@@ -19,6 +19,7 @@ import { RealmProvider } from "./context/RealmContext";
 import { InventoryProvider } from "./context/InventoryContext";
 import { EaglePostWidget } from "./components/EaglePostWidget/EaglePostWidget";
 import { MithrilVaultCalculator } from "./components/MithrilVaultCalculator/MithrilVaultCalculator";
+import { CouncilChatWidget } from "./components/CouncilSupport/CouncilChatWidget";
 import {
   AboutUsPage,
   CancelSubscriptionPage,
@@ -50,6 +51,7 @@ function AppLayout() {
       <Footer />
       {showEaglePost && <EaglePostWidget />}
       {showEaglePost && <MithrilVaultCalculator />}
+      {showEaglePost && <CouncilChatWidget />}
     </div>
   );
 }
