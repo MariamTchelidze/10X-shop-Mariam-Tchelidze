@@ -13,6 +13,7 @@ import { ProductPage } from "./pages/ProductPage/ProductPage";
 import { OrdersPage } from "./pages/OrdersPage/OrdersPage";
 import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
 import { WishlistPage } from "./pages/WishlistPage/WishlistPage";
+import { OrderSuccessPage } from "./pages/OrderSuccessPage/OrderSuccessPage";
 import {
   AboutUsPage,
   CancelSubscriptionPage,
@@ -69,6 +70,7 @@ export function App() {
               <Route element={<ProtectedRoute />}>
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/order-success" element={<OrderSuccessPage />} />
               </Route>
               <Route path="/products/:id" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />

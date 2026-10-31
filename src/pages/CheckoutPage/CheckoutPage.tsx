@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from "react";
-import { Link, Navigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 import { saveOrder } from "../../utils/orders";
+import type { Order } from "../../types/order";
 import { formatPrice } from "../../utils/product";
 
 interface CheckoutValues {
@@ -27,31 +28,11 @@ const emptyValues: CheckoutValues = {
 };
 
 export function CheckoutPage() {
-  const { items, subtotal, clearCart } = useCart();
+  const { items, subtotal } = useCart();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [values, setValues] = useState<CheckoutValues>(emptyValues);
   const [errors, setErrors] = useState<CheckoutErrors>({});
-  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
-  const [orderTotal, setOrderTotal] = useState(0);
-
-  if (isOrderPlaced) {
-    return (
-      <main className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6">
-        <p className="text-xs uppercase tracking-[0.16em] text-market-muted">Order confirmed</p>
-        <h1 className="mt-3 font-display text-3xl text-market-ink sm:text-4xl">
-          Thank you! Your order has been placed.
-        </h1>
-        <p className="mt-4 text-sm text-market-muted">Order total: {formatPrice(orderTotal)}</p>
-        <Link
-          to="/"
-          className="mt-8 inline-flex min-h-12 items-center bg-market-ink px-8 text-xs uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
-        >
-          Continue shopping
-        </Link>
-      </main>
-    );
-  }
-
   if (items.length === 0) {
     return <Navigate to="/cart" replace state={{ message: "Your cart is empty." }} />;
   }
@@ -83,17 +64,21 @@ export function CheckoutPage() {
     }
 
     const orderTotal = subtotal;
-    saveOrder({
+    const order: Order = {
       id: `MM-${Date.now().toString(36).toUpperCase()}`,
       username: user.username,
       date: new Date().toISOString(),
       items: items.map((item) => ({ ...item })),
       total: orderTotal,
       status: "Placed",
-    });
-    setOrderTotal(orderTotal);
-    setIsOrderPlaced(true);
-    clearCart();
+      subtotal,
+      shipping: 0,
+      taxes: 0,
+      shippingAddress: { fullName, email, address, city },
+      paymentMethod: "Demo checkout — no payment collected",
+    };
+    saveOrder(order);
+    navigate("/order-success", { replace: true, state: { order } });
   };
 
   const updateField = (field: keyof CheckoutValues, value: string): void => {
