@@ -1,3 +1,4 @@
+import { useState, type MouseEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
@@ -5,6 +6,7 @@ import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import { useWishlist } from "../../context/WishlistContext";
 import { RealmSelector } from "./RealmSelector";
 import { MobileMenu } from "./MobileMenu";
+import { ShoppingAccessPrompt } from "./ShoppingAccessPrompt";
 
 const categoryLinks = [
   { label: "APPAREL", category: "womens-dresses" },
@@ -57,6 +59,7 @@ export function Header() {
   const { user } = useAuth();
   const { itemCount } = useCart();
   const { items: wishlistItems } = useWishlist();
+  const [requestedDestination, setRequestedDestination] = useState<"/cart" | "/wishlist" | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const displayName = user.fullName || user.email || user.username;
@@ -70,6 +73,13 @@ export function Header() {
     navigate("/", { state: { focusSearch: true } });
   };
 
+  const guardShoppingLink = (destination: "/cart" | "/wishlist") =>
+    (event: MouseEvent<HTMLAnchorElement>): void => {
+      if (user.isLoggedIn) return;
+      event.preventDefault();
+      setRequestedDestination(destination);
+    };
+
   return (
     <header className="sticky top-0 z-50 border-b border-market-border bg-market-paper">
       <div className="mx-auto flex min-h-16 max-w-[1600px] items-center justify-between gap-4 px-4 sm:px-6 min-[1025px]:hidden">
@@ -79,6 +89,7 @@ export function Header() {
           </Link>
           <Link
             to="/cart"
+            onClick={guardShoppingLink("/cart")}
             aria-label={itemCount > 0 ? `Shopping bag, ${itemCount} items` : "Shopping bag"}
             className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
@@ -90,6 +101,7 @@ export function Header() {
           </Link>
           <Link
             to="/wishlist"
+            onClick={guardShoppingLink("/wishlist")}
             aria-label={wishlistItems.length > 0 ? `Wishlist, ${wishlistItems.length} items` : "Wishlist"}
             className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
@@ -157,6 +169,7 @@ export function Header() {
           <RealmSelector />
           <Link
             to="/wishlist"
+            onClick={guardShoppingLink("/wishlist")}
             aria-label={wishlistItems.length > 0 ? `Wishlist, ${wishlistItems.length} items` : "Wishlist"}
             className="relative inline-flex h-10 w-9 shrink-0 items-center justify-center text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink"
           >
@@ -167,6 +180,7 @@ export function Header() {
           </Link>
           <Link
             to="/cart"
+            onClick={guardShoppingLink("/cart")}
             aria-label={itemCount > 0 ? `Bag, ${itemCount} items` : "Bag"}
             className="inline-flex min-h-10 items-center gap-1.5 text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs"
           >
@@ -178,7 +192,7 @@ export function Header() {
           <ThemeToggle />
         </div>
       </div>
-
+      {requestedDestination && <ShoppingAccessPrompt destination={requestedDestination} onClose={() => setRequestedDestination(null)} />}
     </header>
   );
 }

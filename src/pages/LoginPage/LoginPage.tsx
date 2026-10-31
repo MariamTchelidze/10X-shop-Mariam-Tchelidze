@@ -8,7 +8,8 @@ interface FormValues { fullName: string; email: string; password: string; confir
 type FormErrors = Partial<Record<keyof FormValues, string>>;
 
 export function LoginPage() {
-  const [isRegistering, setIsRegistering] = useState(false);
+  const location = useLocation();
+  const [isRegistering, setIsRegistering] = useState(() => new URLSearchParams(location.search).get("mode") === "register");
   const [values, setValues] = useState<FormValues>({ fullName: "", email: "", password: "", confirmPassword: "" });
   const [errors, setErrors] = useState<FormErrors>({});
   const [credentialsInvalid, setCredentialsInvalid] = useState(false);
@@ -17,7 +18,6 @@ export function LoginPage() {
   const { login, register } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const navigateAfterAuth = () => {
     const from = (location.state as { from?: unknown } | null)?.from;
