@@ -84,9 +84,16 @@ export function Header() {
 
         <Link
           to="/"
-          className="justify-self-center whitespace-nowrap font-display text-xs font-semibold tracking-[0.14em] text-market-ink transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-sm sm:tracking-[0.2em] lg:text-base"
+          aria-label="Middle-earth Market home"
+          className="justify-self-center rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
         >
-          MIDDLE MARKET
+          <img
+            src="/images/Logo.png"
+            alt="Middle-earth Market"
+            width={1254}
+            height={1254}
+            className="h-11 w-11 object-contain sm:h-12 sm:w-12 lg:h-14 lg:w-14"
+          />
         </Link>
 
         <div className="flex items-center justify-self-end gap-2 sm:gap-4 lg:gap-6">
