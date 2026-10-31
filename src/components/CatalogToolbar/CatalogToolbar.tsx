@@ -84,11 +84,11 @@ export function CatalogToolbar({
           value={category}
           onChange={(event) => onCategoryChange(event.target.value)}
           disabled={isLoadingCategories || categories.length === 0}
-          className="min-h-11 w-full border-b border-market-border bg-transparent px-1 text-sm text-market-ink outline-none focus:border-market-ink disabled:text-market-muted"
+          className="min-h-11 w-full border-b border-market-border bg-primary px-1 text-sm text-primary outline-none focus:border-market-ink disabled:text-market-muted"
         >
-          <option value="">All categories</option>
+          <option value="" className="bg-primary text-primary">All categories</option>
           {categories.map((item) => (
-            <option key={item.slug} value={item.slug}>
+            <option key={item.slug} value={item.slug} className="bg-primary text-primary">
               {item.name}
             </option>
           ))}
@@ -103,10 +103,10 @@ export function CatalogToolbar({
           id="catalog-sort"
           value={sort}
           onChange={(event) => onSortChange(event.target.value as CatalogSortOption)}
-          className="min-h-11 w-full border-b border-market-border bg-transparent px-1 text-sm text-market-ink outline-none focus:border-market-ink"
+          className="min-h-11 w-full border-b border-market-border bg-primary px-1 text-sm text-primary outline-none focus:border-market-ink"
         >
           {sortOptions.map((option) => (
-            <option key={option.value || "default"} value={option.value}>
+            <option key={option.value || "default"} value={option.value} className="bg-primary text-primary">
               {option.label}
             </option>
           ))}
