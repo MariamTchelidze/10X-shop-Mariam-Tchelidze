@@ -2,29 +2,12 @@ import { useCallback, useRef, useState } from "react";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { CalculatorForm } from "./CalculatorForm";
 
-const OPEN_KEY = "middle-market-mithril-vault-open";
-
-function getInitialOpenState(): boolean {
-  try {
-    const saved = localStorage.getItem(OPEN_KEY);
-    if (saved !== null) return saved === "true";
-  } catch {
-    // Use the viewport default when browser storage is unavailable.
-  }
-  return window.matchMedia("(min-width: 768px)").matches;
-}
-
 export function MithrilVaultCalculator() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(getInitialOpenState);
+  const [isOpen, setIsOpen] = useState(false);
 
   const updateOpenState = useCallback((next: boolean) => {
     setIsOpen(next);
-    try {
-      localStorage.setItem(OPEN_KEY, String(next));
-    } catch {
-      // Keep the current interaction available for this session.
-    }
   }, []);
 
   useOutsideClick(containerRef, () => updateOpenState(false), isOpen);
@@ -32,7 +15,7 @@ export function MithrilVaultCalculator() {
   return (
     <div
       ref={containerRef}
-      className={`fixed z-50 transition-[bottom,left] duration-300 ${isOpen ? "bottom-20 left-4 md:bottom-6 md:left-6" : "bottom-6 left-6"}`}
+      className="fixed bottom-6 left-6 z-50"
     >
       <button
         type="button"

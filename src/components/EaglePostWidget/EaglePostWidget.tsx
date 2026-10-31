@@ -1,11 +1,7 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 
 const SUBSCRIPTION_KEY = "middle-market-eagle-post-email";
-
-interface EaglePostWidgetProps {
-  onOpenChange: (isOpen: boolean) => void;
-}
 
 function readStorage(key: string): string {
   try {
@@ -15,15 +11,11 @@ function readStorage(key: string): string {
   }
 }
 
-export function EaglePostWidget({ onOpenChange }: EaglePostWidgetProps) {
+export function EaglePostWidget() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [email, setEmail] = useState("");
   const [subscribedEmail, setSubscribedEmail] = useState(() => readStorage(SUBSCRIPTION_KEY));
-  const [isOpen, setIsOpen] = useState(() => window.matchMedia("(min-width: 640px)").matches);
-
-  useEffect(() => {
-    onOpenChange(isOpen);
-  }, [isOpen, onOpenChange]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useOutsideClick(containerRef, () => setIsOpen(false), isOpen);
 
@@ -41,12 +33,12 @@ export function EaglePostWidget({ onOpenChange }: EaglePostWidgetProps) {
 
   if (!isOpen) {
     return (
-      <div ref={containerRef} className="flex w-full justify-end">
+      <div ref={containerRef} className="relative h-12 w-48 shrink-0">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
           aria-label="Open Eagle Post newsletter"
-          className="inline-flex min-h-12 w-48 max-w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          className="inline-flex h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
         >
           <EagleMark />
           <span className="font-display text-xs uppercase tracking-[0.12em]">Eagle Post</span>
@@ -56,8 +48,8 @@ export function EaglePostWidget({ onOpenChange }: EaglePostWidgetProps) {
   }
 
   return (
-    <div ref={containerRef} className="w-full">
-      <aside aria-label="Eagle Post newsletter" className="w-full">
+    <div ref={containerRef} className="relative h-12 w-48 shrink-0">
+      <aside aria-label="Eagle Post newsletter" className="absolute bottom-0 right-0 w-[calc(100vw-3rem)] max-w-[22rem]">
       <section className="border border-gold/60 bg-market-paper text-market-ink shadow-2xl">
         <div className="flex items-start justify-between gap-4 border-b border-market-border px-4 py-4 sm:px-5">
           <div className="flex items-center gap-3">
