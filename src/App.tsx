@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Link, Outlet, Route, Routes, useLocation } from "react-router";
 import { Footer } from "./components/Footer/Footer";
 import { Header } from "./components/Header/Header";
@@ -18,6 +19,8 @@ import { HelpCenterPage } from "./pages/HelpCenterPage/HelpCenterPage";
 import { RealmProvider } from "./context/RealmContext";
 import { InventoryProvider } from "./context/InventoryContext";
 import { FloatingWidgetProvider } from "./context/FloatingWidgetContext";
+import { useFloatingWidgets } from "./context/FloatingWidgetContext";
+import { useMediaQuery } from "./hooks/useMediaQuery";
 import { MithrilVaultCalculator } from "./components/MithrilVaultCalculator/MithrilVaultCalculator";
 import { FloatingWidgets } from "./components/FloatingWidgets/FloatingWidgets";
 import {
@@ -41,19 +44,23 @@ import { ProtectedRoute } from "./routes/ProtectedRoute";
 function AppLayout() {
   const { pathname } = useLocation();
   const showEaglePost = pathname !== "/login" && !pathname.startsWith("/login/");
+  const isDesktopViewport = useMediaQuery("(min-width: 1025px)");
+  const { setActiveWidget } = useFloatingWidgets();
+
+  useEffect(() => {
+    if (!isDesktopViewport || !showEaglePost) setActiveWidget(null);
+  }, [isDesktopViewport, setActiveWidget, showEaglePost]);
 
   return (
-    <FloatingWidgetProvider>
-      <div className="flex min-h-screen flex-col bg-market-paper">
-        <Header />
-        <div className="flex-1">
-          <Outlet />
-        </div>
-        <Footer />
-        {showEaglePost && <FloatingWidgets />}
-        {showEaglePost && <MithrilVaultCalculator />}
+    <div className="flex min-h-screen flex-col bg-market-paper">
+      <Header />
+      <div className="flex-1">
+        <Outlet />
       </div>
-    </FloatingWidgetProvider>
+      <Footer />
+      {showEaglePost && isDesktopViewport && <FloatingWidgets />}
+      {showEaglePost && isDesktopViewport && <MithrilVaultCalculator />}
+    </div>
   );
 }
 
@@ -78,6 +85,7 @@ export function App() {
           <WishlistProvider>
           <InventoryProvider>
           <CartProvider>
+          <FloatingWidgetProvider>
             <Routes>
             <Route element={<AppLayout />}>
               <Route path="/" element={<CatalogPage />} />
@@ -111,6 +119,7 @@ export function App() {
               <Route path="*" element={<NotFoundPage />} />
             </Route>
             </Routes>
+          </FloatingWidgetProvider>
           </CartProvider>
           </InventoryProvider>
           </WishlistProvider>

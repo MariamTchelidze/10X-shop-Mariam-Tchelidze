@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const THEME_STORAGE_KEY = "10x-shop-theme";
 
@@ -13,6 +13,12 @@ interface ThemeToggleProps {
 export function ThemeToggle({ showLabel = false }: ThemeToggleProps) {
   const [isDark, setIsDark] = useState(isDarkTheme);
 
+  useEffect(() => {
+    const syncThemeState = () => setIsDark(isDarkTheme());
+    window.addEventListener("theme-change", syncThemeState);
+    return () => window.removeEventListener("theme-change", syncThemeState);
+  }, []);
+
   const toggleTheme = () => {
     const nextIsDark = !isDark;
     document.documentElement.classList.toggle("dark", nextIsDark);
@@ -23,6 +29,7 @@ export function ThemeToggle({ showLabel = false }: ThemeToggleProps) {
     }
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", nextIsDark ? "#0B0B0B" : "#F7F3E9");
     setIsDark(nextIsDark);
+    window.dispatchEvent(new Event("theme-change"));
   };
 
   return (
