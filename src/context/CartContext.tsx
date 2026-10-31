@@ -8,10 +8,15 @@ interface CartContextValue {
   items: CartItem[];
   itemCount: number;
   subtotal: number;
-  addItem: (product: Product, quantity: number) => boolean;
-  removeItem: (productId: number) => void;
-  updateQuantity: (productId: number, quantity: number) => void;
+  addItem: (product: Product, quantity: number, variants?: CartVariants) => boolean;
+  removeItem: (productId: number, variants?: CartVariants) => void;
+  updateQuantity: (productId: number, quantity: number, variants?: CartVariants) => void;
   clearCart: () => void;
+}
+
+export interface CartVariants {
+  size?: string;
+  color?: string;
 }
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -25,7 +30,7 @@ export function CartProvider({ children }: CartProviderProps) {
   const { addToast } = useToast();
   const { user } = useAuth();
 
-  const addItem = (product: Product, quantity: number): boolean => {
+  const addItem = (product: Product, quantity: number, variants: CartVariants = {}): boolean => {
     if (!user.isLoggedIn) {
       addToast("for adding the product to the cart please log in first", "info");
       return false;
@@ -34,7 +39,7 @@ export function CartProvider({ children }: CartProviderProps) {
       return false;
     }
 
-    const currentItem = items.find((item) => item.productId === product.id);
+    const currentItem = items.find((item) => item.productId === product.id && item.size === variants.size && item.color === variants.color);
     const currentQuantity = currentItem?.quantity ?? 0;
     const nextQuantity = Math.min(currentQuantity + quantity, product.stock);
 
@@ -50,12 +55,14 @@ export function CartProvider({ children }: CartProviderProps) {
       discountPercentage: product.discountPercentage,
       stock: product.stock,
       quantity: nextQuantity,
+      ...(variants.size ? { size: variants.size } : {}),
+      ...(variants.color ? { color: variants.color } : {}),
     };
 
     setItems((currentItems) => {
       if (currentItem) {
         return currentItems.map((item) =>
-          item.productId === product.id ? cartItem : item,
+          item.productId === product.id && item.size === variants.size && item.color === variants.color ? cartItem : item,
         );
       }
 
@@ -67,24 +74,24 @@ export function CartProvider({ children }: CartProviderProps) {
     return true;
   };
 
-  const removeItem = (productId: number): void => {
-    if (!items.some((item) => item.productId === productId)) {
+  const removeItem = (productId: number, variants: CartVariants = {}): void => {
+    if (!items.some((item) => item.productId === productId && item.size === variants.size && item.color === variants.color)) {
       return;
     }
     setItems((currentItems) =>
-      currentItems.filter((item) => item.productId !== productId),
+      currentItems.filter((item) => !(item.productId === productId && item.size === variants.size && item.color === variants.color)),
     );
     addToast("ITEM REMOVED", "info");
   };
 
-  const updateQuantity = (productId: number, quantity: number): void => {
+  const updateQuantity = (productId: number, quantity: number, variants: CartVariants = {}): void => {
     if (!Number.isInteger(quantity) || quantity < 1) {
       return;
     }
 
     setItems((currentItems) =>
       currentItems.map((item) =>
-        item.productId === productId
+        item.productId === productId && item.size === variants.size && item.color === variants.color
           ? { ...item, quantity: Math.min(quantity, item.stock) }
           : item,
       ),

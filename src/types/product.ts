@@ -18,6 +18,8 @@ export interface Product {
   thumbnail: string;
   images: string[];
   reviews: Review[];
+  sizes?: string[];
+  colors?: string[];
 }
 
 export interface ProductsResponse {

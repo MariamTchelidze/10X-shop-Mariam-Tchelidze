@@ -6,6 +6,8 @@ export interface CartItem {
   discountPercentage: number;
   stock: number;
   quantity: number;
+  size?: string;
+  color?: string;
 }
 
 export interface CartState {

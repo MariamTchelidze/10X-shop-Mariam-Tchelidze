@@ -51,7 +51,7 @@ export function CartPage() {
             const unitPrice = discountedPrice(item.price, item.discountPercentage);
 
             return (
-              <li key={item.productId} className="flex gap-4 py-5 sm:gap-6">
+              <li key={`${item.productId}-${item.size ?? ""}-${item.color ?? ""}`} className="flex gap-4 py-5 sm:gap-6">
                 <Link to={`/products/${item.productId}`} className="w-24 shrink-0 bg-market-surface sm:w-32">
                   <img
                     src={item.thumbnail}
@@ -67,10 +67,11 @@ export function CartPage() {
                     <Link to={`/products/${item.productId}`} className="text-sm font-medium text-market-ink hover:underline">
                       {item.title}
                     </Link>
+                    {(item.size || item.color) && <p className="mt-1 text-xs text-market-muted">{[item.size && `Size: ${item.size}`, item.color && `Color: ${item.color}`].filter(Boolean).join(" · ")}</p>}
                     <p className="mt-2 text-sm text-market-muted">{formatPrice(unitPrice)} each</p>
                     <button
                       type="button"
-                      onClick={() => removeItem(item.productId)}
+                      onClick={() => removeItem(item.productId, { size: item.size, color: item.color })}
                       className="mt-3 text-xs uppercase tracking-[0.12em] text-market-muted underline underline-offset-4 hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
                     >
                       Remove
@@ -82,7 +83,7 @@ export function CartPage() {
                         type="button"
                         aria-label={`Decrease ${item.title} quantity`}
                         disabled={item.quantity <= 1}
-                        onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                        onClick={() => updateQuantity(item.productId, item.quantity - 1, { size: item.size, color: item.color })}
                         className="min-h-10 min-w-10 text-lg text-market-ink disabled:text-market-border"
                       >
                         −
@@ -92,7 +93,7 @@ export function CartPage() {
                         type="button"
                         aria-label={`Increase ${item.title} quantity`}
                         disabled={item.quantity >= item.stock}
-                        onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                        onClick={() => updateQuantity(item.productId, item.quantity + 1, { size: item.size, color: item.color })}
                         className="min-h-10 min-w-10 text-lg text-market-ink disabled:text-market-border"
                       >
                         +
