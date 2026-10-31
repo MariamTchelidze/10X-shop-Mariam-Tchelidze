@@ -129,7 +129,7 @@ export function ProductPage() {
       : product.stock <= 5
         ? `Only ${product.stock} left!`
         : "In stock";
-  const stockColor = product.stock > 0 && product.stock <= 5 ? "text-amber-700" : "text-market-muted";
+  const stockColor = product.stock > 0 && product.stock <= 5 ? "text-gold" : "text-market-muted";
 
   const handleAddToCart = (): void => {
     const added = addItem(product, quantity);

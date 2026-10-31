@@ -4,23 +4,25 @@ import { useCart } from "../../context/CartContext";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 
 const categoryLinks = [
-  { label: "APPAREL", query: "apparel" },
-  { label: "ACCESSORIES", query: "accessories" },
-  { label: "HOME & LIVING", query: "home" },
-  { label: "COLLECTIBLES", query: "collectibles" },
+  { label: "APPAREL", category: "womens-dresses" },
+  { label: "ACCESSORIES", category: "womens-bags" },
+  { label: "HOME & LIVING", category: "home-decoration" },
+  { label: "COLLECTIBLES", query: "watch" },
 ] as const;
 
-function getCategoryHref(pathname: string, search: string, query: string): string {
+function getCategoryHref(pathname: string, search: string, categoryLink: (typeof categoryLinks)[number]): string {
   const params = new URLSearchParams(pathname === "/" ? search : "");
+  params.delete("q");
   params.delete("category");
-  params.set("q", query);
+  if ("category" in categoryLink) params.set("category", categoryLink.category);
+  else params.set("q", categoryLink.query);
   params.set("page", "1");
   return `/?${params.toString()}`;
 }
 
 function CategoryLinks({ mobile = false }: { mobile?: boolean }) {
   const location = useLocation();
-  const currentQuery = new URLSearchParams(location.search).get("q");
+  const currentParams = new URLSearchParams(location.search);
 
   return (
     <nav
@@ -29,12 +31,14 @@ function CategoryLinks({ mobile = false }: { mobile?: boolean }) {
     >
       {categoryLinks.map((category) => {
         const isActive =
-          location.pathname === "/" && currentQuery === category.query;
+          location.pathname === "/" &&
+          (("category" in category && currentParams.get("category") === category.category) ||
+            ("query" in category && currentParams.get("q") === category.query));
 
         return (
           <Link
             key={category.label}
-            to={getCategoryHref(location.pathname, location.search, category.query)}
+            to={getCategoryHref(location.pathname, location.search, category)}
             aria-current={isActive ? "page" : undefined}
             className={`inline-flex min-h-10 shrink-0 items-center border-b-2 text-[10px] font-medium tracking-[0.16em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink sm:text-xs ${isActive ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
           >

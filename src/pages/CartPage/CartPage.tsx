@@ -139,7 +139,7 @@ export function CartPage() {
                 Apply
               </button>
             </div>
-            {promoError && <p id="promo-error" role="alert" className="mt-2 text-xs text-red-700">{promoError}</p>}
+            {promoError && <p id="promo-error" role="alert" className="mt-2 text-xs text-error">{promoError}</p>}
           </form>
           {promoApplied && (
             <div className="mt-4 flex justify-between gap-4 text-sm text-market-muted">

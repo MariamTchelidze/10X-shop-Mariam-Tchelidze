@@ -84,7 +84,7 @@ export function CheckoutPage() {
 
     const orderTotal = subtotal;
     saveOrder({
-      id: `10X-${Date.now().toString(36).toUpperCase()}`,
+      id: `MM-${Date.now().toString(36).toUpperCase()}`,
       username: user.username,
       date: new Date().toISOString(),
       items: items.map((item) => ({ ...item })),
@@ -212,7 +212,7 @@ function CheckoutField({
         onChange={(event) => onChange(event.target.value)}
         className="min-h-12 w-full border-b border-market-border bg-transparent px-1 text-sm text-market-ink outline-none transition-colors focus:border-market-ink"
       />
-      {error && <p id={errorId} className="mt-2 text-sm text-red-700" role="alert">{error}</p>}
+      {error && <p id={errorId} className="mt-2 text-sm text-error" role="alert">{error}</p>}
     </div>
   );
 }

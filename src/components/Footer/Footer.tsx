@@ -22,13 +22,10 @@ const companyLinks = [
 ] as const;
 
 const interestLinks = [
-  ["JACKETS", "jackets"],
-  ["DRESSES AND JUMPSUITS", "dresses"],
-  ["JEANS", "jeans"],
-  ["TROUSERS", "trousers"],
-  ["T-SHIRTS", "t-shirts"],
-  ["SWEATSHIRTS AND HOODIES", "hoodies"],
-  ["SHOES", "shoes"],
+  ["APPAREL", "womens-dresses", "category"],
+  ["ACCESSORIES", "womens-bags", "category"],
+  ["HOME & LIVING", "home-decoration", "category"],
+  ["COLLECTIBLES", "watch", "search"],
 ] as const;
 
 const socials = ["Instagram", "Facebook", "Twitter", "TikTok", "Snapchat", "YouTube", "Pinterest", "Spotify"] as const;
@@ -89,7 +86,7 @@ export function Footer() {
             <ul className="space-y-1">{companyLinks.map(([label, href]) => <li key={href}><Link to={href} className={linkClass}>{label}</Link></li>)}</ul>
           </FooterColumn>
           <FooterColumn title="YOU MIGHT BE INTERESTED IN">
-            <ul className="space-y-1">{interestLinks.map(([label, query]) => <li key={query}><Link to={`/?q=${encodeURIComponent(query)}&page=1`} className={linkClass}>{label}</Link></li>)}</ul>
+            <ul className="space-y-1">{interestLinks.map(([label, value, kind]) => <li key={label}><Link to={kind === "category" ? `/?category=${value}&page=1` : `/?q=${encodeURIComponent(value)}&page=1`} className={linkClass}>{label}</Link></li>)}</ul>
           </FooterColumn>
           <nav aria-label="Social media" className="sm:col-span-2 lg:col-span-1">
             <h2 className="mb-4 text-[11px] font-medium uppercase tracking-[0.12em] text-market-ink lg:sr-only">Follow us</h2>

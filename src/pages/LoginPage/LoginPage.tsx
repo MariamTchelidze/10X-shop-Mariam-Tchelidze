@@ -75,17 +75,17 @@ export function LoginPage() {
         {isRegistering && <div>
           <label htmlFor="fullName" className="mb-2 block text-xs uppercase tracking-[0.16em] text-market-muted">Full name</label>
           <input id="fullName" name="fullName" autoComplete="name" value={values.fullName} aria-invalid={Boolean(errors.fullName)} onChange={(event) => { setValues((current) => ({ ...current, fullName: event.target.value })); setErrors((current) => ({ ...current, fullName: undefined })); }} className={inputClass("fullName")} />
-          {errors.fullName && <p className="mt-2 text-sm text-red-700" role="alert">{errors.fullName}</p>}
+          {errors.fullName && <p className="mt-2 text-sm text-error" role="alert">{errors.fullName}</p>}
         </div>}
         <div>
           <label htmlFor="email" className="mb-2 block text-xs uppercase tracking-[0.16em] text-market-muted">Email</label>
           <input id="email" name="email" type="email" autoComplete="email" value={values.email} aria-invalid={Boolean(errors.email) || credentialsInvalid} onChange={(event) => { setValues((current) => ({ ...current, email: event.target.value })); setErrors((current) => ({ ...current, email: undefined })); setCredentialsInvalid(false); }} className={inputClass("email")} />
-          {errors.email && <p className="mt-2 text-sm text-red-700" role="alert">{errors.email}</p>}
+          {errors.email && <p className="mt-2 text-sm text-error" role="alert">{errors.email}</p>}
         </div>
         <div>
           <label htmlFor="password" className="mb-2 block text-xs uppercase tracking-[0.16em] text-market-muted">Password</label>
           <input id="password" name="password" type="password" autoComplete={isRegistering ? "new-password" : "current-password"} value={values.password} aria-invalid={Boolean(errors.password) || credentialsInvalid} onChange={(event) => { setValues((current) => ({ ...current, password: event.target.value })); setErrors((current) => ({ ...current, password: undefined })); setCredentialsInvalid(false); }} className={inputClass("password")} />
-          {errors.password && <p className="mt-2 text-sm text-red-700" role="alert">{errors.password}</p>}
+          {errors.password && <p className="mt-2 text-sm text-error" role="alert">{errors.password}</p>}
         </div>
         <button type="submit" className="min-h-12 w-full bg-market-ink px-5 text-xs font-medium uppercase tracking-[0.16em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink">
           {isRegistering ? "Register" : "Log in"}

@@ -17,7 +17,7 @@ export function ProductCard({ product }: ProductCardProps) {
     product.stock === 0
       ? "text-market-muted"
       : product.stock <= 5
-        ? "text-amber-700"
+        ? "text-gold"
         : "text-market-muted";
 
   return (
@@ -39,7 +39,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         <div className="space-y-2 pt-4">
           <div className="flex items-start justify-between gap-3">
-            <h2 className="font-sans text-sm font-medium uppercase tracking-wide text-market-ink">
+            <h2 className="font-display text-sm font-medium uppercase tracking-wide text-market-ink">
               {product.title}
             </h2>
             <span className={`shrink-0 text-xs ${stockColor}`}>{stockMessage}</span>
