@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { CalculatorForm } from "./CalculatorForm";
 
 const OPEN_KEY = "middle-market-mithril-vault-open";
@@ -26,18 +27,7 @@ export function MithrilVaultCalculator() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const closeOnOutsideClick = (event: MouseEvent) => {
-      if (event.target instanceof Node && !containerRef.current?.contains(event.target)) {
-        updateOpenState(false);
-      }
-    };
-
-    document.addEventListener("mousedown", closeOnOutsideClick);
-    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
-  }, [isOpen, updateOpenState]);
+  useOutsideClick(containerRef, () => updateOpenState(false), isOpen);
 
   return (
     <div

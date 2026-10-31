@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { CouncilChatPanel } from "./CouncilChatPanel";
 import { ElvenLeafMark } from "./ElvenLeafMark";
 
@@ -25,24 +26,16 @@ export function CouncilChatWidget() {
     }
   }, []);
 
+  useOutsideClick(containerRef, () => updateOpenState(false), isOpen);
+
   useEffect(() => {
     if (!isOpen) return;
-
-    const closeOnOutsideClick = (event: MouseEvent) => {
-      if (event.target instanceof Node && !containerRef.current?.contains(event.target)) {
-        updateOpenState(false);
-      }
-    };
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") updateOpenState(false);
     };
 
-    document.addEventListener("mousedown", closeOnOutsideClick);
     document.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.removeEventListener("mousedown", closeOnOutsideClick);
-      document.removeEventListener("keydown", closeOnEscape);
-    };
+    return () => document.removeEventListener("keydown", closeOnEscape);
   }, [isOpen, updateOpenState]);
 
   return (

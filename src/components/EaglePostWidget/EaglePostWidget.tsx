@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
+import { useOutsideClick } from "../../hooks/useOutsideClick";
 
 const SUBSCRIPTION_KEY = "middle-market-eagle-post-email";
 
@@ -16,16 +17,7 @@ export function EaglePostWidget() {
   const [subscribedEmail, setSubscribedEmail] = useState(() => readStorage(SUBSCRIPTION_KEY));
   const [isOpen, setIsOpen] = useState(() => window.matchMedia("(min-width: 640px)").matches);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const closeOnOutsideClick = (event: MouseEvent) => {
-      if (event.target instanceof Node && !containerRef.current?.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", closeOnOutsideClick);
-    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
-  }, [isOpen]);
+  useOutsideClick(containerRef, () => setIsOpen(false), isOpen);
 
   const handleSubscribe = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
