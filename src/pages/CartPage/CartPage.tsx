@@ -1,32 +1,12 @@
-import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import { useCart } from "../../context/CartContext";
-import { useToast } from "../../context/ToastContext";
 import { useRealm } from "../../context/RealmContext";
-import { discountedPrice } from "../../utils/product";
+import { CartItemRow } from "./components/CartItemRow";
+import { CartSummary } from "./components/CartSummary";
 
 export function CartPage() {
   const { items, subtotal, removeItem, updateQuantity } = useCart();
-  const { addToast } = useToast();
   const { formatCurrency } = useRealm();
-  const [promoInput, setPromoInput] = useState("");
-  const [promoApplied, setPromoApplied] = useState(false);
-  const [promoError, setPromoError] = useState("");
-  const discount = promoApplied ? subtotal * 0.1 : 0;
-  const total = subtotal - discount;
-
-  const applyPromoCode = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (promoInput.trim().toUpperCase() !== "10X10") {
-      setPromoApplied(false);
-      setPromoError("This promo code is not valid.");
-      addToast("INVALID PROMO CODE", "error");
-      return;
-    }
-    setPromoApplied(true);
-    setPromoError("");
-    addToast("PROMO CODE APPLIED (-10%)", "success");
-  };
 
   if (items.length === 0) {
     return (
@@ -49,118 +29,24 @@ export function CartPage() {
       </h1>
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14">
         <ul className="divide-y divide-market-border">
-          {items.map((item) => {
-            const unitPrice = discountedPrice(item.price, item.discountPercentage);
-
-            return (
-              <li key={`${item.productId}-${item.size ?? ""}-${item.color ?? ""}`} className="flex gap-4 py-5 sm:gap-6">
-                <Link to={`/products/${item.productId}`} className="w-24 shrink-0 bg-market-surface sm:w-32">
-                  <img
-                    src={item.thumbnail}
-                    alt={item.title}
-                    loading="lazy"
-                    width={300}
-                    height={400}
-                    className="aspect-[3/4] h-full w-full object-cover"
-                  />
-                </Link>
-                <div className="flex min-w-0 flex-1 flex-col justify-between gap-4 sm:flex-row sm:items-start">
-                  <div className="min-w-0">
-                    <Link to={`/products/${item.productId}`} className="text-sm font-medium text-market-ink hover:underline">
-                      {item.title}
-                    </Link>
-                    {(item.size || item.color) && <p className="mt-1 text-xs text-market-muted">{[item.size && `Size: ${item.size}`, item.color && `Color: ${item.color}`].filter(Boolean).join(" · ")}</p>}
-                    <p className="mt-2 text-sm text-market-muted">{formatCurrency(unitPrice)} each</p>
-                    <button
-                      type="button"
-                      onClick={() => removeItem(item.productId, { size: item.size, color: item.color })}
-                      className="mt-3 text-xs uppercase tracking-[0.12em] text-market-muted underline underline-offset-4 hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                  <div className="flex items-center justify-between gap-5 sm:flex-col sm:items-end">
-                    <div className="flex min-h-10 items-center border border-market-border">
-                      <button
-                        type="button"
-                        aria-label={`Decrease ${item.title} quantity`}
-                        disabled={item.quantity <= 1}
-                        onClick={() => updateQuantity(item.productId, item.quantity - 1, { size: item.size, color: item.color })}
-                        className="min-h-10 min-w-10 text-lg text-market-ink disabled:text-market-border"
-                      >
-                        −
-                      </button>
-                      <span className="min-w-8 text-center text-sm">{item.quantity}</span>
-                      <button
-                        type="button"
-                        aria-label={`Increase ${item.title} quantity`}
-                        disabled={item.quantity >= item.stock}
-                        onClick={() => updateQuantity(item.productId, item.quantity + 1, { size: item.size, color: item.color })}
-                        className="min-h-10 min-w-10 text-lg text-market-ink disabled:text-market-border"
-                      >
-                        +
-                      </button>
-                    </div>
-                    <p className="text-sm font-medium text-market-ink">
-                      {formatCurrency(unitPrice * item.quantity)}
-                    </p>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
+          {items.map((item) => (
+            <CartItemRow
+              key={`${item.productId}-${item.size ?? ""}-${item.color ?? ""}`}
+              item={item}
+              formatCurrency={formatCurrency}
+              onRemove={(current) =>
+                removeItem(current.productId, { size: current.size, color: current.color })
+              }
+              onQuantityChange={(current, quantity) =>
+                updateQuantity(current.productId, quantity, {
+                  size: current.size,
+                  color: current.color,
+                })
+              }
+            />
+          ))}
         </ul>
-
-        <aside className="h-fit border border-market-border p-5 sm:p-6">
-          <h2 className="font-display text-2xl text-market-ink">Order summary</h2>
-          <div className="mt-6 flex justify-between gap-4 text-sm text-market-muted">
-            <span>Subtotal</span>
-            <span>{formatCurrency(subtotal)}</span>
-          </div>
-          <form onSubmit={applyPromoCode} className="mt-6">
-            <label htmlFor="promo-code" className="mb-2 block text-xs uppercase tracking-[0.12em] text-market-muted">
-              Promo code
-            </label>
-            <div className="flex min-w-0 gap-2">
-              <input
-                id="promo-code"
-                name="promoCode"
-                value={promoInput}
-                onChange={(event) => {
-                  setPromoInput(event.target.value);
-                  setPromoError("");
-                }}
-                aria-invalid={promoError.length > 0}
-                aria-describedby={promoError ? "promo-error" : undefined}
-                placeholder="Enter code"
-                className="min-h-11 min-w-0 flex-1 border border-market-border px-3 text-sm uppercase text-market-ink placeholder:normal-case placeholder:text-market-muted focus:border-market-ink focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="min-h-11 shrink-0 border border-market-ink px-4 text-xs font-medium uppercase tracking-[0.12em] text-market-ink transition-colors hover:bg-market-ink hover:text-market-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink"
-              >
-                Apply
-              </button>
-            </div>
-            {promoError && <p id="promo-error" role="alert" className="mt-2 text-xs text-error">{promoError}</p>}
-          </form>
-          {promoApplied && (
-            <div className="mt-4 flex justify-between gap-4 text-sm text-market-muted">
-              <span>Promo discount (10%)</span>
-              <span>−{formatCurrency(discount)}</span>
-            </div>
-          )}
-          <div className="mt-4 flex justify-between gap-4 border-t border-market-border pt-4 text-sm font-medium text-market-ink">
-            <span>Total</span>
-            <span>{formatCurrency(total)}</span>
-          </div>
-          <Link
-            to="/checkout"
-            className="mt-6 flex min-h-12 items-center justify-center bg-market-ink px-5 text-center text-xs uppercase tracking-[0.12em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
-          >
-            Proceed to checkout
-          </Link>
-        </aside>
+        <CartSummary subtotal={subtotal} formatCurrency={formatCurrency} />
       </div>
     </main>
   );

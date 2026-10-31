@@ -1,10 +1,12 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
-import { fetchProductById, fetchProducts } from "../../api/products";
+import { fetchProductById } from "../../api/products";
 import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
-import type { Product, Review } from "../../types/product";
+import type { Product } from "../../types/product";
 import { discountedPrice } from "../../utils/product";
+import { ProductReviews } from "./components/ProductReviews";
+import { RelatedProducts } from "./components/RelatedProducts";
 
 export function ProductPage() {
   const { id } = useParams();
@@ -15,11 +17,6 @@ export function ProductPage() {
   const [error, setError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [cartMessage, setCartMessage] = useState<string | null>(null);
-  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [reviewName, setReviewName] = useState("");
-  const [reviewComment, setReviewComment] = useState("");
-  const [reviewRating, setReviewRating] = useState(5);
   const { addItem } = useCart();
   const { formatCurrency } = useRealm();
 
@@ -62,36 +59,6 @@ export function ProductPage() {
     void loadProduct();
     return () => controller.abort();
   }, [isValidId, productId]);
-
-  useEffect(() => {
-    if (!product) return;
-    const reviewKey = `10x-shop-reviews-${product.id}`;
-    try {
-      const saved: unknown = JSON.parse(localStorage.getItem(reviewKey) ?? "[]");
-      setReviews([...product.reviews, ...(Array.isArray(saved) ? saved as Review[] : [])]);
-    } catch {
-      setReviews(product.reviews);
-    }
-
-    const controller = new AbortController();
-    void fetchProducts({ q: "", category: product.category, sort: "", page: 1 }, controller.signal)
-      .then((response) => setRelatedProducts(response.products.filter((entry) => entry.id !== product.id).slice(0, 4)))
-      .catch(() => setRelatedProducts([]));
-    return () => controller.abort();
-  }, [product]);
-
-  const handleReviewSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const reviewerName = reviewName.trim();
-    const comment = reviewComment.trim();
-    if (!reviewerName || !comment || !product) return;
-    const review: Review = { reviewerName, comment, rating: reviewRating, date: new Date().toISOString() };
-    const nextReviews = [...reviews, review];
-    setReviews(nextReviews);
-    localStorage.setItem(`10x-shop-reviews-${product.id}`, JSON.stringify(nextReviews.slice(product.reviews.length)));
-    setReviewName("");
-    setReviewComment("");
-  };
 
   if (isLoading) {
     return (
@@ -207,39 +174,8 @@ export function ProductPage() {
           {cartMessage && <p className="mt-3 text-sm text-market-muted" role="status">{cartMessage}</p>}
         </section>
       </div>
-      <section className="mt-14 border-t border-market-border pt-10 sm:mt-20" aria-labelledby="reviews-heading">
-        <h2 id="reviews-heading" className="font-display text-2xl text-market-ink">Reviews <span className="font-sans text-sm text-market-muted">({reviews.length})</span></h2>
-        <ul className="mt-6 divide-y divide-market-border">
-          {reviews.map((review, index) => (
-            <li key={`${review.date}-${index}`} className="py-5">
-              <div className="flex flex-wrap justify-between gap-2"><span className="text-sm font-medium text-market-ink">{review.reviewerName}</span><span className="text-sm text-market-muted" aria-label={`${review.rating} out of 5 stars`}>{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span></div>
-              <p className="mt-2 text-sm leading-6 text-market-muted">{review.comment}</p>
-              <time className="mt-2 block text-xs text-market-muted" dateTime={review.date}>{new Date(review.date).toLocaleDateString()}</time>
-            </li>
-          ))}
-        </ul>
-        <form onSubmit={handleReviewSubmit} className="mt-8 grid gap-4 sm:max-w-xl">
-          <h3 className="text-xs font-medium uppercase tracking-widest">Write a review</h3>
-          <label className="grid gap-2 text-xs uppercase tracking-widest text-market-muted" htmlFor="review-name">Name<input id="review-name" required value={reviewName} onChange={(event) => setReviewName(event.target.value)} className="min-h-11 border border-market-border px-3 text-sm normal-case tracking-normal text-market-ink" /></label>
-          <label className="grid gap-2 text-xs uppercase tracking-widest text-market-muted" htmlFor="review-rating">Rating<select id="review-rating" value={reviewRating} onChange={(event) => setReviewRating(Number(event.target.value))} className="min-h-11 border border-market-border bg-primary px-3 text-sm tracking-normal text-primary">{[5, 4, 3, 2, 1].map((rating) => <option className="bg-primary text-primary" key={rating} value={rating}>{rating} / 5</option>)}</select></label>
-          <label className="grid gap-2 text-xs uppercase tracking-widest text-market-muted" htmlFor="review-comment">Review<input id="review-comment" required value={reviewComment} onChange={(event) => setReviewComment(event.target.value)} className="min-h-11 border border-market-border px-3 text-sm normal-case tracking-normal text-market-ink" /></label>
-          <button type="submit" className="min-h-12 bg-market-ink px-6 text-xs uppercase tracking-widest text-market-paper sm:w-fit">Submit review</button>
-        </form>
-      </section>
-      {relatedProducts.length > 0 && (
-        <section className="mt-14 border-t border-market-border pt-10 sm:mt-20" aria-labelledby="related-heading">
-          <h2 id="related-heading" className="font-display text-2xl text-market-ink">You may also like</h2>
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5">
-            {relatedProducts.map((related) => (
-              <Link key={related.id} to={`/products/${related.id}`} className="group min-w-0">
-                <img src={related.thumbnail} alt={related.title} loading="lazy" className="aspect-[3/4] w-full bg-market-surface object-cover" />
-                <h3 className="mt-3 truncate text-xs text-market-ink group-hover:underline">{related.title}</h3>
-                <p className="mt-1 text-xs text-market-muted">{formatCurrency(discountedPrice(related.price, related.discountPercentage))}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
+      <ProductReviews product={product} />
+      <RelatedProducts product={product} />
     </main>
   );
 }

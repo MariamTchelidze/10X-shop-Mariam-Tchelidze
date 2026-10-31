@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { fetchProducts } from "../../api/products";
 import { CatalogToolbar } from "../../components/CatalogToolbar/CatalogToolbar";
-import { Pagination } from "../../components/Pagination/Pagination";
-import { ProductGrid } from "../../components/ProductGrid/ProductGrid";
 import { HeroCarousel } from "../../components/HeroCarousel/HeroCarousel";
 import {
   CATALOG_PAGE_SIZE,
@@ -12,6 +10,7 @@ import {
   type CatalogSortOption,
 } from "../../types/catalog";
 import type { Product } from "../../types/product";
+import { CatalogResults } from "./components/CatalogResults";
 
 const SEARCH_DEBOUNCE_MS = 400;
 
@@ -201,46 +200,17 @@ export function CatalogPage() {
         onSortChange={handleSortChange}
       />
 
-      {isLoading && (
-        <p className="py-16 text-center text-sm text-market-muted" role="status">
-          Loading products…
-        </p>
-      )}
-
-      {!isLoading && error && (
-        <section className="py-16 text-center" role="alert">
-          <p className="text-sm text-market-muted">{error}</p>
-          <button
-            type="button"
-            onClick={() => setRetryCount((count) => count + 1)}
-            className="mt-5 border-b border-market-ink pb-1 text-xs uppercase tracking-[0.14em] text-market-ink hover:text-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
-          >
-            Try again
-          </button>
-        </section>
-      )}
-
-      {!isLoading && !error && products.length === 0 && (
-        <section className="py-16 text-center">
-          <p className="text-sm text-market-muted">No products found.</p>
-          {(query || category || sort) && (
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="mt-4 text-xs uppercase tracking-[0.14em] text-market-ink underline underline-offset-4"
-            >
-              Clear filters
-            </button>
-          )}
-        </section>
-      )}
-
-      {!isLoading && !error && products.length > 0 && (
-        <>
-          <ProductGrid products={products} />
-          <Pagination page={page} totalPages={totalPages} onChange={handlePageChange} />
-        </>
-      )}
+      <CatalogResults
+        products={products}
+        isLoading={isLoading}
+        error={error}
+        page={page}
+        totalPages={totalPages}
+        canClearFilters={Boolean(query || category || sort)}
+        onRetry={() => setRetryCount((count) => count + 1)}
+        onClearFilters={clearFilters}
+        onPageChange={handlePageChange}
+      />
     </main>
   );
 }
