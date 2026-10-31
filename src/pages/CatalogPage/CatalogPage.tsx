@@ -4,6 +4,7 @@ import { fetchProducts } from "../../api/products";
 import { CatalogToolbar } from "../../components/CatalogToolbar/CatalogToolbar";
 import { Pagination } from "../../components/Pagination/Pagination";
 import { ProductGrid } from "../../components/ProductGrid/ProductGrid";
+import { HeroCarousel } from "../../components/HeroCarousel/HeroCarousel";
 import {
   CATALOG_PAGE_SIZE,
   isCatalogSortOption,
@@ -180,15 +181,7 @@ export function CatalogPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 sm:pb-14 lg:px-8">
-      <section className="relative mb-9 overflow-hidden border border-market-border bg-market-surface px-5 py-10 sm:mb-12 sm:px-10 sm:py-14 lg:px-16" aria-labelledby="realm-heading">
-        <div aria-hidden="true" className="pointer-events-none absolute -right-10 top-1/2 h-40 w-40 -translate-y-1/2 rounded-full border-[10px] border-gold/70 shadow-[0_0_55px_rgba(201,169,106,0.25)] sm:right-12 sm:h-56 sm:w-56 sm:border-[14px]" />
-        <p className="text-[10px] uppercase tracking-[0.2em] text-forest">A MARKET BEYOND THE SHIRE</p>
-        <h1 id="realm-heading" className="relative z-10 mt-4 max-w-2xl font-display text-3xl leading-tight text-market-ink sm:text-5xl">Treasures of Middle-earth</h1>
-        <p className="relative z-10 mt-4 max-w-xl text-sm leading-6 text-market-muted sm:text-base">Artifacts, apparel, and keepsakes for every road through the realm.</p>
-        <div className="relative z-10 mt-6 flex max-w-2xl flex-wrap gap-x-5 gap-y-2 text-[10px] uppercase tracking-[0.12em] text-market-muted sm:text-xs">
-          <span>The One Ring replica</span><span>Nazgûl cloak</span><span>Sauron hoodie</span><span>Mordor mug</span>
-        </div>
-      </section>
+      <HeroCarousel />
       <header className="mb-7 flex items-end justify-between gap-4 border-b border-market-border pb-5 sm:mb-8">
         <h2 className="font-display text-3xl text-market-ink sm:text-4xl">Browse the realm</h2>
         {!isLoading && !error && (
