@@ -41,12 +41,12 @@ export function EaglePostWidget() {
 
   if (!isOpen) {
     return (
-      <div ref={containerRef} className="flex w-full justify-end">
+      <div ref={containerRef} className="w-full">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
           aria-label="Open Eagle Post newsletter"
-          className="inline-flex min-h-12 items-center gap-2 border border-gold/60 bg-market-paper px-4 text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          className="inline-flex min-h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
         >
           <EagleMark />
           <span className="font-display text-xs uppercase tracking-[0.12em]">Eagle Post</span>
