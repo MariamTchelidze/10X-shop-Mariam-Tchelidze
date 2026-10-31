@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useRealm } from "../../context/RealmContext";
+import { QuickViewModal } from "../QuickViewModal/QuickViewModal";
 import type { Product } from "../../types/product";
 import { discountedPrice } from "../../utils/product";
 
@@ -20,6 +21,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [variantError, setVariantError] = useState("");
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const hasVariants = Boolean(product.sizes?.length || product.colors?.length);
   const stockMessage = product.stock === 0 ? "Out of stock" : product.stock <= 5 ? `Only ${product.stock} left!` : "In stock";
   const stockColor = product.stock > 0 && product.stock <= 5 ? "text-gold" : "text-market-muted";
@@ -111,7 +113,9 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         <p className="text-xs capitalize tracking-wide text-market-muted">{product.category}</p>
         <p className="text-sm text-market-ink">{formatCurrency(discountedPrice(product.price, product.discountPercentage))}</p>
+        <button type="button" onClick={() => setIsQuickViewOpen(true)} className="pt-1 text-[10px] uppercase tracking-[0.14em] text-market-muted underline underline-offset-4 transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Scry Artifact</button>
       </div>
+      {isQuickViewOpen && <QuickViewModal product={product} onClose={() => setIsQuickViewOpen(false)} />}
     </article>
   );
 }
