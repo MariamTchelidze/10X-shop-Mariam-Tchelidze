@@ -2,15 +2,18 @@ import { useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
+import { PasswordField } from "./components/PasswordField";
 
-interface FormValues { fullName: string; email: string; password: string }
+interface FormValues { fullName: string; email: string; password: string; confirmPassword: string }
 type FormErrors = Partial<Record<keyof FormValues, string>>;
 
 export function LoginPage() {
   const [isRegistering, setIsRegistering] = useState(false);
-  const [values, setValues] = useState<FormValues>({ fullName: "", email: "", password: "" });
+  const [values, setValues] = useState<FormValues>({ fullName: "", email: "", password: "", confirmPassword: "" });
   const [errors, setErrors] = useState<FormErrors>({});
   const [credentialsInvalid, setCredentialsInvalid] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
   const { login, register } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
@@ -31,6 +34,7 @@ export function LoginPage() {
       if (!fullName) nextErrors.fullName = "Full name is required.";
       if (!email.includes("@") || !email.includes(".")) nextErrors.email = "Enter a valid email address.";
       if (values.password.length < 8) nextErrors.password = "Password must be at least 8 characters.";
+      if (values.confirmPassword !== values.password) nextErrors.confirmPassword = "Passwords do not match.";
     } else if (!email.includes("@") || !email.includes(".") || values.password.length < 8) {
       setErrors({ email: "Enter valid login credentials.", password: "Enter valid login credentials." });
       setCredentialsInvalid(true);
@@ -82,16 +86,42 @@ export function LoginPage() {
           <input id="email" name="email" type="email" autoComplete="email" value={values.email} aria-invalid={Boolean(errors.email) || credentialsInvalid} onChange={(event) => { setValues((current) => ({ ...current, email: event.target.value })); setErrors((current) => ({ ...current, email: undefined })); setCredentialsInvalid(false); }} className={inputClass("email")} />
           {errors.email && <p className="mt-2 text-sm text-error" role="alert">{errors.email}</p>}
         </div>
-        <div>
-          <label htmlFor="password" className="mb-2 block text-xs uppercase tracking-[0.16em] text-market-muted">Password</label>
-          <input id="password" name="password" type="password" autoComplete={isRegistering ? "new-password" : "current-password"} value={values.password} aria-invalid={Boolean(errors.password) || credentialsInvalid} onChange={(event) => { setValues((current) => ({ ...current, password: event.target.value })); setErrors((current) => ({ ...current, password: undefined })); setCredentialsInvalid(false); }} className={inputClass("password")} />
-          {errors.password && <p className="mt-2 text-sm text-error" role="alert">{errors.password}</p>}
-        </div>
+        <PasswordField
+          id="password"
+          label="Password"
+          value={values.password}
+          autoComplete={isRegistering ? "new-password" : "current-password"}
+          visible={isPasswordVisible}
+          invalid={Boolean(errors.password) || credentialsInvalid}
+          error={errors.password}
+          onChange={(password) => {
+            setValues((current) => ({ ...current, password }));
+            setErrors((current) => ({ ...current, password: undefined, confirmPassword: undefined }));
+            setCredentialsInvalid(false);
+          }}
+          onToggleVisibility={() => setIsPasswordVisible((visible) => !visible)}
+        />
+        {isRegistering && (
+          <PasswordField
+            id="confirmPassword"
+            label="Confirm password"
+            value={values.confirmPassword}
+            autoComplete="new-password"
+            visible={isConfirmationVisible}
+            invalid={Boolean(errors.confirmPassword)}
+            error={errors.confirmPassword}
+            onChange={(confirmPassword) => {
+              setValues((current) => ({ ...current, confirmPassword }));
+              setErrors((current) => ({ ...current, confirmPassword: undefined }));
+            }}
+            onToggleVisibility={() => setIsConfirmationVisible((visible) => !visible)}
+          />
+        )}
         <button type="submit" className="min-h-12 w-full bg-market-ink px-5 text-xs font-medium uppercase tracking-[0.16em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink">
           {isRegistering ? "Register" : "Log in"}
         </button>
       </form>
-      <button type="button" onClick={() => { setIsRegistering((current) => !current); setErrors({}); setCredentialsInvalid(false); }} className="mt-6 text-center text-xs uppercase tracking-[0.14em] text-market-muted underline-offset-4 hover:text-market-ink hover:underline">
+      <button type="button" onClick={() => { setIsRegistering((current) => !current); setErrors({}); setCredentialsInvalid(false); setValues((current) => ({ ...current, confirmPassword: "" })); setIsPasswordVisible(false); setIsConfirmationVisible(false); }} className="mt-6 text-center text-xs uppercase tracking-[0.14em] text-market-muted underline-offset-4 hover:text-market-ink hover:underline">
         {isRegistering ? "Already have an account? Log in" : "New to Middle Market? Register"}
       </button>
       <Link to="/" className="mt-6 text-center text-xs uppercase tracking-[0.14em] text-market-muted underline-offset-4 hover:text-market-ink hover:underline">Back to catalog</Link>
