@@ -4,12 +4,13 @@ import { discountedPrice } from "../../../utils/product";
 
 interface CartItemRowProps {
   item: CartItem;
+  maxQuantity: number;
   formatCurrency: (amount: number) => string;
   onRemove: (item: CartItem) => void;
   onQuantityChange: (item: CartItem, quantity: number) => void;
 }
 
-export function CartItemRow({ item, formatCurrency, onRemove, onQuantityChange }: CartItemRowProps) {
+export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQuantityChange }: CartItemRowProps) {
   const unitPrice = discountedPrice(item.price, item.discountPercentage);
   const variants = [
     item.size ? `Size: ${item.size}` : "",
@@ -60,7 +61,7 @@ export function CartItemRow({ item, formatCurrency, onRemove, onQuantityChange }
             <button
               type="button"
               aria-label={`Increase ${item.title} quantity`}
-              disabled={item.quantity >= item.stock}
+              disabled={item.quantity >= maxQuantity}
               onClick={() => onQuantityChange(item, item.quantity + 1)}
               className="min-h-10 min-w-10 text-lg text-market-ink disabled:text-market-border"
             >

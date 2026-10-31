@@ -1,12 +1,22 @@
 import { Link } from "react-router";
 import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
+import { useInventory } from "../../context/InventoryContext";
+import type { CartItem } from "../../types/cart";
 import { CartItemRow } from "./components/CartItemRow";
 import { CartSummary } from "./components/CartSummary";
 
 export function CartPage() {
   const { items, subtotal, removeItem, updateQuantity } = useCart();
   const { formatCurrency } = useRealm();
+  const { getStock } = useInventory();
+
+  const getMaxQuantity = (item: CartItem): number => {
+    const otherVariantQuantity = items
+      .filter((entry) => entry.productId === item.productId && !(entry.size === item.size && entry.color === item.color))
+      .reduce((total, entry) => total + entry.quantity, 0);
+    return Math.max(1, getStock(item.productId, item.stock) - otherVariantQuantity);
+  };
 
   if (items.length === 0) {
     return (
@@ -33,6 +43,7 @@ export function CartPage() {
             <CartItemRow
               key={`${item.productId}-${item.size ?? ""}-${item.color ?? ""}`}
               item={item}
+              maxQuantity={getMaxQuantity(item)}
               formatCurrency={formatCurrency}
               onRemove={(current) =>
                 removeItem(current.productId, { size: current.size, color: current.color })

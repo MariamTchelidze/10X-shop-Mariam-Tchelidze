@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { fetchProductById } from "../../api/products";
 import { ProductReviewsContainer } from "../../components/ProductReviews/ProductReviewsContainer";
+import { StockAlertModal } from "../../components/StockAlert/StockAlertModal";
 import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
+import { useInventory } from "../../context/InventoryContext";
 import type { Product } from "../../types/product";
 import { discountedPrice } from "../../utils/product";
 import { RelatedProducts } from "./components/RelatedProducts";
@@ -17,8 +19,10 @@ export function ProductPage() {
   const [error, setError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [cartMessage, setCartMessage] = useState<string | null>(null);
+  const [isStockAlertOpen, setIsStockAlertOpen] = useState(false);
   const { addItem } = useCart();
   const { formatCurrency } = useRealm();
+  const { getStock } = useInventory();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -60,6 +64,10 @@ export function ProductPage() {
     return () => controller.abort();
   }, [isValidId, productId]);
 
+  useEffect(() => {
+    setQuantity((current) => Math.min(current, Math.max(1, getStock(productId, product?.stock ?? 0))));
+  }, [getStock, product?.stock, productId]);
+
   if (isLoading) {
     return (
       <main className="mx-auto max-w-7xl px-4 py-16 text-center text-sm text-market-muted" role="status">
@@ -92,13 +100,14 @@ export function ProductPage() {
   }
 
   const price = discountedPrice(product.price, product.discountPercentage);
+  const stock = getStock(product.id, product.stock);
   const stockMessage =
-    product.stock === 0
-      ? "Out of stock"
-      : product.stock <= 5
-        ? `Only ${product.stock} left!`
+    stock === 0
+      ? "Out of Stock · Mithril Alert"
+      : stock <= 5
+        ? `Only ${stock} left in stock!`
         : "In stock";
-  const stockColor = product.stock > 0 && product.stock <= 5 ? "text-gold" : "text-market-muted";
+  const stockColor = stock > 0 && stock <= 5 ? "text-gold" : stock === 0 ? "text-blood" : "text-market-muted";
 
   const handleAddToCart = (): void => {
     const added = addItem(product, quantity);
@@ -146,7 +155,7 @@ export function ProductPage() {
             <button
               type="button"
               aria-label="Decrease quantity"
-              disabled={quantity <= 1 || product.stock === 0}
+              disabled={quantity <= 1 || stock === 0}
               onClick={() => setQuantity((current) => Math.max(1, current - 1))}
               className="min-h-12 min-w-12 text-lg text-market-ink disabled:text-market-border"
             >
@@ -156,26 +165,43 @@ export function ProductPage() {
             <button
               type="button"
               aria-label="Increase quantity"
-              disabled={quantity >= product.stock || product.stock === 0}
-              onClick={() => setQuantity((current) => Math.min(product.stock, current + 1))}
+              disabled={quantity >= stock || stock === 0}
+              onClick={() => setQuantity((current) => Math.min(stock, current + 1))}
               className="min-h-12 min-w-12 text-lg text-market-ink disabled:text-market-border"
             >
               +
             </button>
           </div>
-          <button
-            type="button"
-            disabled={product.stock === 0}
-            onClick={handleAddToCart}
-            className="mt-4 min-h-12 w-full max-w-sm bg-market-ink px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted disabled:cursor-not-allowed disabled:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
-          >
-            {product.stock === 0 ? "Out of stock" : "Add to cart"}
-          </button>
+          {stock > 0 ? (
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              className="mt-4 min-h-12 w-full max-w-sm bg-market-ink px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
+            >
+              Add to cart
+            </button>
+          ) : (
+            <div className="mt-4 grid w-full max-w-sm gap-2">
+              <button type="button" disabled className="min-h-12 cursor-not-allowed bg-market-surface px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-muted">
+                Out of stock
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsStockAlertOpen(true)}
+                className="min-h-12 border border-gold bg-market-paper px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-ink transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+              >
+                Request Mithril stock alert
+              </button>
+            </div>
+          )}
           {cartMessage && <p className="mt-3 text-sm text-market-muted" role="status">{cartMessage}</p>}
         </section>
       </div>
       <ProductReviewsContainer product={product} />
       <RelatedProducts product={product} />
+      {isStockAlertOpen && (
+        <StockAlertModal product={product} onClose={() => setIsStockAlertOpen(false)} />
+      )}
     </main>
   );
 }

@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from "react-router";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 import { useRealm } from "../../context/RealmContext";
+import { useInventory } from "../../context/InventoryContext";
 import type { Order } from "../../types/order";
 import { saveOrder } from "../../utils/orders";
 import { CheckoutForm } from "./components/CheckoutForm";
@@ -19,6 +20,7 @@ const emptyValues: CheckoutValues = {
 export function CheckoutPage() {
   const { items, subtotal } = useCart();
   const { user } = useAuth();
+  const { decrementStock } = useInventory();
   const { formatCurrency } = useRealm();
   const navigate = useNavigate();
   const [values, setValues] = useState<CheckoutValues>(emptyValues);
@@ -71,6 +73,7 @@ export function CheckoutPage() {
       paymentMethod: "Demo checkout — no payment collected",
     };
     saveOrder(order);
+    decrementStock(items);
     navigate("/order-success", { replace: true, state: { order } });
   };
 

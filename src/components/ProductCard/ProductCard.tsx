@@ -4,7 +4,9 @@ import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useRealm } from "../../context/RealmContext";
+import { useInventory } from "../../context/InventoryContext";
 import { QuickViewModal } from "../QuickViewModal/QuickViewModal";
+import { StockAlertModal } from "../StockAlert/StockAlertModal";
 import type { Product } from "../../types/product";
 import { discountedPrice } from "../../utils/product";
 
@@ -17,21 +19,27 @@ export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
   const { formatCurrency } = useRealm();
   const { isInWishlist, toggleWishlist } = useWishlist();
+  const { getStock } = useInventory();
   const [isVariantPickerOpen, setIsVariantPickerOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [variantError, setVariantError] = useState("");
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
+  const [isStockAlertOpen, setIsStockAlertOpen] = useState(false);
+  const stock = getStock(product.id, product.stock);
   const hasVariants = Boolean(product.sizes?.length || product.colors?.length);
-  const stockMessage = product.stock === 0 ? "Out of stock" : product.stock <= 5 ? `Only ${product.stock} left!` : "In stock";
-  const stockColor = product.stock > 0 && product.stock <= 5 ? "text-gold" : "text-market-muted";
+  const stockMessage = stock === 0 ? "Out of Stock · Mithril Alert" : stock <= 5 ? `Only ${stock} left in stock!` : "In stock";
+  const stockColor = stock > 0 && stock <= 5 ? "text-gold" : stock === 0 ? "text-blood" : "text-market-muted";
 
   const handleQuickAdd = (): void => {
+    if (stock < 1) {
+      setIsStockAlertOpen(true);
+      return;
+    }
     if (!user.isLoggedIn) {
       addItem(product, 1);
       return;
     }
-    if (product.stock < 1) return;
     if (hasVariants) {
       setVariantError("");
       setIsVariantPickerOpen((current) => !current);
@@ -42,6 +50,11 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const handleVariantSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
+    if (stock < 1) {
+      setIsVariantPickerOpen(false);
+      setIsStockAlertOpen(true);
+      return;
+    }
     if ((product.sizes?.length && !selectedSize) || (product.colors?.length && !selectedColor)) {
       setVariantError("Choose your options to continue.");
       return;
@@ -80,14 +93,30 @@ export function ProductCard({ product }: ProductCardProps) {
         </button>
 
         <div className={`absolute inset-x-0 bottom-0 z-10 transition-all duration-300 ${isVariantPickerOpen ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 max-sm:translate-y-0 max-sm:opacity-100"}`}>
-          {!isVariantPickerOpen ? (
+          {!isVariantPickerOpen ? stock === 0 ? (
+            <div className="grid grid-cols-2">
+              <button
+                type="button"
+                disabled
+                className="min-h-11 cursor-not-allowed bg-market-surface px-3 text-[10px] font-medium uppercase tracking-[0.1em] text-market-muted"
+              >
+                Out of stock
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsStockAlertOpen(true)}
+                className="min-h-11 bg-market-paper/95 px-3 text-[10px] font-medium uppercase tracking-[0.1em] text-market-ink transition-colors hover:bg-market-ink hover:text-market-paper focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-gold"
+              >
+                Mithril alert
+              </button>
+            </div>
+          ) : (
             <button
               type="button"
-              disabled={product.stock === 0}
               onClick={handleQuickAdd}
-              className="min-h-11 w-full bg-market-paper/95 px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-market-ink backdrop-blur-sm transition-colors hover:bg-market-ink hover:text-market-paper disabled:cursor-not-allowed disabled:opacity-60"
+              className="min-h-11 w-full bg-market-paper/95 px-4 text-[10px] font-medium uppercase tracking-[0.14em] text-market-ink backdrop-blur-sm transition-colors hover:bg-market-ink hover:text-market-paper focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-gold"
             >
-              {product.stock === 0 ? "Out of stock" : "Add to Bag"}
+              Add to Bag
             </button>
           ) : (
             <form onSubmit={handleVariantSubmit} className="space-y-3 bg-market-paper/95 p-3 text-market-ink shadow-lg backdrop-blur-sm sm:p-4">
@@ -109,13 +138,14 @@ export function ProductCard({ product }: ProductCardProps) {
           <Link to={`/products/${product.id}`} className="min-w-0 font-display text-sm font-medium uppercase tracking-wide text-market-ink hover:underline">
             {product.title}
           </Link>
-          <span className={`shrink-0 text-xs ${stockColor}`}>{stockMessage}</span>
+          <span className={`max-w-[44%] shrink text-right text-[9px] leading-3 sm:text-[10px] ${stockColor}`}>{stockMessage}</span>
         </div>
         <p className="text-xs capitalize tracking-wide text-market-muted">{product.category}</p>
         <p className="text-sm text-market-ink">{formatCurrency(discountedPrice(product.price, product.discountPercentage))}</p>
         <button type="button" onClick={() => setIsQuickViewOpen(true)} className="pt-1 text-[10px] uppercase tracking-[0.14em] text-market-muted underline underline-offset-4 transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Scry Artifact</button>
       </div>
       {isQuickViewOpen && <QuickViewModal product={product} onClose={() => setIsQuickViewOpen(false)} />}
+      {isStockAlertOpen && <StockAlertModal product={product} onClose={() => setIsStockAlertOpen(false)} />}
     </article>
   );
 }

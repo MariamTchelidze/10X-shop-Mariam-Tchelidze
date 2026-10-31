@@ -1,8 +1,10 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Product } from "../types/product";
 import type { CartItem } from "../types/cart";
 import { useToast } from "./ToastContext";
 import { useAuth } from "./AuthContext";
+import { useInventory } from "./InventoryContext";
+import { readCartItems, saveCartItems } from "../utils/cartStorage";
 
 interface CartContextValue {
   items: CartItem[];
@@ -26,24 +28,33 @@ interface CartProviderProps {
 }
 
 export function CartProvider({ children }: CartProviderProps) {
-  const [items, setItems] = useState<CartItem[]>([]);
   const { addToast } = useToast();
   const { user } = useAuth();
+  const { getStock } = useInventory();
+  const [items, setItems] = useState<CartItem[]>(() => readCartItems(getStock));
+
+  useEffect(() => {
+    saveCartItems(items);
+  }, [items]);
 
   const addItem = (product: Product, quantity: number, variants: CartVariants = {}): boolean => {
     if (!user.isLoggedIn) {
       addToast("for adding the product to the cart please log in first", "info");
       return false;
     }
-    if (!Number.isInteger(quantity) || quantity < 1 || product.stock < 1) {
+    const stock = getStock(product.id, product.stock);
+    if (!Number.isInteger(quantity) || quantity < 1 || stock < 1) {
       return false;
     }
 
     const currentItem = items.find((item) => item.productId === product.id && item.size === variants.size && item.color === variants.color);
-    const currentQuantity = currentItem?.quantity ?? 0;
-    const nextQuantity = Math.min(currentQuantity + quantity, product.stock);
+    const quantityAlreadyInCart = items
+      .filter((item) => item.productId === product.id)
+      .reduce((total, item) => total + item.quantity, 0);
+    const quantityToAdd = Math.min(quantity, stock - quantityAlreadyInCart);
+    const nextQuantity = (currentItem?.quantity ?? 0) + quantityToAdd;
 
-    if (nextQuantity === currentQuantity) {
+    if (quantityToAdd < 1) {
       return false;
     }
 
@@ -53,7 +64,7 @@ export function CartProvider({ children }: CartProviderProps) {
       thumbnail: product.thumbnail,
       price: product.price,
       discountPercentage: product.discountPercentage,
-      stock: product.stock,
+      stock,
       quantity: nextQuantity,
       ...(variants.size ? { size: variants.size } : {}),
       ...(variants.color ? { color: variants.color } : {}),
@@ -89,10 +100,20 @@ export function CartProvider({ children }: CartProviderProps) {
       return;
     }
 
+    const currentItem = items.find((item) =>
+      item.productId === productId && item.size === variants.size && item.color === variants.color,
+    );
+    if (!currentItem) return;
+    const stock = getStock(productId, currentItem.stock);
+    const quantityInOtherVariants = items
+      .filter((item) => item.productId === productId && !(item.size === variants.size && item.color === variants.color))
+      .reduce((total, item) => total + item.quantity, 0);
+    const maxQuantity = Math.max(1, stock - quantityInOtherVariants);
+
     setItems((currentItems) =>
       currentItems.map((item) =>
         item.productId === productId && item.size === variants.size && item.color === variants.color
-          ? { ...item, quantity: Math.min(quantity, item.stock) }
+          ? { ...item, stock, quantity: Math.min(quantity, maxQuantity) }
           : item,
       ),
     );

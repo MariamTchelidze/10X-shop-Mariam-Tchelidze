@@ -16,6 +16,7 @@ import { WishlistPage } from "./pages/WishlistPage/WishlistPage";
 import { OrderSuccessPage } from "./pages/OrderSuccessPage/OrderSuccessPage";
 import { HelpCenterPage } from "./pages/HelpCenterPage/HelpCenterPage";
 import { RealmProvider } from "./context/RealmContext";
+import { InventoryProvider } from "./context/InventoryContext";
 import { EaglePostWidget } from "./components/EaglePostWidget/EaglePostWidget";
 import {
   AboutUsPage,
@@ -70,6 +71,7 @@ export function App() {
         <ToastProvider>
           <RealmProvider>
           <WishlistProvider>
+          <InventoryProvider>
           <CartProvider>
             <Routes>
             <Route element={<AppLayout />}>
@@ -105,6 +107,7 @@ export function App() {
             </Route>
             </Routes>
           </CartProvider>
+          </InventoryProvider>
           </WishlistProvider>
           </RealmProvider>
         </ToastProvider>

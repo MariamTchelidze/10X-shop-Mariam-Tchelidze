@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
+import { useInventory } from "../../context/InventoryContext";
 import type { Product } from "../../types/product";
 import { discountedPrice } from "../../utils/product";
+import { StockAlertModal } from "../StockAlert/StockAlertModal";
 
 interface QuickViewModalProps {
   product: Product;
@@ -12,12 +14,15 @@ interface QuickViewModalProps {
 export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
   const { addItem } = useCart();
   const { formatCurrency } = useRealm();
+  const { getStock } = useInventory();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [error, setError] = useState("");
+  const [isStockAlertOpen, setIsStockAlertOpen] = useState(false);
   const image = product.images[0] ?? product.thumbnail;
   const price = discountedPrice(product.price, product.discountPercentage);
+  const stock = getStock(product.id, product.stock);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -39,6 +44,10 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
 
   const handleAddToBag = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (stock < 1) {
+      setIsStockAlertOpen(true);
+      return;
+    }
     if ((product.sizes?.length && !selectedSize) || (product.colors?.length && !selectedColor)) {
       setError("Choose your artifact options before adding it to your bag.");
       return;
@@ -74,6 +83,9 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
           <p className="text-[10px] uppercase tracking-[0.18em] text-gold">Scry the artifact</p>
           <h2 id="quick-view-title" className="mt-3 pr-10 font-display text-2xl leading-tight text-market-ink sm:text-3xl">{product.title}</h2>
           <p className="mt-2 text-xs uppercase tracking-widest text-market-muted">{product.category}</p>
+          <p className={`mt-2 text-xs ${stock > 0 && stock <= 5 ? "text-gold" : "text-market-muted"}`}>
+            {stock === 0 ? "Out of Stock · Mithril Alert" : stock <= 5 ? `Only ${stock} left in stock!` : "In stock"}
+          </p>
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <p className="text-base text-market-ink">{formatCurrency(price)}</p>
             {product.discountPercentage > 0 && <p className="text-sm text-market-muted line-through">{formatCurrency(product.price)}</p>}
@@ -98,10 +110,24 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
               </label>
             )}
             {error && <p role="alert" className="text-xs text-error">{error}</p>}
-            <button type="submit" disabled={product.stock < 1} className="min-h-12 w-full bg-market-ink px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-paper transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50">{product.stock > 0 ? "Add to Bag" : "Out of Stock"}</button>
+            {stock > 0 ? (
+              <button type="submit" className="min-h-12 w-full bg-market-ink px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-paper transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
+                Add to Bag
+              </button>
+            ) : (
+              <div className="grid gap-2">
+                <button type="button" disabled className="min-h-12 w-full cursor-not-allowed bg-market-surface px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-muted">
+                  Out of stock
+                </button>
+                <button type="button" onClick={() => setIsStockAlertOpen(true)} className="min-h-12 w-full border border-gold px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-ink transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
+                  Request Mithril stock alert
+                </button>
+              </div>
+            )}
           </form>
         </div>
       </section>
+      {isStockAlertOpen && <StockAlertModal product={product} onClose={() => setIsStockAlertOpen(false)} />}
     </div>
   );
 }
