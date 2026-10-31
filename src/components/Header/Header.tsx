@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
+import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 
 const categoryLinks = [
   { label: "WOMEN", slug: "womens-dresses" },
@@ -85,7 +86,7 @@ export function Header() {
           10X SHOP
         </Link>
 
-        <div className="flex items-center justify-self-end gap-3 sm:gap-5 lg:gap-7">
+        <div className="flex items-center justify-self-end gap-2 sm:gap-4 lg:gap-6">
           <button
             type="button"
             onClick={handleSearchClick}
@@ -119,6 +120,7 @@ export function Header() {
               {itemCount > 0 ? itemCount : ""}
             </span>
           </Link>
+          <ThemeToggle />
         </div>
       </div>
 

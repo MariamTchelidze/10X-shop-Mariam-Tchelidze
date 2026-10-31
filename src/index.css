@@ -1,35 +1,85 @@
 @import "tailwindcss";
 
-@theme {
-  --color-zara-black: var(--zara-black);
-  --color-zara-white: var(--zara-white);
-  --color-zara-gray: var(--zara-gray);
-  --color-zara-light: var(--zara-light);
-  --color-zara-border: var(--zara-border);
+@theme inline {
+  --color-zara-black: var(--text-primary);
+  --color-zara-white: var(--bg-primary);
+  --color-zara-gray: var(--text-muted);
+  --color-zara-light: var(--bg-secondary);
+  --color-zara-border: var(--color-border);
+  --color-accent: var(--color-accent);
   --font-editorial: var(--zara-font-editorial);
   --font-sans: var(--zara-font-sans);
 }
 
+@utility bg-primary {
+  background-color: var(--bg-primary);
+}
+
+@utility bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+@utility text-primary {
+  color: var(--text-primary);
+}
+
+@utility text-muted {
+  color: var(--text-muted);
+}
+
+@utility border-border {
+  border-color: var(--color-border);
+}
+
+@utility bg-accent {
+  background-color: var(--color-accent);
+}
+
+@utility text-accent {
+  color: var(--color-accent);
+}
+
 :root {
-  --zara-black: #000000;
-  --zara-white: #ffffff;
-  --zara-gray: #767676;
-  --zara-light: #f9f9f9;
-  --zara-border: #e5e5e5;
+  color-scheme: light;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9f9f9;
+  --text-primary: #000000;
+  --text-muted: #767676;
+  --color-border: #e5e5e5;
+  --color-accent: #000000;
+  --zara-black: var(--text-primary);
+  --zara-white: var(--bg-primary);
+  --zara-gray: var(--text-muted);
+  --zara-light: var(--bg-secondary);
+  --zara-border: var(--color-border);
   --zara-font-editorial: "Playfair Display", Georgia, serif;
   --zara-font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
   font-family: var(--zara-font-sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  color: var(--zara-black);
-  background: var(--zara-white);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+}
+
+:root.dark,
+.dark {
+  color-scheme: dark;
+  --bg-primary: #0b0f19;
+  --bg-secondary: #121826;
+  --text-primary: #f5f5f5;
+  --text-muted: #a3aab8;
+  --color-border: #303746;
+  --color-accent: #ffffff;
 }
 
 body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: color 180ms ease, background-color 180ms ease;
 }
 
 @keyframes toast-in {
