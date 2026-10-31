@@ -73,7 +73,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-market-border bg-market-paper">
       <div className="mx-auto flex min-h-16 max-w-[1600px] items-center justify-between gap-4 px-4 sm:px-6 min-[1025px]:hidden">
-        <div className="flex min-w-0 items-center gap-2">
+        <div className="flex min-w-0 items-center gap-1">
           <Link to="/" aria-label="Middle-earth Market home" className="shrink-0 rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink">
             <img src="/images/Logo.png" alt="Middle-earth Market" width={1254} height={1254} className="h-10 w-10 object-contain sm:h-11 sm:w-11" />
           </Link>
@@ -87,6 +87,16 @@ export function Header() {
               <path d="M9 9V6a3 3 0 0 1 6 0v3" />
             </svg>
             {itemCount > 0 && <span className="absolute right-0 top-0 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-market-ink px-1 text-[9px] leading-none text-market-paper">{itemCount}</span>}
+          </Link>
+          <Link
+            to="/wishlist"
+            aria-label={wishlistItems.length > 0 ? `Wishlist, ${wishlistItems.length} items` : "Wishlist"}
+            className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" />
+            </svg>
+            {wishlistItems.length > 0 && <span className="absolute right-0 top-0 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-market-ink px-1 text-[9px] leading-none text-market-paper">{wishlistItems.length}</span>}
           </Link>
         </div>
         <MobileMenu />
