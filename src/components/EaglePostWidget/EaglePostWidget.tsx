@@ -41,7 +41,7 @@ export function EaglePostWidget() {
           type="button"
           onClick={() => setIsOpen(true)}
           aria-label="Open Eagle Post newsletter"
-          className="inline-flex h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold max-lg:hidden"
+          className="inline-flex h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold max-[1024px]:hidden"
         >
           <EagleMark />
           <span className="font-display text-xs uppercase tracking-[0.12em]">Eagle Post</span>

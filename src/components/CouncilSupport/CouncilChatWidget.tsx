@@ -41,7 +41,7 @@ export function CouncilChatWidget() {
           onClick={() => updateOpenState(true)}
           aria-label="Open The Council of Elrond support"
           aria-expanded={false}
-          className="inline-flex h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold max-lg:hidden"
+          className="inline-flex h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold max-[1024px]:hidden"
         >
           <ElvenLeafMark />
           <span className="font-display text-[10px] uppercase tracking-[0.1em] sm:text-xs">Ask the Council</span>

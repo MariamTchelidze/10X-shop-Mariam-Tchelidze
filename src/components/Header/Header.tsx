@@ -72,7 +72,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-market-border bg-market-paper">
-      <div className="mx-auto grid min-h-16 max-w-[1600px] grid-cols-[auto_1fr_auto] items-center gap-2 px-4 sm:px-6 lg:hidden">
+      <div className="mx-auto grid min-h-16 max-w-[1600px] grid-cols-[auto_1fr_auto] items-center gap-2 px-4 sm:px-6 min-[1025px]:hidden">
         <MobileMenu />
         <Link
           to="/"
@@ -102,7 +102,7 @@ export function Header() {
         </div>
       </div>
 
-      <div className="mx-auto hidden min-h-16 max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:px-6 lg:grid lg:min-h-20 lg:px-10">
+      <div className="mx-auto hidden min-h-16 max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:px-6 min-[1025px]:grid lg:min-h-20 lg:px-10">
         <div className="min-w-0">
           <div className="hidden lg:block">
             <CategoryLinks />
