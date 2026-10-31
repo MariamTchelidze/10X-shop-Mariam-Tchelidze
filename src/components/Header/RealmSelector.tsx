@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { REALMS, useRealm } from "../../context/RealmContext";
 
-export function RealmSelector() {
+interface RealmSelectorProps {
+  showLabel?: boolean;
+}
+
+export function RealmSelector({ showLabel = false }: RealmSelectorProps) {
   const { realm, setRealm } = useRealm();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,9 +34,10 @@ export function RealmSelector() {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((open) => !open)}
-        className="inline-flex h-10 w-9 items-center justify-center text-lg text-market-ink transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+        className={`inline-flex min-h-10 items-center text-market-ink transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${showLabel ? "gap-2 px-1" : "w-9 justify-center text-lg"}`}
       >
         <span aria-hidden="true">{realm.marker}</span>
+        {showLabel && <span className="text-left text-[10px] uppercase tracking-[0.1em]">{realm.name} · {realm.currencySymbol}</span>}
       </button>
       {isOpen && (
         <div role="listbox" aria-label="Choose your realm and currency" className="absolute right-0 top-full z-[60] mt-2 w-[min(19rem,calc(100vw-2rem))] border border-market-border bg-market-paper p-2 text-market-ink shadow-xl">

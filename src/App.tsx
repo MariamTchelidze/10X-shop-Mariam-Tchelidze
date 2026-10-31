@@ -17,6 +17,7 @@ import { OrderSuccessPage } from "./pages/OrderSuccessPage/OrderSuccessPage";
 import { HelpCenterPage } from "./pages/HelpCenterPage/HelpCenterPage";
 import { RealmProvider } from "./context/RealmContext";
 import { InventoryProvider } from "./context/InventoryContext";
+import { FloatingWidgetProvider } from "./context/FloatingWidgetContext";
 import { MithrilVaultCalculator } from "./components/MithrilVaultCalculator/MithrilVaultCalculator";
 import { FloatingWidgets } from "./components/FloatingWidgets/FloatingWidgets";
 import {
@@ -42,15 +43,17 @@ function AppLayout() {
   const showEaglePost = pathname !== "/login" && !pathname.startsWith("/login/");
 
   return (
-    <div className="flex min-h-screen flex-col bg-market-paper">
-      <Header />
-      <div className="flex-1">
-        <Outlet />
+    <FloatingWidgetProvider>
+      <div className="flex min-h-screen flex-col bg-market-paper">
+        <Header />
+        <div className="flex-1">
+          <Outlet />
+        </div>
+        <Footer />
+        {showEaglePost && <FloatingWidgets />}
+        {showEaglePost && <MithrilVaultCalculator />}
       </div>
-      <Footer />
-      {showEaglePost && <FloatingWidgets />}
-      {showEaglePost && <MithrilVaultCalculator />}
-    </div>
+    </FloatingWidgetProvider>
   );
 }
 

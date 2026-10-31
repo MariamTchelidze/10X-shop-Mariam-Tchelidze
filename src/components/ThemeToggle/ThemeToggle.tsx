@@ -6,7 +6,11 @@ function isDarkTheme(): boolean {
   return document.documentElement.classList.contains("dark");
 }
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  showLabel?: boolean;
+}
+
+export function ThemeToggle({ showLabel = false }: ThemeToggleProps) {
   const [isDark, setIsDark] = useState(isDarkTheme);
 
   const toggleTheme = () => {
@@ -27,7 +31,7 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
       title={`Switch to ${isDark ? "light" : "dark"} theme`}
-      className="inline-flex h-9 w-9 shrink-0 items-center justify-center text-market-ink transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink"
+      className={`inline-flex min-h-10 shrink-0 items-center ${showLabel ? "gap-2 px-1" : "w-9 justify-center"} text-market-ink transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink`}
     >
       {isDark ? (
         <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -39,6 +43,7 @@ export function ThemeToggle() {
           <path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z" />
         </svg>
       )}
+      {showLabel && <span className="text-[10px] uppercase tracking-[0.12em]">{isDark ? "Dark theme" : "Light theme"}</span>}
     </button>
   );
 }

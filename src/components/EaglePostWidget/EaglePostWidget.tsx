@@ -1,4 +1,5 @@
 import { useRef, useState, type FormEvent } from "react";
+import { useFloatingWidgets } from "../../context/FloatingWidgetContext";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 
 const SUBSCRIPTION_KEY = "middle-market-eagle-post-email";
@@ -15,7 +16,9 @@ export function EaglePostWidget() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [email, setEmail] = useState("");
   const [subscribedEmail, setSubscribedEmail] = useState(() => readStorage(SUBSCRIPTION_KEY));
-  const [isOpen, setIsOpen] = useState(false);
+  const { activeWidget, setActiveWidget } = useFloatingWidgets();
+  const isOpen = activeWidget === "eagle-post";
+  const setIsOpen = (open: boolean) => setActiveWidget(open ? "eagle-post" : null);
 
   useOutsideClick(containerRef, () => setIsOpen(false), isOpen);
 
@@ -38,7 +41,7 @@ export function EaglePostWidget() {
           type="button"
           onClick={() => setIsOpen(true)}
           aria-label="Open Eagle Post newsletter"
-          className="inline-flex h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          className="inline-flex h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold max-lg:hidden"
         >
           <EagleMark />
           <span className="font-display text-xs uppercase tracking-[0.12em]">Eagle Post</span>

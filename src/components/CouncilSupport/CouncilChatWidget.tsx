@@ -1,15 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { useFloatingWidgets } from "../../context/FloatingWidgetContext";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { CouncilChatPanel } from "./CouncilChatPanel";
 import { ElvenLeafMark } from "./ElvenLeafMark";
 
 export function CouncilChatWidget() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const { activeWidget, setActiveWidget } = useFloatingWidgets();
+  const isOpen = activeWidget === "council";
 
   const updateOpenState = useCallback((next: boolean) => {
-    setIsOpen(next);
-  }, []);
+    setActiveWidget(next ? "council" : null);
+  }, [setActiveWidget]);
 
   useOutsideClick(containerRef, () => updateOpenState(false), isOpen);
 
@@ -39,7 +41,7 @@ export function CouncilChatWidget() {
           onClick={() => updateOpenState(true)}
           aria-label="Open The Council of Elrond support"
           aria-expanded={false}
-          className="inline-flex h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          className="inline-flex h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold max-lg:hidden"
         >
           <ElvenLeafMark />
           <span className="font-display text-[10px] uppercase tracking-[0.1em] sm:text-xs">Ask the Council</span>
