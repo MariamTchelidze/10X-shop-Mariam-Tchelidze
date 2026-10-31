@@ -14,6 +14,7 @@ import { OrdersPage } from "./pages/OrdersPage/OrdersPage";
 import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
 import { WishlistPage } from "./pages/WishlistPage/WishlistPage";
 import { OrderSuccessPage } from "./pages/OrderSuccessPage/OrderSuccessPage";
+import { HelpCenterPage } from "./pages/HelpCenterPage/HelpCenterPage";
 import {
   AboutUsPage,
   CancelSubscriptionPage,
@@ -75,6 +76,7 @@ export function App() {
               <Route path="/products/:id" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
+              <Route path="/help-center" element={<HelpCenterPage />} />
               <Route path="/help/shop-online" element={<ShopOnlinePage />} />
               <Route path="/help/payments" element={<PaymentsPage />} />
               <Route path="/help/deliveries" element={<DeliveriesPage />} />

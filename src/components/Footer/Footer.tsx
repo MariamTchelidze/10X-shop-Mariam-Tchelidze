@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 
 const helpLinks = [
+  ["HELP & LORE CENTER", "/help-center"],
   ["SHOP ONLINE", "/help/shop-online"],
   ["PAYMENTS", "/help/payments"],
   ["DELIVERIES AND ORDER TRACKING", "/help/deliveries"],
