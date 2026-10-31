@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from "react";
 
 const SUBSCRIPTION_KEY = "middle-market-eagle-post-email";
-const DISMISSED_KEY = "middle-market-eagle-post-dismissed";
 
 function readStorage(key: string): string {
   try {
@@ -14,8 +13,7 @@ function readStorage(key: string): string {
 export function EaglePostWidget() {
   const [email, setEmail] = useState("");
   const [subscribedEmail, setSubscribedEmail] = useState(() => readStorage(SUBSCRIPTION_KEY));
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(() => readStorage(DISMISSED_KEY) === "true");
+  const [isOpen, setIsOpen] = useState(() => window.matchMedia("(min-width: 640px)").matches);
 
   const handleSubscribe = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,24 +27,13 @@ export function EaglePostWidget() {
     setSubscribedEmail(normalizedEmail);
   };
 
-  const dismiss = () => {
-    setIsDismissed(true);
-    try {
-      localStorage.setItem(DISMISSED_KEY, "true");
-    } catch {
-      // Dismissal still applies until this page is refreshed.
-    }
-  };
-
-  if (isDismissed) return null;
-
   if (!isOpen) {
     return (
       <button
         type="button"
         onClick={() => setIsOpen(true)}
         aria-label="Open Eagle Post newsletter"
-        className="fixed bottom-[calc(env(safe-area-inset-bottom)+1rem)] right-4 z-40 inline-flex min-h-12 items-center gap-2 border border-gold/60 bg-market-paper px-4 text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold sm:bottom-6 sm:right-6"
+        className="fixed bottom-6 right-6 z-50 inline-flex min-h-12 items-center gap-2 border border-gold/60 bg-market-paper px-4 text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold max-sm:bottom-4 max-sm:right-4"
       >
         <EagleMark />
         <span className="font-display text-xs uppercase tracking-[0.12em]">Eagle Post</span>
@@ -55,19 +42,19 @@ export function EaglePostWidget() {
   }
 
   return (
-    <aside aria-label="Eagle Post newsletter" className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-40 sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-[min(22rem,calc(100vw-3rem))]">
+    <aside aria-label="Eagle Post newsletter" className="fixed bottom-6 right-6 z-50 w-[calc(100vw-2rem)] max-w-[22rem] sm:w-[min(22rem,calc(100vw-3rem))] max-sm:bottom-4 max-sm:right-4">
       <section className="border border-gold/60 bg-market-paper text-market-ink shadow-2xl">
         <div className="flex items-start justify-between gap-4 border-b border-market-border px-4 py-4 sm:px-5">
           <div className="flex items-center gap-3">
             <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gold/60 text-gold"><EagleMark /></span>
             <div>
               <h2 className="font-display text-sm uppercase tracking-[0.1em]">Eagle Post</h2>
-              <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-market-muted">Dispatch via Great Eagle</p>
+              <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-market-muted">Dispatch via Great Eagles</p>
             </div>
           </div>
           <div className="flex shrink-0 gap-1">
             <button type="button" onClick={() => setIsOpen(false)} aria-label="Minimize Eagle Post" className="inline-flex h-8 w-8 items-center justify-center text-lg text-market-muted transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-gold">−</button>
-            <button type="button" onClick={dismiss} aria-label="Dismiss Eagle Post" className="inline-flex h-8 w-8 items-center justify-center text-lg text-market-muted transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-gold">×</button>
+            <button type="button" onClick={() => setIsOpen(false)} aria-label="Close Eagle Post" className="inline-flex h-8 w-8 items-center justify-center text-lg text-market-muted transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-gold">×</button>
           </div>
         </div>
 

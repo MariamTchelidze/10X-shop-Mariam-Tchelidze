@@ -1,4 +1,4 @@
-import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router";
+import { BrowserRouter, Link, Outlet, Route, Routes, useLocation } from "react-router";
 import { Footer } from "./components/Footer/Footer";
 import { Header } from "./components/Header/Header";
 import { AuthProvider } from "./context/AuthContext";
@@ -36,6 +36,9 @@ import {
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 
 function AppLayout() {
+  const { pathname } = useLocation();
+  const showEaglePost = pathname !== "/login" && !pathname.startsWith("/login/");
+
   return (
     <div className="flex min-h-screen flex-col bg-market-paper">
       <Header />
@@ -43,7 +46,7 @@ function AppLayout() {
         <Outlet />
       </div>
       <Footer />
-      <EaglePostWidget />
+      {showEaglePost && <EaglePostWidget />}
     </div>
   );
 }
