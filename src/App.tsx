@@ -16,6 +16,7 @@ import { WishlistPage } from "./pages/WishlistPage/WishlistPage";
 import { OrderSuccessPage } from "./pages/OrderSuccessPage/OrderSuccessPage";
 import { HelpCenterPage } from "./pages/HelpCenterPage/HelpCenterPage";
 import { RealmProvider } from "./context/RealmContext";
+import { EaglePostWidget } from "./components/EaglePostWidget/EaglePostWidget";
 import {
   AboutUsPage,
   CancelSubscriptionPage,
@@ -42,6 +43,7 @@ function AppLayout() {
         <Outlet />
       </div>
       <Footer />
+      <EaglePostWidget />
     </div>
   );
 }
