@@ -1,5 +1,5 @@
 import type { FormEvent } from "react";
-import type { CheckoutErrors, CheckoutValues } from "../checkoutTypes";
+import type { CheckoutErrors, CheckoutValues } from "../../../types/checkout";
 
 interface CheckoutFormProps {
   values: CheckoutValues;

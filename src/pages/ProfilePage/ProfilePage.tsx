@@ -8,7 +8,7 @@ import { GeneralSettingsSection } from "./components/GeneralSettingsSection";
 import { ProfileSidebar } from "./components/ProfileSidebar";
 import { PurchasesSection } from "./components/PurchasesSection";
 import { RefundsSection } from "./components/RefundsSection";
-import type { ProfileSectionId } from "./profileTypes";
+import type { ProfileSectionId } from "../../types/profile";
 import { useProfileManagement } from "./useProfileManagement";
 
 export function ProfilePage() {

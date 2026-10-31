@@ -1,6 +1,4 @@
-import type { ToastMessage } from "../../context/ToastContext";
-
-export type ToastType = "success" | "info" | "error";
+import type { ToastMessage, ToastType } from "../../types/toast";
 
 interface ToastProps {
   toast: ToastMessage;

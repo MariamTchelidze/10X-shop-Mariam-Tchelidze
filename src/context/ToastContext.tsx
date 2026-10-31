@@ -7,13 +7,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { Toast, type ToastType } from "../components/Toast/Toast";
-
-export interface ToastMessage {
-  id: number;
-  message: string;
-  type: ToastType;
-}
+import { Toast } from "../components/Toast/Toast";
+import type { ToastMessage, ToastType } from "../types/toast";
 
 interface ToastContextValue {
   addToast: (message: string, type: ToastType) => void;

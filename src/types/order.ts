@@ -1,5 +1,12 @@
 import type { CartItem } from "./cart";
 
+export interface ShippingAddress {
+  fullName: string;
+  email: string;
+  address: string;
+  city: string;
+}
+
 export interface Order {
   id: string;
   username: string;
@@ -10,11 +17,6 @@ export interface Order {
   subtotal?: number;
   shipping?: number;
   taxes?: number;
-  shippingAddress?: {
-    fullName: string;
-    email: string;
-    address: string;
-    city: string;
-  };
+  shippingAddress?: ShippingAddress;
   paymentMethod?: string;
 }

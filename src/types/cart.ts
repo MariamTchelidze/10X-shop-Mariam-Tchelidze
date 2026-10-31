@@ -10,6 +10,7 @@ export interface CartItem {
   color?: string;
 }
 
-export interface CartState {
-  items: CartItem[];
+export interface CartVariants {
+  size?: string;
+  color?: string;
 }

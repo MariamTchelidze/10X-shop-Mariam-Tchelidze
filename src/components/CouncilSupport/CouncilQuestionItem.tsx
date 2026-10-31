@@ -1,4 +1,4 @@
-import type { CouncilQuestion } from "./councilQuestions";
+import type { CouncilQuestion } from "../../types/support";
 
 interface CouncilQuestionItemProps {
   question: CouncilQuestion;

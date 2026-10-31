@@ -1,4 +1,4 @@
-import type { ProfileSectionId } from "../profileTypes";
+import type { ProfileSectionId } from "../../../types/profile";
 
 interface ProfileSidebarProps {
   activeSection: ProfileSectionId;

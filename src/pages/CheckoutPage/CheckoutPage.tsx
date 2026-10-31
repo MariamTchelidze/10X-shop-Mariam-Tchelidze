@@ -8,7 +8,7 @@ import type { Order } from "../../types/order";
 import { saveOrder } from "../../utils/orders";
 import { CheckoutForm } from "./components/CheckoutForm";
 import { OrderSummary } from "./components/OrderSummary";
-import type { CheckoutErrors, CheckoutValues } from "./checkoutTypes";
+import type { CheckoutErrors, CheckoutValues } from "../../types/checkout";
 
 const emptyValues: CheckoutValues = {
   fullName: "",

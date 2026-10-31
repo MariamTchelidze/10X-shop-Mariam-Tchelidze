@@ -1,5 +1,5 @@
 import type { FormEvent } from "react";
-import type { ProfileAddress, ProfileAddressForm } from "../profileTypes";
+import type { ProfileAddress, ProfileAddressForm } from "../../../types/profile";
 import { ProfileField } from "./ProfileField";
 import { SectionPanel } from "./SectionPanel";
 

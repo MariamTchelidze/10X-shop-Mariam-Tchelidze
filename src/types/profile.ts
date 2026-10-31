@@ -26,11 +26,7 @@ export interface SavedCard {
   expiry: string;
 }
 
-export interface RefundFormValues {
-  bankName: string;
-  accountHolder: string;
-  iban: string;
-}
+export type RefundFormValues = Pick<RefundRequest, "bankName" | "accountHolder" | "iban">;
 
 export interface CardFormValues {
   holder: string;

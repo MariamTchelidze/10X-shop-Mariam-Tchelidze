@@ -1,14 +1,5 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
-
-export interface Realm {
-  id: string;
-  name: string;
-  region: string;
-  currencyName: string;
-  currencySymbol: string;
-  multiplier: number;
-  marker: string;
-}
+import type { Realm } from "../types/realm";
 
 export const REALMS: Realm[] = [
   { id: "shire", name: "The Shire", region: "The Shire", currencyName: "Copper Pennies", currencySymbol: "§", multiplier: 1, marker: "🟢" },

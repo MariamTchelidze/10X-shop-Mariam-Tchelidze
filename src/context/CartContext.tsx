@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Product } from "../types/product";
-import type { CartItem } from "../types/cart";
+import type { CartItem, CartVariants } from "../types/cart";
 import { useToast } from "./ToastContext";
 import { useAuth } from "./AuthContext";
 import { useInventory } from "./InventoryContext";
@@ -15,11 +15,6 @@ interface CartContextValue {
   removeItem: (productId: number, variants?: CartVariants) => void;
   updateQuantity: (productId: number, quantity: number, variants?: CartVariants) => void;
   clearCart: () => void;
-}
-
-export interface CartVariants {
-  size?: string;
-  color?: string;
 }
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);

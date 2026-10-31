@@ -1,5 +1,5 @@
 import type { FormEvent } from "react";
-import type { RefundFormValues, RefundRequest } from "../profileTypes";
+import type { RefundFormValues, RefundRequest } from "../../../types/profile";
 import { ProfileField } from "./ProfileField";
 import { SectionPanel } from "./SectionPanel";
 import { formatDate } from "../../../utils/formatters";

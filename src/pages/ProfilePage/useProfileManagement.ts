@@ -9,7 +9,7 @@ import type {
   RefundFormValues,
   RefundRequest,
   SavedCard,
-} from "./profileTypes";
+} from "../../types/profile";
 
 const emptyAddress: ProfileAddressForm = {
   country: "",

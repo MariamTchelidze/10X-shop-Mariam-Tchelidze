@@ -1,4 +1,4 @@
-import type { Realm } from "../../../context/RealmContext";
+import type { Realm } from "../../../types/realm";
 
 export function convertRealmCurrency(amount: number, source: Realm, target: Realm): number {
   if (!Number.isFinite(amount) || amount < 0 || source.multiplier <= 0) return 0;

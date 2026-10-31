@@ -1,17 +1,5 @@
 import { useState } from "react";
-
-interface FaqItem {
-  id: string;
-  question: string;
-  answer: string;
-}
-
-interface FaqCategory {
-  id: string;
-  title: string;
-  intro: string;
-  questions: FaqItem[];
-}
+import type { FaqCategory } from "../../types/help";
 
 const categories: FaqCategory[] = [
   {

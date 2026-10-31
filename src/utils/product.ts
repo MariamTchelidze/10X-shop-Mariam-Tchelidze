@@ -24,12 +24,3 @@ export function getStockStatus(stock: number): StockStatus {
   }
   return { message: "In stock", className: "text-market-muted" };
 }
-
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
-
-export function formatPrice(amount: number): string {
-  return currencyFormatter.format(amount);
-}

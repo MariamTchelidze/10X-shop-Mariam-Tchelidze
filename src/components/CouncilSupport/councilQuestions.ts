@@ -1,9 +1,4 @@
-export interface CouncilQuestion {
-  id: string;
-  topic: string;
-  question: string;
-  answer: string;
-}
+import type { CouncilQuestion } from "../../types/support";
 
 export const councilQuestions: CouncilQuestion[] = [
   {
