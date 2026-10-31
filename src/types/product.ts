@@ -3,6 +3,8 @@ export interface Review {
   comment: string;
   date: string;
   reviewerName: string;
+  title?: string;
+  realm?: string;
 }
 
 export interface Product {

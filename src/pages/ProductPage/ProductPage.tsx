@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { fetchProductById } from "../../api/products";
+import { ProductReviewsContainer } from "../../components/ProductReviews/ProductReviewsContainer";
 import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
 import type { Product } from "../../types/product";
 import { discountedPrice } from "../../utils/product";
-import { ProductReviews } from "./components/ProductReviews";
 import { RelatedProducts } from "./components/RelatedProducts";
 
 export function ProductPage() {
@@ -174,7 +174,7 @@ export function ProductPage() {
           {cartMessage && <p className="mt-3 text-sm text-market-muted" role="status">{cartMessage}</p>}
         </section>
       </div>
-      <ProductReviews product={product} />
+      <ProductReviewsContainer product={product} />
       <RelatedProducts product={product} />
     </main>
   );
