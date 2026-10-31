@@ -1,4 +1,5 @@
 import type { CartItem } from "../../../types/cart";
+import { lineTotal } from "../../../utils/product";
 
 interface OrderSummaryProps {
   items: CartItem[];
@@ -15,7 +16,7 @@ export function OrderSummary({ items, subtotal, formatCurrency }: OrderSummaryPr
           <li key={item.productId} className="flex justify-between gap-4 text-sm">
             <span className="text-market-muted">{item.title} × {item.quantity}</span>
             <span className="shrink-0 text-market-ink">
-              {formatCurrency(item.price * (1 - item.discountPercentage / 100) * item.quantity)}
+              {formatCurrency(lineTotal(item.price, item.discountPercentage, item.quantity))}
             </span>
           </li>
         ))}

@@ -2,6 +2,7 @@ import type { FormEvent } from "react";
 import type { RefundFormValues, RefundRequest } from "../profileTypes";
 import { ProfileField } from "./ProfileField";
 import { SectionPanel } from "./SectionPanel";
+import { formatDate } from "../../../utils/formatters";
 
 interface RefundsSectionProps {
   requests: RefundRequest[];
@@ -34,7 +35,7 @@ export function RefundsSection({ requests, values, onFieldChange, onSubmit }: Re
           {requests.map((request) => (
             <li key={request.id} className="flex flex-wrap justify-between gap-3 py-4 text-xs">
               <span className="text-market-ink">{request.bankName} · {request.iban.slice(-4).padStart(request.iban.length, "•")}</span>
-              <span className="text-market-muted">{new Date(request.submittedAt).toLocaleDateString()} · {request.status}</span>
+              <span className="text-market-muted">{formatDate(request.submittedAt)} · {request.status}</span>
             </li>
           ))}
         </ul>

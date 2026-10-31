@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import type { Order } from "../../../types/order";
 import { SectionPanel } from "./SectionPanel";
+import { formatDate } from "../../../utils/formatters";
 
 interface PurchasesSectionProps {
   orders: Order[];
@@ -21,7 +22,7 @@ export function PurchasesSection({ orders, formatCurrency }: PurchasesSectionPro
               <div>
                 <p className="text-xs uppercase tracking-widest text-market-ink">{order.id}</p>
                 <p className="mt-1 text-xs text-market-muted">
-                  {new Date(order.date).toLocaleDateString()} · {order.items.length} line items
+                  {formatDate(order.date)} · {order.items.length} line items
                 </p>
               </div>
               <div className="flex items-center gap-4">

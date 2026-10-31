@@ -3,7 +3,7 @@ import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
 import { useInventory } from "../../context/InventoryContext";
 import type { Product } from "../../types/product";
-import { discountedPrice } from "../../utils/product";
+import { discountedPrice, getStockStatus } from "../../utils/product";
 import { StockAlertModal } from "../StockAlert/StockAlertModal";
 
 interface QuickViewModalProps {
@@ -23,6 +23,7 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
   const image = product.images[0] ?? product.thumbnail;
   const price = discountedPrice(product.price, product.discountPercentage);
   const stock = getStock(product.id, product.stock);
+  const stockStatus = getStockStatus(stock);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -83,9 +84,7 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
           <p className="text-[10px] uppercase tracking-[0.18em] text-gold">Scry the artifact</p>
           <h2 id="quick-view-title" className="mt-3 pr-10 font-display text-2xl leading-tight text-market-ink sm:text-3xl">{product.title}</h2>
           <p className="mt-2 text-xs uppercase tracking-widest text-market-muted">{product.category}</p>
-          <p className={`mt-2 text-xs ${stock > 0 && stock <= 5 ? "text-gold" : "text-market-muted"}`}>
-            {stock === 0 ? "Out of Stock · Mithril Alert" : stock <= 5 ? `Only ${stock} left in stock!` : "In stock"}
-          </p>
+          <p className={`mt-2 text-xs ${stockStatus.className}`}>{stockStatus.message}</p>
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <p className="text-base text-market-ink">{formatCurrency(price)}</p>
             {product.discountPercentage > 0 && <p className="text-sm text-market-muted line-through">{formatCurrency(product.price)}</p>}

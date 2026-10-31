@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import type { CartItem } from "../../../types/cart";
-import { discountedPrice } from "../../../utils/product";
+import { discountedPrice, lineTotal } from "../../../utils/product";
 
 interface CartItemRowProps {
   item: CartItem;
@@ -69,7 +69,7 @@ export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQua
             </button>
           </div>
           <p className="text-sm font-medium text-market-ink">
-            {formatCurrency(unitPrice * item.quantity)}
+            {formatCurrency(lineTotal(item.price, item.discountPercentage, item.quantity))}
           </p>
         </div>
       </div>

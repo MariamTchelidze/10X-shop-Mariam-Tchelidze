@@ -8,7 +8,7 @@ import { useInventory } from "../../context/InventoryContext";
 import { QuickViewModal } from "../QuickViewModal/QuickViewModal";
 import { StockAlertModal } from "../StockAlert/StockAlertModal";
 import type { Product } from "../../types/product";
-import { discountedPrice } from "../../utils/product";
+import { discountedPrice, getStockStatus } from "../../utils/product";
 
 interface ProductCardProps {
   product: Product;
@@ -28,8 +28,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const [isStockAlertOpen, setIsStockAlertOpen] = useState(false);
   const stock = getStock(product.id, product.stock);
   const hasVariants = Boolean(product.sizes?.length || product.colors?.length);
-  const stockMessage = stock === 0 ? "Out of Stock · Mithril Alert" : stock <= 5 ? `Only ${stock} left in stock!` : "In stock";
-  const stockColor = stock > 0 && stock <= 5 ? "text-gold" : stock === 0 ? "text-blood" : "text-market-muted";
+  const stockStatus = getStockStatus(stock);
 
   const handleQuickAdd = (): void => {
     if (stock < 1) {
@@ -138,7 +137,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <Link to={`/products/${product.id}`} className="min-w-0 font-display text-sm font-medium uppercase tracking-wide text-market-ink hover:underline">
             {product.title}
           </Link>
-          <span className={`max-w-[44%] shrink text-right text-[9px] leading-3 sm:text-[10px] ${stockColor}`}>{stockMessage}</span>
+          <span className={`max-w-[44%] shrink text-right text-[9px] leading-3 sm:text-[10px] ${stockStatus.className}`}>{stockStatus.message}</span>
         </div>
         <p className="text-xs capitalize tracking-wide text-market-muted">{product.category}</p>
         <p className="text-sm text-market-ink">{formatCurrency(discountedPrice(product.price, product.discountPercentage))}</p>

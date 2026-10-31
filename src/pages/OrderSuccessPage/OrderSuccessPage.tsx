@@ -6,6 +6,7 @@ import { useRealm } from "../../context/RealmContext";
 import type { Order } from "../../types/order";
 import { readOrders } from "../../utils/orders";
 import { discountedPrice } from "../../utils/product";
+import { formatDate } from "../../utils/formatters";
 
 interface OrderSuccessLocationState {
   order?: Order;
@@ -55,7 +56,7 @@ export function OrderSuccessPage() {
         <section aria-labelledby="items-heading">
           <div className="flex flex-wrap items-end justify-between gap-3 border-b border-market-border pb-4">
             <h2 id="items-heading" className="font-display text-2xl text-market-ink">Treasures reserved</h2>
-            <p className="text-xs text-market-muted">Placed {new Date(order.date).toLocaleDateString()}</p>
+            <p className="text-xs text-market-muted">Placed {formatDate(order.date)}</p>
           </div>
           <ul className="divide-y divide-market-border">
             {order.items.map((item) => {

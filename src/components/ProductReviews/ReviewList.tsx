@@ -1,5 +1,6 @@
 import type { Review } from "../../types/product";
 import { StarRating } from "./StarRating";
+import { formatDate } from "../../utils/formatters";
 
 interface ReviewListProps {
   reviews: Review[];
@@ -34,7 +35,7 @@ export function ReviewList({ reviews }: ReviewListProps) {
             <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-end sm:justify-start">
               <StarRating rating={review.rating} />
               <time className="text-xs text-market-muted" dateTime={review.date}>
-                {new Date(review.date).toLocaleDateString()}
+                {formatDate(review.date)}
               </time>
             </div>
           </article>

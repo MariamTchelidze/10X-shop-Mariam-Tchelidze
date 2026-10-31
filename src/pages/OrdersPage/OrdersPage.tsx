@@ -3,6 +3,8 @@ import { Link } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useRealm } from "../../context/RealmContext";
 import { readOrders } from "../../utils/orders";
+import { formatDate } from "../../utils/formatters";
+import { lineTotal } from "../../utils/product";
 
 export function OrdersPage() {
   const { user } = useAuth();
@@ -22,12 +24,12 @@ export function OrdersPage() {
           {orders.map((order) => (
             <details key={order.id} className="border border-market-border p-4 sm:p-6">
               <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-4">
-                <span className="min-w-0"><span className="block text-xs uppercase tracking-widest text-market-muted">Order {order.id}</span><span className="mt-2 block text-sm text-market-ink">{new Date(order.date).toLocaleDateString()}</span></span>
+                <span className="min-w-0"><span className="block text-xs uppercase tracking-widest text-market-muted">Order {order.id}</span><span className="mt-2 block text-sm text-market-ink">{formatDate(order.date)}</span></span>
                 <span className="rounded-full border border-market-border px-3 py-1 text-[10px] uppercase tracking-widest">{order.status}</span>
                 <span className="text-sm font-medium">{formatCurrency(order.total)}</span>
               </summary>
               <ul className="mt-5 divide-y divide-market-border border-t border-market-border">
-                {order.items.map((item) => <li key={item.productId} className="flex justify-between gap-4 py-3 text-sm"><span className="min-w-0 text-market-muted">{item.title} × {item.quantity}</span><span className="shrink-0">{formatCurrency(item.price * (1 - item.discountPercentage / 100) * item.quantity)}</span></li>)}
+                {order.items.map((item) => <li key={item.productId} className="flex justify-between gap-4 py-3 text-sm"><span className="min-w-0 text-market-muted">{item.title} × {item.quantity}</span><span className="shrink-0">{formatCurrency(lineTotal(item.price, item.discountPercentage, item.quantity))}</span></li>)}
               </ul>
             </details>
           ))}

@@ -5,6 +5,7 @@ import { useToast } from "./ToastContext";
 import { useAuth } from "./AuthContext";
 import { useInventory } from "./InventoryContext";
 import { readCartItems, saveCartItems } from "../utils/cartStorage";
+import { lineTotal } from "../utils/product";
 
 interface CartContextValue {
   items: CartItem[];
@@ -129,8 +130,7 @@ export function CartProvider({ children }: CartProviderProps) {
 
   const itemCount = items.reduce((count, item) => count + item.quantity, 0);
   const subtotal = items.reduce(
-    (sum, item) =>
-      sum + item.price * (1 - item.discountPercentage / 100) * item.quantity,
+    (sum, item) => sum + lineTotal(item.price, item.discountPercentage, item.quantity),
     0,
   );
   const value: CartContextValue = {

@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
-import { fetchProducts } from "../../api/products";
 import { CatalogToolbar } from "../../components/CatalogToolbar/CatalogToolbar";
 import { HeroCarousel } from "../../components/HeroCarousel/HeroCarousel";
 import {
   CATALOG_PAGE_SIZE,
   isCatalogSortOption,
-  type CatalogQuery,
   type CatalogSortOption,
 } from "../../types/catalog";
-import type { Product } from "../../types/product";
 import { CatalogResults } from "./components/CatalogResults";
+import { useCatalogProducts } from "./useCatalogProducts";
 
 const SEARCH_DEBOUNCE_MS = 400;
 
@@ -28,11 +26,13 @@ export function CatalogPage() {
   const page = Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;
 
   const [searchInput, setSearchInput] = useState(query);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [total, setTotal] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
+  const { products, total, isLoading, error, retry } = useCatalogProducts({
+    q: query,
+    category,
+    sort,
+    page,
+    setSearchParams,
+  });
 
   useEffect(() => {
     setSearchInput(query);
@@ -86,53 +86,6 @@ export function CatalogPage() {
 
     return () => window.clearTimeout(timeoutId);
   }, [query, searchInput, setSearchParams]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const params: CatalogQuery = { q: query, category, sort, page };
-
-    const loadProducts = async (): Promise<void> => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await fetchProducts(params, controller.signal);
-        if (!controller.signal.aborted) {
-          const lastPage = Math.max(
-            1,
-            Math.ceil(response.total / CATALOG_PAGE_SIZE),
-          );
-          if (page > lastPage) {
-            setSearchParams(
-              (current) => {
-                current.set("page", String(lastPage));
-                return current;
-              },
-              { replace: true },
-            );
-            return;
-          }
-          setProducts(response.products);
-          setTotal(response.total);
-        }
-      } catch (reason: unknown) {
-        if (!controller.signal.aborted) {
-          setError(
-            reason instanceof Error
-              ? reason.message
-              : "Something went wrong while loading products.",
-          );
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    void loadProducts();
-    return () => controller.abort();
-  }, [category, page, query, retryCount, setSearchParams, sort]);
 
   const totalPages = Math.ceil(total / CATALOG_PAGE_SIZE);
   const firstResult = total === 0 ? 0 : (page - 1) * CATALOG_PAGE_SIZE + 1;
@@ -207,7 +160,7 @@ export function CatalogPage() {
         page={page}
         totalPages={totalPages}
         canClearFilters={Boolean(query || category || sort)}
-        onRetry={() => setRetryCount((count) => count + 1)}
+        onRetry={retry}
         onClearFilters={clearFilters}
         onPageChange={handlePageChange}
       />
