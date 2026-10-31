@@ -179,11 +179,20 @@ export function CatalogPage() {
   };
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
-      <header className="mb-7 flex items-end justify-between gap-4 border-b border-zara-border pb-5 sm:mb-8">
-        <h1 className="font-editorial text-3xl text-zara-black sm:text-4xl">Catalog</h1>
+    <main className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 sm:pb-14 lg:px-8">
+      <section className="relative mb-9 overflow-hidden border border-market-border bg-market-surface px-5 py-10 sm:mb-12 sm:px-10 sm:py-14 lg:px-16" aria-labelledby="realm-heading">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-10 top-1/2 h-40 w-40 -translate-y-1/2 rounded-full border-[10px] border-gold/70 shadow-[0_0_55px_color-mix(in_srgb,var(--color-gold)_28%,transparent)] sm:right-12 sm:h-56 sm:w-56 sm:border-[14px]" />
+        <p className="text-[10px] uppercase tracking-[0.2em] text-forest">A MARKET BEYOND THE SHIRE</p>
+        <h1 id="realm-heading" className="relative z-10 mt-4 max-w-2xl font-display text-3xl leading-tight text-market-ink sm:text-5xl">Treasures of Middle-earth</h1>
+        <p className="relative z-10 mt-4 max-w-xl text-sm leading-6 text-market-muted sm:text-base">Artifacts, apparel, and keepsakes for every road through the realm.</p>
+        <div className="relative z-10 mt-6 flex max-w-2xl flex-wrap gap-x-5 gap-y-2 text-[10px] uppercase tracking-[0.12em] text-market-muted sm:text-xs">
+          <span>The One Ring replica</span><span>Nazgûl cloak</span><span>Sauron hoodie</span><span>Mordor mug</span>
+        </div>
+      </section>
+      <header className="mb-7 flex items-end justify-between gap-4 border-b border-market-border pb-5 sm:mb-8">
+        <h2 className="font-display text-3xl text-market-ink sm:text-4xl">Browse the realm</h2>
         {!isLoading && !error && (
-          <p className="text-right text-[10px] uppercase tracking-[0.12em] text-zara-gray sm:text-xs">
+          <p className="text-right text-[10px] uppercase tracking-[0.12em] text-market-muted sm:text-xs">
             {total === 0 ? "0 items" : `Showing ${firstResult}–${lastResult} of ${total}`}
           </p>
         )}
@@ -200,18 +209,18 @@ export function CatalogPage() {
       />
 
       {isLoading && (
-        <p className="py-16 text-center text-sm text-zara-gray" role="status">
+        <p className="py-16 text-center text-sm text-market-muted" role="status">
           Loading products…
         </p>
       )}
 
       {!isLoading && error && (
         <section className="py-16 text-center" role="alert">
-          <p className="text-sm text-zara-gray">{error}</p>
+          <p className="text-sm text-market-muted">{error}</p>
           <button
             type="button"
             onClick={() => setRetryCount((count) => count + 1)}
-            className="mt-5 border-b border-zara-black pb-1 text-xs uppercase tracking-[0.14em] text-zara-black hover:text-zara-gray focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black"
+            className="mt-5 border-b border-market-ink pb-1 text-xs uppercase tracking-[0.14em] text-market-ink hover:text-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
           >
             Try again
           </button>
@@ -220,12 +229,12 @@ export function CatalogPage() {
 
       {!isLoading && !error && products.length === 0 && (
         <section className="py-16 text-center">
-          <p className="text-sm text-zara-gray">No products found.</p>
+          <p className="text-sm text-market-muted">No products found.</p>
           {(query || category || sort) && (
             <button
               type="button"
               onClick={clearFilters}
-              className="mt-4 text-xs uppercase tracking-[0.14em] text-zara-black underline underline-offset-4"
+              className="mt-4 text-xs uppercase tracking-[0.14em] text-market-ink underline underline-offset-4"
             >
               Clear filters
             </button>

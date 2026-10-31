@@ -93,7 +93,7 @@ export function ProductPage() {
 
   if (isLoading) {
     return (
-      <main className="mx-auto max-w-7xl px-4 py-16 text-center text-sm text-zara-gray" role="status">
+      <main className="mx-auto max-w-7xl px-4 py-16 text-center text-sm text-market-muted" role="status">
         Loading product…
       </main>
     );
@@ -102,9 +102,9 @@ export function ProductPage() {
   if (!isValidId || (!error && product === null)) {
     return (
       <main className="mx-auto max-w-7xl px-4 py-16 text-center">
-        <h1 className="font-editorial text-3xl text-zara-black">Page not found</h1>
-        <p className="mt-3 text-sm text-zara-gray">The product you are looking for does not exist.</p>
-        <Link to="/" className="mt-6 inline-block text-xs uppercase tracking-[0.14em] text-zara-black underline">
+        <h1 className="font-display text-3xl text-market-ink">Page not found</h1>
+        <p className="mt-3 text-sm text-market-muted">The product you are looking for does not exist.</p>
+        <Link to="/" className="mt-6 inline-block text-xs uppercase tracking-[0.14em] text-market-ink underline">
           Back to catalog
         </Link>
       </main>
@@ -114,8 +114,8 @@ export function ProductPage() {
   if (error || product === null) {
     return (
       <main className="mx-auto max-w-7xl px-4 py-16 text-center" role="alert">
-        <p className="text-sm text-zara-gray">{error ?? "Unable to load this product."}</p>
-        <Link to="/" className="mt-6 inline-block text-xs uppercase tracking-[0.14em] text-zara-black underline">
+        <p className="text-sm text-market-muted">{error ?? "Unable to load this product."}</p>
+        <Link to="/" className="mt-6 inline-block text-xs uppercase tracking-[0.14em] text-market-ink underline">
           Back to catalog
         </Link>
       </main>
@@ -129,7 +129,7 @@ export function ProductPage() {
       : product.stock <= 5
         ? `Only ${product.stock} left!`
         : "In stock";
-  const stockColor = product.stock > 0 && product.stock <= 5 ? "text-amber-700" : "text-zara-gray";
+  const stockColor = product.stock > 0 && product.stock <= 5 ? "text-amber-700" : "text-market-muted";
 
   const handleAddToCart = (): void => {
     const added = addItem(product, quantity);
@@ -140,11 +140,11 @@ export function ProductPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-      <Link to="/" className="mb-6 inline-block text-xs uppercase tracking-[0.14em] text-zara-gray hover:text-zara-black">
+      <Link to="/" className="mb-6 inline-block text-xs uppercase tracking-[0.14em] text-market-muted hover:text-market-ink">
         ← Back to catalog
       </Link>
       <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-        <div className="bg-zara-light">
+        <div className="bg-market-surface">
           <img
             src={product.thumbnail}
             alt={product.title}
@@ -154,32 +154,32 @@ export function ProductPage() {
           />
         </div>
         <section className="flex flex-col items-start py-2 md:py-8">
-          <p className="text-xs uppercase tracking-[0.16em] text-zara-gray">{product.category}</p>
-          <h1 className="mt-3 font-editorial text-3xl text-zara-black sm:text-4xl">{product.title}</h1>
+          <p className="text-xs uppercase tracking-[0.16em] text-market-muted">{product.category}</p>
+          <h1 className="mt-3 font-display text-3xl text-market-ink sm:text-4xl">{product.title}</h1>
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <p className="text-base text-zara-black">{formatPrice(price)}</p>
+            <p className="text-base text-market-ink">{formatPrice(price)}</p>
             {product.discountPercentage > 0 && (
               <>
-                <p className="text-sm text-zara-gray line-through">{formatPrice(product.price)}</p>
-                <span className="text-xs text-zara-gray">−{Math.round(product.discountPercentage)}%</span>
+                <p className="text-sm text-market-muted line-through">{formatPrice(product.price)}</p>
+                <span className="text-xs text-market-muted">−{Math.round(product.discountPercentage)}%</span>
               </>
             )}
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
-            <span className="text-zara-black" aria-label={`Rated ${product.rating} out of 5`}>
+            <span className="text-market-ink" aria-label={`Rated ${product.rating} out of 5`}>
               ★ {product.rating.toFixed(1)}
             </span>
             <span className={stockColor}>{stockMessage}</span>
           </div>
-          <p className="mt-6 max-w-prose text-sm leading-6 text-zara-gray">{product.description}</p>
+          <p className="mt-6 max-w-prose text-sm leading-6 text-market-muted">{product.description}</p>
 
-          <div className="mt-8 flex min-h-12 items-center border border-zara-border">
+          <div className="mt-8 flex min-h-12 items-center border border-market-border">
             <button
               type="button"
               aria-label="Decrease quantity"
               disabled={quantity <= 1 || product.stock === 0}
               onClick={() => setQuantity((current) => Math.max(1, current - 1))}
-              className="min-h-12 min-w-12 text-lg text-zara-black disabled:text-zara-border"
+              className="min-h-12 min-w-12 text-lg text-market-ink disabled:text-market-border"
             >
               −
             </button>
@@ -189,7 +189,7 @@ export function ProductPage() {
               aria-label="Increase quantity"
               disabled={quantity >= product.stock || product.stock === 0}
               onClick={() => setQuantity((current) => Math.min(product.stock, current + 1))}
-              className="min-h-12 min-w-12 text-lg text-zara-black disabled:text-zara-border"
+              className="min-h-12 min-w-12 text-lg text-market-ink disabled:text-market-border"
             >
               +
             </button>
@@ -198,41 +198,41 @@ export function ProductPage() {
             type="button"
             disabled={product.stock === 0}
             onClick={handleAddToCart}
-            className="mt-4 min-h-12 w-full max-w-sm bg-zara-black px-6 text-xs font-medium uppercase tracking-[0.14em] text-zara-white transition-colors hover:bg-zara-gray disabled:cursor-not-allowed disabled:bg-zara-gray focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black"
+            className="mt-4 min-h-12 w-full max-w-sm bg-market-ink px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted disabled:cursor-not-allowed disabled:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
           >
             {product.stock === 0 ? "Out of stock" : "Add to cart"}
           </button>
-          {cartMessage && <p className="mt-3 text-sm text-zara-gray" role="status">{cartMessage}</p>}
+          {cartMessage && <p className="mt-3 text-sm text-market-muted" role="status">{cartMessage}</p>}
         </section>
       </div>
-      <section className="mt-14 border-t border-zara-border pt-10 sm:mt-20" aria-labelledby="reviews-heading">
-        <h2 id="reviews-heading" className="font-editorial text-2xl text-zara-black">Reviews <span className="font-sans text-sm text-zara-gray">({reviews.length})</span></h2>
-        <ul className="mt-6 divide-y divide-zara-border">
+      <section className="mt-14 border-t border-market-border pt-10 sm:mt-20" aria-labelledby="reviews-heading">
+        <h2 id="reviews-heading" className="font-display text-2xl text-market-ink">Reviews <span className="font-sans text-sm text-market-muted">({reviews.length})</span></h2>
+        <ul className="mt-6 divide-y divide-market-border">
           {reviews.map((review, index) => (
             <li key={`${review.date}-${index}`} className="py-5">
-              <div className="flex flex-wrap justify-between gap-2"><span className="text-sm font-medium text-zara-black">{review.reviewerName}</span><span className="text-sm text-zara-gray" aria-label={`${review.rating} out of 5 stars`}>{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span></div>
-              <p className="mt-2 text-sm leading-6 text-zara-gray">{review.comment}</p>
-              <time className="mt-2 block text-xs text-zara-gray" dateTime={review.date}>{new Date(review.date).toLocaleDateString()}</time>
+              <div className="flex flex-wrap justify-between gap-2"><span className="text-sm font-medium text-market-ink">{review.reviewerName}</span><span className="text-sm text-market-muted" aria-label={`${review.rating} out of 5 stars`}>{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span></div>
+              <p className="mt-2 text-sm leading-6 text-market-muted">{review.comment}</p>
+              <time className="mt-2 block text-xs text-market-muted" dateTime={review.date}>{new Date(review.date).toLocaleDateString()}</time>
             </li>
           ))}
         </ul>
         <form onSubmit={handleReviewSubmit} className="mt-8 grid gap-4 sm:max-w-xl">
           <h3 className="text-xs font-medium uppercase tracking-widest">Write a review</h3>
-          <label className="grid gap-2 text-xs uppercase tracking-widest text-zara-gray" htmlFor="review-name">Name<input id="review-name" required value={reviewName} onChange={(event) => setReviewName(event.target.value)} className="min-h-11 border border-zara-border px-3 text-sm normal-case tracking-normal text-zara-black" /></label>
-          <label className="grid gap-2 text-xs uppercase tracking-widest text-zara-gray" htmlFor="review-rating">Rating<select id="review-rating" value={reviewRating} onChange={(event) => setReviewRating(Number(event.target.value))} className="min-h-11 border border-zara-border bg-zara-white px-3 text-sm tracking-normal text-zara-black">{[5, 4, 3, 2, 1].map((rating) => <option key={rating} value={rating}>{rating} / 5</option>)}</select></label>
-          <label className="grid gap-2 text-xs uppercase tracking-widest text-zara-gray" htmlFor="review-comment">Review<input id="review-comment" required value={reviewComment} onChange={(event) => setReviewComment(event.target.value)} className="min-h-11 border border-zara-border px-3 text-sm normal-case tracking-normal text-zara-black" /></label>
-          <button type="submit" className="min-h-12 bg-zara-black px-6 text-xs uppercase tracking-widest text-zara-white sm:w-fit">Submit review</button>
+          <label className="grid gap-2 text-xs uppercase tracking-widest text-market-muted" htmlFor="review-name">Name<input id="review-name" required value={reviewName} onChange={(event) => setReviewName(event.target.value)} className="min-h-11 border border-market-border px-3 text-sm normal-case tracking-normal text-market-ink" /></label>
+          <label className="grid gap-2 text-xs uppercase tracking-widest text-market-muted" htmlFor="review-rating">Rating<select id="review-rating" value={reviewRating} onChange={(event) => setReviewRating(Number(event.target.value))} className="min-h-11 border border-market-border bg-market-paper px-3 text-sm tracking-normal text-market-ink">{[5, 4, 3, 2, 1].map((rating) => <option key={rating} value={rating}>{rating} / 5</option>)}</select></label>
+          <label className="grid gap-2 text-xs uppercase tracking-widest text-market-muted" htmlFor="review-comment">Review<input id="review-comment" required value={reviewComment} onChange={(event) => setReviewComment(event.target.value)} className="min-h-11 border border-market-border px-3 text-sm normal-case tracking-normal text-market-ink" /></label>
+          <button type="submit" className="min-h-12 bg-market-ink px-6 text-xs uppercase tracking-widest text-market-paper sm:w-fit">Submit review</button>
         </form>
       </section>
       {relatedProducts.length > 0 && (
-        <section className="mt-14 border-t border-zara-border pt-10 sm:mt-20" aria-labelledby="related-heading">
-          <h2 id="related-heading" className="font-editorial text-2xl text-zara-black">You may also like</h2>
+        <section className="mt-14 border-t border-market-border pt-10 sm:mt-20" aria-labelledby="related-heading">
+          <h2 id="related-heading" className="font-display text-2xl text-market-ink">You may also like</h2>
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5">
             {relatedProducts.map((related) => (
               <Link key={related.id} to={`/products/${related.id}`} className="group min-w-0">
-                <img src={related.thumbnail} alt={related.title} loading="lazy" className="aspect-[3/4] w-full bg-zara-light object-cover" />
-                <h3 className="mt-3 truncate text-xs text-zara-black group-hover:underline">{related.title}</h3>
-                <p className="mt-1 text-xs text-zara-gray">{formatPrice(discountedPrice(related.price, related.discountPercentage))}</p>
+                <img src={related.thumbnail} alt={related.title} loading="lazy" className="aspect-[3/4] w-full bg-market-surface object-cover" />
+                <h3 className="mt-3 truncate text-xs text-market-ink group-hover:underline">{related.title}</h3>
+                <p className="mt-1 text-xs text-market-muted">{formatPrice(discountedPrice(related.price, related.discountPercentage))}</p>
               </Link>
             ))}
           </div>

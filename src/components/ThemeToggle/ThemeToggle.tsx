@@ -17,7 +17,7 @@ export function ThemeToggle() {
     } catch {
       // Keep the current session toggle functional if browser storage is unavailable.
     }
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", nextIsDark ? "#0b0f19" : "#ffffff");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", nextIsDark ? "#0B0B0B" : "#F7F3E9");
     setIsDark(nextIsDark);
   };
 
@@ -27,7 +27,7 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
       title={`Switch to ${isDark ? "light" : "dark"} theme`}
-      className="inline-flex h-9 w-9 shrink-0 items-center justify-center text-zara-black transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zara-black"
+      className="inline-flex h-9 w-9 shrink-0 items-center justify-center text-market-ink transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink"
     >
       {isDark ? (
         <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

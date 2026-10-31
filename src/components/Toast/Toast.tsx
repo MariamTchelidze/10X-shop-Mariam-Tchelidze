@@ -8,9 +8,9 @@ interface ToastProps {
 }
 
 const typeStyles: Record<ToastType, string> = {
-  success: "bg-zara-black text-zara-white",
-  info: "bg-zara-light text-zara-black",
-  error: "bg-zara-white text-zara-black border border-zara-black",
+  success: "bg-market-ink text-market-paper",
+  info: "bg-market-surface text-market-ink",
+  error: "bg-market-paper text-market-ink border border-market-ink",
 };
 
 const typeIcons: Record<ToastType, string> = {

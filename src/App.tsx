@@ -11,11 +11,27 @@ import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { ProductPage } from "./pages/ProductPage/ProductPage";
 import { OrdersPage } from "./pages/OrdersPage/OrdersPage";
 import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
+import {
+  AboutUsPage,
+  CancelSubscriptionPage,
+  DeliveriesPage,
+  GiftCardPage,
+  GiftTicketPage,
+  GuestPurchasePage,
+  OurStoresPage,
+  PaymentsPage,
+  ReturnGuestPage,
+  ReturnsPage,
+  SearchReceiptPage,
+  ShopOnlinePage,
+  WifiConnectionPage,
+  WorkWithUsPage,
+} from "./pages/FooterPages/FooterPages";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 
 function AppLayout() {
   return (
-    <div className="flex min-h-screen flex-col bg-zara-white">
+    <div className="flex min-h-screen flex-col bg-market-paper">
       <Header />
       <div className="flex-1">
         <Outlet />
@@ -28,9 +44,9 @@ function AppLayout() {
 function NotFoundPage() {
   return (
     <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="font-editorial text-3xl text-zara-black">Page not found</h1>
-      <p className="mt-3 text-zara-gray">The page you are looking for does not exist.</p>
-      <Link to="/" className="mt-6 inline-block text-sm text-zara-black underline">
+      <h1 className="font-display text-3xl text-market-ink">Page not found</h1>
+      <p className="mt-3 text-market-muted">The page you are looking for does not exist.</p>
+      <Link to="/" className="mt-6 inline-block text-sm text-market-ink underline">
         Go to catalog
       </Link>
     </main>
@@ -53,6 +69,20 @@ export function App() {
               </Route>
               <Route path="/products/:id" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/help/shop-online" element={<ShopOnlinePage />} />
+              <Route path="/help/payments" element={<PaymentsPage />} />
+              <Route path="/help/deliveries" element={<DeliveriesPage />} />
+              <Route path="/help/returns" element={<ReturnsPage />} />
+              <Route path="/help/return-guest" element={<ReturnGuestPage />} />
+              <Route path="/help/gift-card" element={<GiftCardPage />} />
+              <Route path="/help/search-receipt" element={<SearchReceiptPage />} />
+              <Route path="/help/guest-purchase" element={<GuestPurchasePage />} />
+              <Route path="/help/gift-ticket" element={<GiftTicketPage />} />
+              <Route path="/help/wifi-connection" element={<WifiConnectionPage />} />
+              <Route path="/help/cancel-subscription" element={<CancelSubscriptionPage />} />
+              <Route path="/about/about-us" element={<AboutUsPage />} />
+              <Route path="/about/work-with-us" element={<WorkWithUsPage />} />
+              <Route path="/about/our-stores" element={<OurStoresPage />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/checkout" element={<CheckoutPage />} />
               </Route>

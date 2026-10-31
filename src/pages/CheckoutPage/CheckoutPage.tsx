@@ -37,14 +37,14 @@ export function CheckoutPage() {
   if (isOrderPlaced) {
     return (
       <main className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6">
-        <p className="text-xs uppercase tracking-[0.16em] text-zara-gray">Order confirmed</p>
-        <h1 className="mt-3 font-editorial text-3xl text-zara-black sm:text-4xl">
+        <p className="text-xs uppercase tracking-[0.16em] text-market-muted">Order confirmed</p>
+        <h1 className="mt-3 font-display text-3xl text-market-ink sm:text-4xl">
           Thank you! Your order has been placed.
         </h1>
-        <p className="mt-4 text-sm text-zara-gray">Order total: {formatPrice(orderTotal)}</p>
+        <p className="mt-4 text-sm text-market-muted">Order total: {formatPrice(orderTotal)}</p>
         <Link
           to="/"
-          className="mt-8 inline-flex min-h-12 items-center bg-zara-black px-8 text-xs uppercase tracking-[0.14em] text-zara-white transition-colors hover:bg-zara-gray focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black"
+          className="mt-8 inline-flex min-h-12 items-center bg-market-ink px-8 text-xs uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
         >
           Continue shopping
         </Link>
@@ -103,7 +103,7 @@ export function CheckoutPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
-      <h1 className="mb-8 border-b border-zara-border pb-5 font-editorial text-3xl text-zara-black sm:mb-10 sm:text-4xl">
+      <h1 className="mb-8 border-b border-market-border pb-5 font-display text-3xl text-market-ink sm:mb-10 sm:text-4xl">
         Checkout
       </h1>
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14">
@@ -143,29 +143,29 @@ export function CheckoutPage() {
           />
           <button
             type="submit"
-            className="min-h-12 w-full bg-zara-black px-5 text-xs font-medium uppercase tracking-[0.14em] text-zara-white transition-colors hover:bg-zara-gray focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black sm:w-auto sm:min-w-64"
+            className="min-h-12 w-full bg-market-ink px-5 text-xs font-medium uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:w-auto sm:min-w-64"
           >
             Place order
           </button>
         </form>
 
-        <aside className="h-fit border border-zara-border p-5 sm:p-6">
-          <h2 className="font-editorial text-2xl text-zara-black">Order summary</h2>
-          <ul className="mt-5 space-y-3 border-b border-zara-border pb-5">
+        <aside className="h-fit border border-market-border p-5 sm:p-6">
+          <h2 className="font-display text-2xl text-market-ink">Order summary</h2>
+          <ul className="mt-5 space-y-3 border-b border-market-border pb-5">
             {items.map((item) => (
               <li key={item.productId} className="flex justify-between gap-4 text-sm">
-                <span className="text-zara-gray">{item.title} × {item.quantity}</span>
-                <span className="shrink-0 text-zara-black">
+                <span className="text-market-muted">{item.title} × {item.quantity}</span>
+                <span className="shrink-0 text-market-ink">
                   {formatPrice(item.price * (1 - item.discountPercentage / 100) * item.quantity)}
                 </span>
               </li>
             ))}
           </ul>
-          <div className="mt-4 flex justify-between gap-4 text-sm text-zara-gray">
+          <div className="mt-4 flex justify-between gap-4 text-sm text-market-muted">
             <span>Subtotal</span>
             <span>{formatPrice(subtotal)}</span>
           </div>
-          <div className="mt-4 flex justify-between gap-4 border-t border-zara-border pt-4 text-sm font-medium text-zara-black">
+          <div className="mt-4 flex justify-between gap-4 border-t border-market-border pt-4 text-sm font-medium text-market-ink">
             <span>Total</span>
             <span>{formatPrice(subtotal)}</span>
           </div>
@@ -198,7 +198,7 @@ function CheckoutField({
 
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-xs uppercase tracking-[0.14em] text-zara-gray">
+      <label htmlFor={id} className="mb-2 block text-xs uppercase tracking-[0.14em] text-market-muted">
         {label}
       </label>
       <input
@@ -210,7 +210,7 @@ function CheckoutField({
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
         onChange={(event) => onChange(event.target.value)}
-        className="min-h-12 w-full border-b border-zara-border bg-transparent px-1 text-sm text-zara-black outline-none transition-colors focus:border-zara-black"
+        className="min-h-12 w-full border-b border-market-border bg-transparent px-1 text-sm text-market-ink outline-none transition-colors focus:border-market-ink"
       />
       {error && <p id={errorId} className="mt-2 text-sm text-red-700" role="alert">{error}</p>}
     </div>

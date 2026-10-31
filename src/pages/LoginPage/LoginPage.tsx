@@ -66,35 +66,35 @@ export function LoginPage() {
   };
 
   const inputClass = (field: keyof FormValues): string =>
-    `min-h-12 w-full border-b bg-transparent px-1 text-sm text-zara-black outline-none transition-colors placeholder:text-zara-gray focus:border-zara-black ${errors[field] || (credentialsInvalid && !isRegistering) ? "border-red-500 ring-1 ring-red-500" : "border-zara-border"}`;
+    `min-h-12 w-full border-b bg-transparent px-1 text-sm text-market-ink outline-none transition-colors placeholder:text-market-muted focus:border-market-ink ${errors[field] || (credentialsInvalid && !isRegistering) ? "border-red-500 ring-1 ring-red-500" : "border-market-border"}`;
 
   return (
     <main className="mx-auto flex min-h-[calc(100vh-2rem)] w-full max-w-md flex-col justify-center px-5 py-12">
-      <h1 className="font-editorial text-center text-4xl text-zara-black">{isRegistering ? "Create account" : "Log in"}</h1>
+      <h1 className="font-display text-center text-4xl text-market-ink">{isRegistering ? "Create account" : "Log in"}</h1>
       <form className="mt-10 space-y-6" onSubmit={handleSubmit} noValidate>
         {isRegistering && <div>
-          <label htmlFor="fullName" className="mb-2 block text-xs uppercase tracking-[0.16em] text-zara-gray">Full name</label>
+          <label htmlFor="fullName" className="mb-2 block text-xs uppercase tracking-[0.16em] text-market-muted">Full name</label>
           <input id="fullName" name="fullName" autoComplete="name" value={values.fullName} aria-invalid={Boolean(errors.fullName)} onChange={(event) => { setValues((current) => ({ ...current, fullName: event.target.value })); setErrors((current) => ({ ...current, fullName: undefined })); }} className={inputClass("fullName")} />
           {errors.fullName && <p className="mt-2 text-sm text-red-700" role="alert">{errors.fullName}</p>}
         </div>}
         <div>
-          <label htmlFor="email" className="mb-2 block text-xs uppercase tracking-[0.16em] text-zara-gray">Email</label>
+          <label htmlFor="email" className="mb-2 block text-xs uppercase tracking-[0.16em] text-market-muted">Email</label>
           <input id="email" name="email" type="email" autoComplete="email" value={values.email} aria-invalid={Boolean(errors.email) || credentialsInvalid} onChange={(event) => { setValues((current) => ({ ...current, email: event.target.value })); setErrors((current) => ({ ...current, email: undefined })); setCredentialsInvalid(false); }} className={inputClass("email")} />
           {errors.email && <p className="mt-2 text-sm text-red-700" role="alert">{errors.email}</p>}
         </div>
         <div>
-          <label htmlFor="password" className="mb-2 block text-xs uppercase tracking-[0.16em] text-zara-gray">Password</label>
+          <label htmlFor="password" className="mb-2 block text-xs uppercase tracking-[0.16em] text-market-muted">Password</label>
           <input id="password" name="password" type="password" autoComplete={isRegistering ? "new-password" : "current-password"} value={values.password} aria-invalid={Boolean(errors.password) || credentialsInvalid} onChange={(event) => { setValues((current) => ({ ...current, password: event.target.value })); setErrors((current) => ({ ...current, password: undefined })); setCredentialsInvalid(false); }} className={inputClass("password")} />
           {errors.password && <p className="mt-2 text-sm text-red-700" role="alert">{errors.password}</p>}
         </div>
-        <button type="submit" className="min-h-12 w-full bg-zara-black px-5 text-xs font-medium uppercase tracking-[0.16em] text-zara-white transition-colors hover:bg-zara-gray focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black">
+        <button type="submit" className="min-h-12 w-full bg-market-ink px-5 text-xs font-medium uppercase tracking-[0.16em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink">
           {isRegistering ? "Register" : "Log in"}
         </button>
       </form>
-      <button type="button" onClick={() => { setIsRegistering((current) => !current); setErrors({}); setCredentialsInvalid(false); }} className="mt-6 text-center text-xs uppercase tracking-[0.14em] text-zara-gray underline-offset-4 hover:text-zara-black hover:underline">
-        {isRegistering ? "Already have an account? Log in" : "New to 10X Shop? Register"}
+      <button type="button" onClick={() => { setIsRegistering((current) => !current); setErrors({}); setCredentialsInvalid(false); }} className="mt-6 text-center text-xs uppercase tracking-[0.14em] text-market-muted underline-offset-4 hover:text-market-ink hover:underline">
+        {isRegistering ? "Already have an account? Log in" : "New to Middle Market? Register"}
       </button>
-      <Link to="/" className="mt-6 text-center text-xs uppercase tracking-[0.14em] text-zara-gray underline-offset-4 hover:text-zara-black hover:underline">Back to catalog</Link>
+      <Link to="/" className="mt-6 text-center text-xs uppercase tracking-[0.14em] text-market-muted underline-offset-4 hover:text-market-ink hover:underline">Back to catalog</Link>
     </main>
   );
 }

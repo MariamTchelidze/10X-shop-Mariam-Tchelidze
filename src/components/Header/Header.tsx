@@ -4,24 +4,23 @@ import { useCart } from "../../context/CartContext";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 
 const categoryLinks = [
-  { label: "WOMEN", slug: "womens-dresses" },
-  { label: "MEN", slug: "mens-shirts" },
-  { label: "TEEN", slug: "tops" },
-  { label: "KIDS", slug: "sports-accessories" },
-  { label: "HOME", slug: "home-decoration" },
+  { label: "APPAREL", query: "apparel" },
+  { label: "ACCESSORIES", query: "accessories" },
+  { label: "HOME & LIVING", query: "home" },
+  { label: "COLLECTIBLES", query: "collectibles" },
 ] as const;
 
-function getCategoryHref(pathname: string, search: string, slug: string): string {
+function getCategoryHref(pathname: string, search: string, query: string): string {
   const params = new URLSearchParams(pathname === "/" ? search : "");
-  params.delete("q");
-  params.set("category", slug);
+  params.delete("category");
+  params.set("q", query);
   params.set("page", "1");
   return `/?${params.toString()}`;
 }
 
 function CategoryLinks({ mobile = false }: { mobile?: boolean }) {
   const location = useLocation();
-  const currentCategory = new URLSearchParams(location.search).get("category");
+  const currentQuery = new URLSearchParams(location.search).get("q");
 
   return (
     <nav
@@ -30,14 +29,14 @@ function CategoryLinks({ mobile = false }: { mobile?: boolean }) {
     >
       {categoryLinks.map((category) => {
         const isActive =
-          location.pathname === "/" && currentCategory === category.slug;
+          location.pathname === "/" && currentQuery === category.query;
 
         return (
           <Link
             key={category.label}
-            to={getCategoryHref(location.pathname, location.search, category.slug)}
+            to={getCategoryHref(location.pathname, location.search, category.query)}
             aria-current={isActive ? "page" : undefined}
-            className={`inline-flex min-h-10 shrink-0 items-center border-b-2 text-[10px] font-medium tracking-[0.16em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zara-black sm:text-xs ${isActive ? "border-zara-black text-zara-black" : "border-transparent text-zara-gray"}`}
+            className={`inline-flex min-h-10 shrink-0 items-center border-b-2 text-[10px] font-medium tracking-[0.16em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink sm:text-xs ${isActive ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
           >
             {category.label}
           </Link>
@@ -64,7 +63,7 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-zara-border bg-zara-white">
+    <header className="sticky top-0 z-50 border-b border-market-border bg-market-paper">
       <div className="mx-auto grid min-h-16 max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:px-6 lg:min-h-20 lg:px-10">
         <div className="min-w-0">
           <div className="hidden lg:block">
@@ -73,7 +72,7 @@ export function Header() {
           <button
             type="button"
             onClick={handleSearchClick}
-            className="text-[10px] font-medium tracking-[0.14em] text-zara-gray transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black sm:text-xs lg:hidden"
+            className="text-[10px] font-medium tracking-[0.14em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs lg:hidden"
           >
             SEARCH
           </button>
@@ -81,16 +80,16 @@ export function Header() {
 
         <Link
           to="/"
-          className="justify-self-center whitespace-nowrap font-sans text-sm font-bold tracking-[0.24em] text-zara-black transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black sm:text-base sm:tracking-[0.3em] lg:text-lg"
+          className="justify-self-center whitespace-nowrap font-display text-xs font-semibold tracking-[0.14em] text-market-ink transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-sm sm:tracking-[0.2em] lg:text-base"
         >
-          10X SHOP
+          MIDDLE MARKET
         </Link>
 
         <div className="flex items-center justify-self-end gap-2 sm:gap-4 lg:gap-6">
           <button
             type="button"
             onClick={handleSearchClick}
-            className="hidden text-xs font-medium tracking-[0.12em] text-zara-gray transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black lg:inline-flex"
+            className="hidden text-xs font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink lg:inline-flex"
           >
             SEARCH
           </button>
@@ -98,14 +97,14 @@ export function Header() {
             <Link
               to="/profile"
               aria-label={`Profile for ${displayName}`}
-              className="max-w-20 truncate text-[10px] font-medium tracking-[0.12em] text-zara-gray transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black sm:max-w-32 sm:text-xs"
+              className="max-w-20 truncate text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:max-w-32 sm:text-xs"
             >
               {displayName || "PROFILE"}
             </Link>
           ) : (
             <Link
               to="/login"
-              className="text-[10px] font-medium tracking-[0.12em] text-zara-gray transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black sm:text-xs"
+              className="text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs"
             >
               LOG IN
             </Link>
@@ -113,10 +112,10 @@ export function Header() {
           <Link
             to="/cart"
             aria-label={itemCount > 0 ? `Bag, ${itemCount} items` : "Bag"}
-            className="inline-flex min-h-10 items-center gap-1.5 text-[10px] font-medium tracking-[0.12em] text-zara-gray transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black sm:text-xs"
+            className="inline-flex min-h-10 items-center gap-1.5 text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs"
           >
             BAG
-            <span className="inline-flex min-w-4 justify-center text-zara-black">
+            <span className="inline-flex min-w-4 justify-center text-market-ink">
               {itemCount > 0 ? itemCount : ""}
             </span>
           </Link>
@@ -124,7 +123,7 @@ export function Header() {
         </div>
       </div>
 
-      <div className="overflow-x-auto border-t border-zara-border lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="overflow-x-auto border-t border-market-border lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <CategoryLinks mobile />
       </div>
     </header>

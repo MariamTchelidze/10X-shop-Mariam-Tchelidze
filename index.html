@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#F7F3E9" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script>
       (() => {
         try {
@@ -11,13 +14,13 @@
           const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
           const useDarkTheme = savedTheme === "dark" || (savedTheme !== "light" && prefersDark);
           document.documentElement.classList.toggle("dark", useDarkTheme);
-          document.querySelector('meta[name="theme-color"]')?.setAttribute("content", useDarkTheme ? "#0b0f19" : "#ffffff");
+          document.querySelector('meta[name="theme-color"]')?.setAttribute("content", useDarkTheme ? "#0B0B0B" : "#F7F3E9");
         } catch {
           // The app still loads with the light theme if browser storage is unavailable.
         }
       })();
     </script>
-    <title>10X Shop</title>
+    <title>Middle Market</title>
   </head>
   <body>
     <div id="root"></div>

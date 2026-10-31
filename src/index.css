@@ -1,14 +1,19 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-zara-black: var(--text-primary);
-  --color-zara-white: var(--bg-primary);
-  --color-zara-gray: var(--text-muted);
-  --color-zara-light: var(--bg-secondary);
-  --color-zara-border: var(--color-border);
-  --color-accent: var(--color-accent);
-  --font-editorial: var(--zara-font-editorial);
-  --font-sans: var(--zara-font-sans);
+  --color-market-ink: var(--text-primary);
+  --color-market-paper: var(--bg-primary);
+  --color-market-muted: var(--text-muted);
+  --color-market-surface: var(--bg-secondary);
+  --color-market-border: var(--color-border);
+  --color-leaf: var(--color-leaf);
+  --color-forest: var(--color-forest);
+  --color-earth: var(--color-earth);
+  --color-gold: var(--color-gold);
+  --color-blood: var(--color-blood);
+  --color-lava: var(--color-lava);
+  --font-display: var(--font-cinzel);
+  --font-sans: var(--font-lora);
 }
 
 @utility bg-primary {
@@ -31,31 +36,23 @@
   border-color: var(--color-border);
 }
 
-@utility bg-accent {
-  background-color: var(--color-accent);
-}
-
-@utility text-accent {
-  color: var(--color-accent);
-}
-
 :root {
   color-scheme: light;
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9f9f9;
-  --text-primary: #000000;
-  --text-muted: #767676;
-  --color-border: #e5e5e5;
-  --color-accent: #000000;
-  --zara-black: var(--text-primary);
-  --zara-white: var(--bg-primary);
-  --zara-gray: var(--text-muted);
-  --zara-light: var(--bg-secondary);
-  --zara-border: var(--color-border);
-  --zara-font-editorial: "Playfair Display", Georgia, serif;
-  --zara-font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --bg-primary: #f7f3e9;
+  --bg-secondary: #dbc9a4;
+  --text-primary: #1a1a1a;
+  --text-muted: #66543b;
+  --color-border: #c9b58c;
+  --color-leaf: #7a8f5b;
+  --color-forest: #3e5b3c;
+  --color-earth: #8b6f47;
+  --color-gold: #c9a96a;
+  --color-blood: #8b1e1e;
+  --color-lava: #ff6b1a;
+  --font-cinzel: "Cinzel", "Cormorant Garamond", Georgia, serif;
+  --font-lora: "Lora", Georgia, serif;
 
-  font-family: var(--zara-font-sans);
+  font-family: var(--font-lora);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   color: var(--text-primary);
@@ -65,12 +62,17 @@
 :root.dark,
 .dark {
   color-scheme: dark;
-  --bg-primary: #0b0f19;
-  --bg-secondary: #121826;
-  --text-primary: #f5f5f5;
-  --text-muted: #a3aab8;
-  --color-border: #303746;
-  --color-accent: #ffffff;
+  --bg-primary: #0b0b0b;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #f3eee3;
+  --text-muted: #c0b9ad;
+  --color-border: #2e2e2e;
+  --color-leaf: #7a8f5b;
+  --color-forest: #3e5b3c;
+  --color-earth: #8b6f47;
+  --color-gold: #c9a96a;
+  --color-blood: #8b1e1e;
+  --color-lava: #ff6b1a;
 }
 
 body {
@@ -83,13 +85,6 @@ body {
 }
 
 @keyframes toast-in {
-  from {
-    opacity: 0;
-    transform: translateY(0.75rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(0.75rem); }
+  to { opacity: 1; transform: translateY(0); }
 }

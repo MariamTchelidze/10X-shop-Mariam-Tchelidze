@@ -29,10 +29,10 @@ export function CartPage() {
   if (items.length === 0) {
     return (
       <main className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8">
-        <h1 className="font-editorial text-3xl text-zara-black">Your cart is empty</h1>
+        <h1 className="font-display text-3xl text-market-ink">Your cart is empty</h1>
         <Link
           to="/"
-          className="mt-6 inline-flex min-h-12 items-center bg-zara-black px-8 text-xs uppercase tracking-[0.14em] text-zara-white transition-colors hover:bg-zara-gray focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black"
+          className="mt-6 inline-flex min-h-12 items-center bg-market-ink px-8 text-xs uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
         >
           Browse products
         </Link>
@@ -42,17 +42,17 @@ export function CartPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
-      <h1 className="mb-8 border-b border-zara-border pb-5 font-editorial text-3xl text-zara-black sm:mb-10 sm:text-4xl">
+      <h1 className="mb-8 border-b border-market-border pb-5 font-display text-3xl text-market-ink sm:mb-10 sm:text-4xl">
         Your cart
       </h1>
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14">
-        <ul className="divide-y divide-zara-border">
+        <ul className="divide-y divide-market-border">
           {items.map((item) => {
             const unitPrice = discountedPrice(item.price, item.discountPercentage);
 
             return (
               <li key={item.productId} className="flex gap-4 py-5 sm:gap-6">
-                <Link to={`/products/${item.productId}`} className="w-24 shrink-0 bg-zara-light sm:w-32">
+                <Link to={`/products/${item.productId}`} className="w-24 shrink-0 bg-market-surface sm:w-32">
                   <img
                     src={item.thumbnail}
                     alt={item.title}
@@ -64,26 +64,26 @@ export function CartPage() {
                 </Link>
                 <div className="flex min-w-0 flex-1 flex-col justify-between gap-4 sm:flex-row sm:items-start">
                   <div className="min-w-0">
-                    <Link to={`/products/${item.productId}`} className="text-sm font-medium text-zara-black hover:underline">
+                    <Link to={`/products/${item.productId}`} className="text-sm font-medium text-market-ink hover:underline">
                       {item.title}
                     </Link>
-                    <p className="mt-2 text-sm text-zara-gray">{formatPrice(unitPrice)} each</p>
+                    <p className="mt-2 text-sm text-market-muted">{formatPrice(unitPrice)} each</p>
                     <button
                       type="button"
                       onClick={() => removeItem(item.productId)}
-                      className="mt-3 text-xs uppercase tracking-[0.12em] text-zara-gray underline underline-offset-4 hover:text-zara-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black"
+                      className="mt-3 text-xs uppercase tracking-[0.12em] text-market-muted underline underline-offset-4 hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
                     >
                       Remove
                     </button>
                   </div>
                   <div className="flex items-center justify-between gap-5 sm:flex-col sm:items-end">
-                    <div className="flex min-h-10 items-center border border-zara-border">
+                    <div className="flex min-h-10 items-center border border-market-border">
                       <button
                         type="button"
                         aria-label={`Decrease ${item.title} quantity`}
                         disabled={item.quantity <= 1}
                         onClick={() => updateQuantity(item.productId, item.quantity - 1)}
-                        className="min-h-10 min-w-10 text-lg text-zara-black disabled:text-zara-border"
+                        className="min-h-10 min-w-10 text-lg text-market-ink disabled:text-market-border"
                       >
                         −
                       </button>
@@ -93,12 +93,12 @@ export function CartPage() {
                         aria-label={`Increase ${item.title} quantity`}
                         disabled={item.quantity >= item.stock}
                         onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                        className="min-h-10 min-w-10 text-lg text-zara-black disabled:text-zara-border"
+                        className="min-h-10 min-w-10 text-lg text-market-ink disabled:text-market-border"
                       >
                         +
                       </button>
                     </div>
-                    <p className="text-sm font-medium text-zara-black">
+                    <p className="text-sm font-medium text-market-ink">
                       {formatPrice(unitPrice * item.quantity)}
                     </p>
                   </div>
@@ -108,14 +108,14 @@ export function CartPage() {
           })}
         </ul>
 
-        <aside className="h-fit border border-zara-border p-5 sm:p-6">
-          <h2 className="font-editorial text-2xl text-zara-black">Order summary</h2>
-          <div className="mt-6 flex justify-between gap-4 text-sm text-zara-gray">
+        <aside className="h-fit border border-market-border p-5 sm:p-6">
+          <h2 className="font-display text-2xl text-market-ink">Order summary</h2>
+          <div className="mt-6 flex justify-between gap-4 text-sm text-market-muted">
             <span>Subtotal</span>
             <span>{formatPrice(subtotal)}</span>
           </div>
           <form onSubmit={applyPromoCode} className="mt-6">
-            <label htmlFor="promo-code" className="mb-2 block text-xs uppercase tracking-[0.12em] text-zara-gray">
+            <label htmlFor="promo-code" className="mb-2 block text-xs uppercase tracking-[0.12em] text-market-muted">
               Promo code
             </label>
             <div className="flex min-w-0 gap-2">
@@ -130,11 +130,11 @@ export function CartPage() {
                 aria-invalid={promoError.length > 0}
                 aria-describedby={promoError ? "promo-error" : undefined}
                 placeholder="Enter code"
-                className="min-h-11 min-w-0 flex-1 border border-zara-border px-3 text-sm uppercase text-zara-black placeholder:normal-case placeholder:text-zara-gray focus:border-zara-black focus:outline-none"
+                className="min-h-11 min-w-0 flex-1 border border-market-border px-3 text-sm uppercase text-market-ink placeholder:normal-case placeholder:text-market-muted focus:border-market-ink focus:outline-none"
               />
               <button
                 type="submit"
-                className="min-h-11 shrink-0 border border-zara-black px-4 text-xs font-medium uppercase tracking-[0.12em] text-zara-black transition-colors hover:bg-zara-black hover:text-zara-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zara-black"
+                className="min-h-11 shrink-0 border border-market-ink px-4 text-xs font-medium uppercase tracking-[0.12em] text-market-ink transition-colors hover:bg-market-ink hover:text-market-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink"
               >
                 Apply
               </button>
@@ -142,18 +142,18 @@ export function CartPage() {
             {promoError && <p id="promo-error" role="alert" className="mt-2 text-xs text-red-700">{promoError}</p>}
           </form>
           {promoApplied && (
-            <div className="mt-4 flex justify-between gap-4 text-sm text-zara-gray">
+            <div className="mt-4 flex justify-between gap-4 text-sm text-market-muted">
               <span>Promo discount (10%)</span>
               <span>−{formatPrice(discount)}</span>
             </div>
           )}
-          <div className="mt-4 flex justify-between gap-4 border-t border-zara-border pt-4 text-sm font-medium text-zara-black">
+          <div className="mt-4 flex justify-between gap-4 border-t border-market-border pt-4 text-sm font-medium text-market-ink">
             <span>Total</span>
             <span>{formatPrice(total)}</span>
           </div>
           <Link
             to="/checkout"
-            className="mt-6 flex min-h-12 items-center justify-center bg-zara-black px-5 text-center text-xs uppercase tracking-[0.12em] text-zara-white transition-colors hover:bg-zara-gray focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zara-black"
+            className="mt-6 flex min-h-12 items-center justify-center bg-market-ink px-5 text-center text-xs uppercase tracking-[0.12em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
           >
             Proceed to checkout
           </Link>
