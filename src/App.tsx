@@ -17,9 +17,8 @@ import { OrderSuccessPage } from "./pages/OrderSuccessPage/OrderSuccessPage";
 import { HelpCenterPage } from "./pages/HelpCenterPage/HelpCenterPage";
 import { RealmProvider } from "./context/RealmContext";
 import { InventoryProvider } from "./context/InventoryContext";
-import { EaglePostWidget } from "./components/EaglePostWidget/EaglePostWidget";
 import { MithrilVaultCalculator } from "./components/MithrilVaultCalculator/MithrilVaultCalculator";
-import { CouncilChatWidget } from "./components/CouncilSupport/CouncilChatWidget";
+import { FloatingWidgets } from "./components/FloatingWidgets/FloatingWidgets";
 import {
   AboutUsPage,
   CancelSubscriptionPage,
@@ -49,9 +48,8 @@ function AppLayout() {
         <Outlet />
       </div>
       <Footer />
-      {showEaglePost && <EaglePostWidget />}
+      {showEaglePost && <FloatingWidgets />}
       {showEaglePost && <MithrilVaultCalculator />}
-      {showEaglePost && <CouncilChatWidget />}
     </div>
   );
 }

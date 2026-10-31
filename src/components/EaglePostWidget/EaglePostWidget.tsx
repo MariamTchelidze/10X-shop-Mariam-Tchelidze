@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 const SUBSCRIPTION_KEY = "middle-market-eagle-post-email";
 
@@ -11,9 +11,21 @@ function readStorage(key: string): string {
 }
 
 export function EaglePostWidget() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [email, setEmail] = useState("");
   const [subscribedEmail, setSubscribedEmail] = useState(() => readStorage(SUBSCRIPTION_KEY));
   const [isOpen, setIsOpen] = useState(() => window.matchMedia("(min-width: 640px)").matches);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (event.target instanceof Node && !containerRef.current?.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+  }, [isOpen]);
 
   const handleSubscribe = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,20 +41,23 @@ export function EaglePostWidget() {
 
   if (!isOpen) {
     return (
-      <button
-        type="button"
-        onClick={() => setIsOpen(true)}
-        aria-label="Open Eagle Post newsletter"
-        className="fixed bottom-6 right-6 z-50 inline-flex min-h-12 items-center gap-2 border border-gold/60 bg-market-paper px-4 text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold max-sm:bottom-4 max-sm:right-4"
-      >
-        <EagleMark />
-        <span className="font-display text-xs uppercase tracking-[0.12em]">Eagle Post</span>
-      </button>
+      <div ref={containerRef} className="flex w-full justify-end">
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          aria-label="Open Eagle Post newsletter"
+          className="inline-flex min-h-12 items-center gap-2 border border-gold/60 bg-market-paper px-4 text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+        >
+          <EagleMark />
+          <span className="font-display text-xs uppercase tracking-[0.12em]">Eagle Post</span>
+        </button>
+      </div>
     );
   }
 
   return (
-    <aside aria-label="Eagle Post newsletter" className="fixed bottom-6 right-6 z-50 w-[calc(100vw-2rem)] max-w-[22rem] sm:w-[min(22rem,calc(100vw-3rem))] max-sm:bottom-4 max-sm:right-4">
+    <div ref={containerRef} className="w-full">
+      <aside aria-label="Eagle Post newsletter" className="w-full">
       <section className="border border-gold/60 bg-market-paper text-market-ink shadow-2xl">
         <div className="flex items-start justify-between gap-4 border-b border-market-border px-4 py-4 sm:px-5">
           <div className="flex items-center gap-3">
@@ -86,7 +101,8 @@ export function EaglePostWidget() {
           )}
         </div>
       </section>
-    </aside>
+      </aside>
+    </div>
   );
 }
 
