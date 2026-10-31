@@ -41,7 +41,7 @@ export function MithrilVaultCalculator() {
         aria-expanded={isOpen}
         aria-hidden={isOpen}
         tabIndex={isOpen ? -1 : 0}
-        className={`inline-flex min-h-12 items-center gap-2 border border-gold/60 bg-market-paper px-4 text-market-ink shadow-lg transition-all duration-300 hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${isOpen ? "pointer-events-none absolute left-0 top-0 scale-95 opacity-0" : "relative scale-100 opacity-100"}`}
+        className={`inline-flex min-h-12 w-48 items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-all duration-300 hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${isOpen ? "pointer-events-none absolute left-0 top-0 scale-95 opacity-0" : "relative scale-100 opacity-100"}`}
       >
         <VaultMark />
         <span className="font-display text-xs uppercase tracking-[0.12em]">Mithril Vault</span>
@@ -51,7 +51,7 @@ export function MithrilVaultCalculator() {
         aria-label="Mithril Vault currency calculator"
         aria-hidden={!isOpen}
         inert={!isOpen}
-        className={`absolute bottom-0 left-0 w-[calc(100vw-2rem)] max-w-[22rem] origin-bottom-left overflow-y-auto border border-gold/60 bg-market-paper text-market-ink shadow-2xl transition-all duration-300 max-md:max-h-[calc(100dvh-7rem)] ${isOpen ? "translate-y-0 scale-100 opacity-100" : "pointer-events-none translate-y-2 scale-95 opacity-0"}`}
+        className={`absolute bottom-0 left-0 origin-bottom-left overflow-y-auto border border-gold/60 bg-market-paper text-market-ink shadow-2xl transition-[width,transform,opacity] duration-300 max-md:max-h-[calc(100dvh-7rem)] ${isOpen ? "w-[calc(100vw-2rem)] max-w-[22rem] translate-y-0 scale-100 opacity-100" : "pointer-events-none w-48 translate-y-2 scale-95 opacity-0"}`}
       >
         <header className="flex items-start justify-between gap-3 border-b border-market-border px-4 py-4 sm:px-5">
           <div className="flex min-w-0 items-center gap-3">

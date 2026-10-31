@@ -5,6 +5,10 @@ import { ElvenLeafMark } from "./ElvenLeafMark";
 
 const OPEN_KEY = "middle-market-council-chat-open";
 
+interface CouncilChatWidgetProps {
+  onOpenChange: (isOpen: boolean) => void;
+}
+
 function readInitialOpenState(): boolean {
   try {
     return localStorage.getItem(OPEN_KEY) === "true";
@@ -13,7 +17,7 @@ function readInitialOpenState(): boolean {
   }
 }
 
-export function CouncilChatWidget() {
+export function CouncilChatWidget({ onOpenChange }: CouncilChatWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(readInitialOpenState);
 
@@ -25,6 +29,10 @@ export function CouncilChatWidget() {
       // Keep the widget interactive for this session if storage is unavailable.
     }
   }, []);
+
+  useEffect(() => {
+    onOpenChange(isOpen);
+  }, [isOpen, onOpenChange]);
 
   useOutsideClick(containerRef, () => updateOpenState(false), isOpen);
 
@@ -58,7 +66,7 @@ export function CouncilChatWidget() {
           onClick={() => updateOpenState(true)}
           aria-label="Open The Council of Elrond support"
           aria-expanded={false}
-          className="inline-flex min-h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          className="ml-auto inline-flex min-h-12 w-48 max-w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
         >
           <ElvenLeafMark />
           <span className="font-display text-[10px] uppercase tracking-[0.1em] sm:text-xs">Ask the Council</span>

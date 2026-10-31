@@ -1,7 +1,11 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 
 const SUBSCRIPTION_KEY = "middle-market-eagle-post-email";
+
+interface EaglePostWidgetProps {
+  onOpenChange: (isOpen: boolean) => void;
+}
 
 function readStorage(key: string): string {
   try {
@@ -11,11 +15,15 @@ function readStorage(key: string): string {
   }
 }
 
-export function EaglePostWidget() {
+export function EaglePostWidget({ onOpenChange }: EaglePostWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [email, setEmail] = useState("");
   const [subscribedEmail, setSubscribedEmail] = useState(() => readStorage(SUBSCRIPTION_KEY));
   const [isOpen, setIsOpen] = useState(() => window.matchMedia("(min-width: 640px)").matches);
+
+  useEffect(() => {
+    onOpenChange(isOpen);
+  }, [isOpen, onOpenChange]);
 
   useOutsideClick(containerRef, () => setIsOpen(false), isOpen);
 
@@ -33,12 +41,12 @@ export function EaglePostWidget() {
 
   if (!isOpen) {
     return (
-      <div ref={containerRef} className="w-full">
+      <div ref={containerRef} className="flex w-full justify-end">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
           aria-label="Open Eagle Post newsletter"
-          className="inline-flex min-h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          className="inline-flex min-h-12 w-48 max-w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
         >
           <EagleMark />
           <span className="font-display text-xs uppercase tracking-[0.12em]">Eagle Post</span>
