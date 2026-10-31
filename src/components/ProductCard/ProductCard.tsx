@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
+import { useWishlist } from "../../context/WishlistContext";
 import type { Product } from "../../types/product";
 import { discountedPrice, formatPrice } from "../../utils/product";
 
@@ -12,6 +13,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { user } = useAuth();
   const { addItem } = useCart();
+  const { isInWishlist, toggleWishlist } = useWishlist();
   const [isVariantPickerOpen, setIsVariantPickerOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -60,6 +62,18 @@ export function ProductCard({ product }: ProductCardProps) {
             className="aspect-[3/4] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         </Link>
+
+        <button
+          type="button"
+          aria-label={isInWishlist(product.id) ? `Remove ${product.title} from wishlist` : `Add ${product.title} to wishlist`}
+          aria-pressed={isInWishlist(product.id)}
+          onClick={() => toggleWishlist(product)}
+          className="absolute right-3 top-3 z-20 inline-flex h-10 w-10 items-center justify-center rounded-full border border-market-border bg-market-paper/95 text-market-ink shadow-sm transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill={isInWishlist(product.id) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" />
+          </svg>
+        </button>
 
         <div className={`absolute inset-x-0 bottom-0 z-10 transition-all duration-300 ${isVariantPickerOpen ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 max-sm:translate-y-0 max-sm:opacity-100"}`}>
           {!isVariantPickerOpen ? (

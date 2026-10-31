@@ -4,6 +4,7 @@ import { Header } from "./components/Header/Header";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { ToastProvider } from "./context/ToastContext";
+import { WishlistProvider } from "./context/WishlistContext";
 import { CartPage } from "./pages/CartPage/CartPage";
 import { CatalogPage } from "./pages/CatalogPage/CatalogPage";
 import { CheckoutPage } from "./pages/CheckoutPage/CheckoutPage";
@@ -11,6 +12,7 @@ import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { ProductPage } from "./pages/ProductPage/ProductPage";
 import { OrdersPage } from "./pages/OrdersPage/OrdersPage";
 import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
+import { WishlistPage } from "./pages/WishlistPage/WishlistPage";
 import {
   AboutUsPage,
   CancelSubscriptionPage,
@@ -58,6 +60,7 @@ export function App() {
     <BrowserRouter>
       <AuthProvider>
         <ToastProvider>
+          <WishlistProvider>
           <CartProvider>
             <Routes>
             <Route element={<AppLayout />}>
@@ -69,6 +72,7 @@ export function App() {
               </Route>
               <Route path="/products/:id" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/help/shop-online" element={<ShopOnlinePage />} />
               <Route path="/help/payments" element={<PaymentsPage />} />
               <Route path="/help/deliveries" element={<DeliveriesPage />} />
@@ -90,6 +94,7 @@ export function App() {
             </Route>
             </Routes>
           </CartProvider>
+          </WishlistProvider>
         </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
