@@ -18,6 +18,7 @@ import { HelpCenterPage } from "./pages/HelpCenterPage/HelpCenterPage";
 import { RealmProvider } from "./context/RealmContext";
 import { InventoryProvider } from "./context/InventoryContext";
 import { EaglePostWidget } from "./components/EaglePostWidget/EaglePostWidget";
+import { MithrilVaultCalculator } from "./components/MithrilVaultCalculator/MithrilVaultCalculator";
 import {
   AboutUsPage,
   CancelSubscriptionPage,
@@ -48,6 +49,7 @@ function AppLayout() {
       </div>
       <Footer />
       {showEaglePost && <EaglePostWidget />}
+      {showEaglePost && <MithrilVaultCalculator />}
     </div>
   );
 }
