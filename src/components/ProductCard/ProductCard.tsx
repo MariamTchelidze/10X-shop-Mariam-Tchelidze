@@ -3,8 +3,9 @@ import { Link } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
+import { useRealm } from "../../context/RealmContext";
 import type { Product } from "../../types/product";
-import { discountedPrice, formatPrice } from "../../utils/product";
+import { discountedPrice } from "../../utils/product";
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +14,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { user } = useAuth();
   const { addItem } = useCart();
+  const { formatCurrency } = useRealm();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const [isVariantPickerOpen, setIsVariantPickerOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState("");
@@ -108,7 +110,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <span className={`shrink-0 text-xs ${stockColor}`}>{stockMessage}</span>
         </div>
         <p className="text-xs capitalize tracking-wide text-market-muted">{product.category}</p>
-        <p className="text-sm text-market-ink">{formatPrice(discountedPrice(product.price, product.discountPercentage))}</p>
+        <p className="text-sm text-market-ink">{formatCurrency(discountedPrice(product.price, product.discountPercentage))}</p>
       </div>
     </article>
   );

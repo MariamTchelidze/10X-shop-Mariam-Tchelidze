@@ -2,11 +2,13 @@ import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import { useCart } from "../../context/CartContext";
 import { useToast } from "../../context/ToastContext";
-import { discountedPrice, formatPrice } from "../../utils/product";
+import { useRealm } from "../../context/RealmContext";
+import { discountedPrice } from "../../utils/product";
 
 export function CartPage() {
   const { items, subtotal, removeItem, updateQuantity } = useCart();
   const { addToast } = useToast();
+  const { formatCurrency } = useRealm();
   const [promoInput, setPromoInput] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoError, setPromoError] = useState("");
@@ -68,7 +70,7 @@ export function CartPage() {
                       {item.title}
                     </Link>
                     {(item.size || item.color) && <p className="mt-1 text-xs text-market-muted">{[item.size && `Size: ${item.size}`, item.color && `Color: ${item.color}`].filter(Boolean).join(" · ")}</p>}
-                    <p className="mt-2 text-sm text-market-muted">{formatPrice(unitPrice)} each</p>
+                    <p className="mt-2 text-sm text-market-muted">{formatCurrency(unitPrice)} each</p>
                     <button
                       type="button"
                       onClick={() => removeItem(item.productId, { size: item.size, color: item.color })}
@@ -100,7 +102,7 @@ export function CartPage() {
                       </button>
                     </div>
                     <p className="text-sm font-medium text-market-ink">
-                      {formatPrice(unitPrice * item.quantity)}
+                      {formatCurrency(unitPrice * item.quantity)}
                     </p>
                   </div>
                 </div>
@@ -113,7 +115,7 @@ export function CartPage() {
           <h2 className="font-display text-2xl text-market-ink">Order summary</h2>
           <div className="mt-6 flex justify-between gap-4 text-sm text-market-muted">
             <span>Subtotal</span>
-            <span>{formatPrice(subtotal)}</span>
+            <span>{formatCurrency(subtotal)}</span>
           </div>
           <form onSubmit={applyPromoCode} className="mt-6">
             <label htmlFor="promo-code" className="mb-2 block text-xs uppercase tracking-[0.12em] text-market-muted">
@@ -145,12 +147,12 @@ export function CartPage() {
           {promoApplied && (
             <div className="mt-4 flex justify-between gap-4 text-sm text-market-muted">
               <span>Promo discount (10%)</span>
-              <span>−{formatPrice(discount)}</span>
+              <span>−{formatCurrency(discount)}</span>
             </div>
           )}
           <div className="mt-4 flex justify-between gap-4 border-t border-market-border pt-4 text-sm font-medium text-market-ink">
             <span>Total</span>
-            <span>{formatPrice(total)}</span>
+            <span>{formatCurrency(total)}</span>
           </div>
           <Link
             to="/checkout"

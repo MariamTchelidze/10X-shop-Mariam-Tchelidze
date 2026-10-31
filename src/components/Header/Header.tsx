@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import { useWishlist } from "../../context/WishlistContext";
+import { RealmSelector } from "./RealmSelector";
 
 const categoryLinks = [
   { label: "APPAREL", category: "womens-dresses" },
@@ -110,7 +111,7 @@ export function Header() {
             <Link
               to="/profile"
               aria-label={`Profile for ${displayName}`}
-              className="max-w-20 truncate text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:max-w-32 sm:text-xs"
+              className="max-w-12 truncate text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:max-w-32 sm:text-xs"
             >
               {displayName || "PROFILE"}
             </Link>
@@ -122,6 +123,7 @@ export function Header() {
               LOG IN
             </Link>
           )}
+          <RealmSelector />
           <Link
             to="/wishlist"
             aria-label={wishlistItems.length > 0 ? `Wishlist, ${wishlistItems.length} items` : "Wishlist"}

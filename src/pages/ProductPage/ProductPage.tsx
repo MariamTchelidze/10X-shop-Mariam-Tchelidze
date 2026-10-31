@@ -2,8 +2,9 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router";
 import { fetchProductById, fetchProducts } from "../../api/products";
 import { useCart } from "../../context/CartContext";
+import { useRealm } from "../../context/RealmContext";
 import type { Product, Review } from "../../types/product";
-import { discountedPrice, formatPrice } from "../../utils/product";
+import { discountedPrice } from "../../utils/product";
 
 export function ProductPage() {
   const { id } = useParams();
@@ -20,6 +21,7 @@ export function ProductPage() {
   const [reviewComment, setReviewComment] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
   const { addItem } = useCart();
+  const { formatCurrency } = useRealm();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -157,10 +159,10 @@ export function ProductPage() {
           <p className="text-xs uppercase tracking-[0.16em] text-market-muted">{product.category}</p>
           <h1 className="mt-3 font-display text-3xl text-market-ink sm:text-4xl">{product.title}</h1>
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <p className="text-base text-market-ink">{formatPrice(price)}</p>
+            <p className="text-base text-market-ink">{formatCurrency(price)}</p>
             {product.discountPercentage > 0 && (
               <>
-                <p className="text-sm text-market-muted line-through">{formatPrice(product.price)}</p>
+                <p className="text-sm text-market-muted line-through">{formatCurrency(product.price)}</p>
                 <span className="text-xs text-market-muted">−{Math.round(product.discountPercentage)}%</span>
               </>
             )}
@@ -232,7 +234,7 @@ export function ProductPage() {
               <Link key={related.id} to={`/products/${related.id}`} className="group min-w-0">
                 <img src={related.thumbnail} alt={related.title} loading="lazy" className="aspect-[3/4] w-full bg-market-surface object-cover" />
                 <h3 className="mt-3 truncate text-xs text-market-ink group-hover:underline">{related.title}</h3>
-                <p className="mt-1 text-xs text-market-muted">{formatPrice(discountedPrice(related.price, related.discountPercentage))}</p>
+                <p className="mt-1 text-xs text-market-muted">{formatCurrency(discountedPrice(related.price, related.discountPercentage))}</p>
               </Link>
             ))}
           </div>

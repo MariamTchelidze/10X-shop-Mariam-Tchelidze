@@ -15,6 +15,7 @@ import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
 import { WishlistPage } from "./pages/WishlistPage/WishlistPage";
 import { OrderSuccessPage } from "./pages/OrderSuccessPage/OrderSuccessPage";
 import { HelpCenterPage } from "./pages/HelpCenterPage/HelpCenterPage";
+import { RealmProvider } from "./context/RealmContext";
 import {
   AboutUsPage,
   CancelSubscriptionPage,
@@ -62,6 +63,7 @@ export function App() {
     <BrowserRouter>
       <AuthProvider>
         <ToastProvider>
+          <RealmProvider>
           <WishlistProvider>
           <CartProvider>
             <Routes>
@@ -99,6 +101,7 @@ export function App() {
             </Routes>
           </CartProvider>
           </WishlistProvider>
+          </RealmProvider>
         </ToastProvider>
       </AuthProvider>
     </BrowserRouter>

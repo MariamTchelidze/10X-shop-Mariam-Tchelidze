@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
+import { useRealm } from "../../context/RealmContext";
 import type { Order } from "../../types/order";
 import { readOrders } from "../../utils/orders";
-import { discountedPrice, formatPrice } from "../../utils/product";
+import { discountedPrice } from "../../utils/product";
 
 interface OrderSuccessLocationState {
   order?: Order;
@@ -15,6 +16,7 @@ export function OrderSuccessPage() {
   const routeState = location.state as OrderSuccessLocationState | null;
   const { user } = useAuth();
   const { items, clearCart } = useCart();
+  const { formatCurrency } = useRealm();
   const [order] = useState<Order | null>(() =>
     routeState?.order ?? readOrders().find((savedOrder) => savedOrder.username === user.username) ?? null,
   );
@@ -63,7 +65,7 @@ export function OrderSuccessPage() {
                   <img src={item.thumbnail} alt={item.title} loading="lazy" width={180} height={220} className="aspect-[3/4] w-20 shrink-0 bg-market-surface object-cover sm:w-24" />
                   <div className="flex min-w-0 flex-1 flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0"><h3 className="font-display text-sm text-market-ink">{item.title}</h3><p className="mt-2 text-xs text-market-muted">Quantity: {item.quantity}</p>{(item.size || item.color) && <p className="mt-1 text-xs text-market-muted">{[item.size && `Size: ${item.size}`, item.color && `Color: ${item.color}`].filter(Boolean).join(" · ")}</p>}</div>
-                    <p className="shrink-0 text-sm text-market-ink">{formatPrice(unitPrice * item.quantity)}</p>
+                    <p className="shrink-0 text-sm text-market-ink">{formatCurrency(unitPrice * item.quantity)}</p>
                   </div>
                 </li>
               );
@@ -90,10 +92,10 @@ export function OrderSuccessPage() {
         <aside className="h-fit border border-market-border bg-market-surface p-5 sm:p-6">
           <h2 className="font-display text-xl text-market-ink">Order total</h2>
           <dl className="mt-5 space-y-4 text-sm">
-            <div className="flex justify-between gap-4 text-market-muted"><dt>Subtotal</dt><dd>{formatPrice(subtotal)}</dd></div>
-            <div className="flex justify-between gap-4 text-market-muted"><dt>Shipping</dt><dd>{shipping === 0 ? "Complimentary" : formatPrice(shipping)}</dd></div>
-            <div className="flex justify-between gap-4 text-market-muted"><dt>Taxes</dt><dd>{formatPrice(taxes)}</dd></div>
-            <div className="flex justify-between gap-4 border-t border-market-border pt-4 font-medium text-market-ink"><dt>Total</dt><dd>{formatPrice(order.total)}</dd></div>
+            <div className="flex justify-between gap-4 text-market-muted"><dt>Subtotal</dt><dd>{formatCurrency(subtotal)}</dd></div>
+            <div className="flex justify-between gap-4 text-market-muted"><dt>Shipping</dt><dd>{shipping === 0 ? "Complimentary" : formatCurrency(shipping)}</dd></div>
+            <div className="flex justify-between gap-4 text-market-muted"><dt>Taxes</dt><dd>{formatCurrency(taxes)}</dd></div>
+            <div className="flex justify-between gap-4 border-t border-market-border pt-4 font-medium text-market-ink"><dt>Total</dt><dd>{formatCurrency(order.total)}</dd></div>
           </dl>
           <p className="mt-4 text-[10px] leading-5 text-market-muted">Demo order only. No payment was collected.</p>
         </aside>

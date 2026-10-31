@@ -2,9 +2,9 @@ import { useState, type FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
+import { useRealm } from "../../context/RealmContext";
 import { saveOrder } from "../../utils/orders";
 import type { Order } from "../../types/order";
-import { formatPrice } from "../../utils/product";
 
 interface CheckoutValues {
   fullName: string;
@@ -30,6 +30,7 @@ const emptyValues: CheckoutValues = {
 export function CheckoutPage() {
   const { items, subtotal } = useCart();
   const { user } = useAuth();
+  const { formatCurrency } = useRealm();
   const navigate = useNavigate();
   const [values, setValues] = useState<CheckoutValues>(emptyValues);
   const [errors, setErrors] = useState<CheckoutErrors>({});
@@ -141,18 +142,18 @@ export function CheckoutPage() {
               <li key={item.productId} className="flex justify-between gap-4 text-sm">
                 <span className="text-market-muted">{item.title} × {item.quantity}</span>
                 <span className="shrink-0 text-market-ink">
-                  {formatPrice(item.price * (1 - item.discountPercentage / 100) * item.quantity)}
+                  {formatCurrency(item.price * (1 - item.discountPercentage / 100) * item.quantity)}
                 </span>
               </li>
             ))}
           </ul>
           <div className="mt-4 flex justify-between gap-4 text-sm text-market-muted">
             <span>Subtotal</span>
-            <span>{formatPrice(subtotal)}</span>
+            <span>{formatCurrency(subtotal)}</span>
           </div>
           <div className="mt-4 flex justify-between gap-4 border-t border-market-border pt-4 text-sm font-medium text-market-ink">
             <span>Total</span>
-            <span>{formatPrice(subtotal)}</span>
+            <span>{formatCurrency(subtotal)}</span>
           </div>
         </aside>
       </div>
