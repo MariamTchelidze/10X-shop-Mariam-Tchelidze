@@ -61,11 +61,11 @@ export function HeroCarousel() {
 
       <div className="absolute inset-x-0 bottom-0 z-10 px-5 pb-16 pt-24 text-white sm:px-10 sm:pb-20 lg:px-16">
         <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#e5d2a4] sm:text-xs">A MARKET BEYOND THE SHIRE</p>
-        <h1 className="mt-3 max-w-3xl font-display text-3xl leading-tight sm:text-5xl lg:text-6xl">Treasures of Middle-earth</h1>
-        <p className="mt-4 max-w-xl text-sm leading-6 text-white/85 sm:text-base">Artifacts, apparel, and keepsakes for every road through the realm.</p>
-        <nav aria-label="Featured treasures" className="mt-6 flex max-w-4xl flex-wrap gap-x-5 gap-y-3 sm:gap-x-7">
+        <h1 className="mt-3 whitespace-nowrap font-display text-xl leading-tight sm:text-2xl md:text-4xl lg:text-6xl">Treasures of Middle-earth</h1>
+        <p className="mt-4 hidden max-w-xl text-sm leading-6 text-white/85 min-[769px]:block sm:text-base">Artifacts, apparel, and keepsakes for every road through the realm.</p>
+        <nav aria-label="Featured treasures" className="mt-3 grid max-w-[22rem] grid-cols-2 gap-x-3 gap-y-2 sm:mt-6 sm:flex sm:max-w-4xl sm:flex-wrap sm:gap-x-7 sm:gap-y-3">
           {treasures.map(([label, query]) => (
-            <Link key={query} to={`/?q=${encodeURIComponent(query)}&page=1`} className="border-b border-white/60 pb-1 text-[9px] font-medium uppercase tracking-[0.11em] text-white transition-colors hover:border-[#e5d2a4] hover:text-[#e5d2a4] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:text-[10px]">
+            <Link key={query} to={`/?q=${encodeURIComponent(query)}&page=1`} className="min-w-0 whitespace-nowrap border-b border-white/60 pb-1 text-[8px] font-medium uppercase tracking-[0.08em] text-white transition-colors hover:border-[#e5d2a4] hover:text-[#e5d2a4] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white min-[400px]:text-[9px] min-[400px]:tracking-[0.1em] sm:text-[10px] sm:tracking-[0.11em]">
               {label}
             </Link>
           ))}
