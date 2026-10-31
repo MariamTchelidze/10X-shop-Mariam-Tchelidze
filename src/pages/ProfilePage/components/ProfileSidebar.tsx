@@ -20,13 +20,13 @@ export function ProfileSidebar({
   onSignOut,
 }: ProfileSidebarProps) {
   return (
-    <aside className="h-fit md:sticky md:top-28">
+    <aside className="h-fit w-full min-w-0 max-w-full md:sticky md:top-28">
       <p className="mb-3 hidden text-[10px] uppercase tracking-[0.16em] text-market-muted md:block">
         Account menu
       </p>
       <nav
         aria-label="Profile sections"
-        className="flex gap-2 overflow-x-auto border-b border-market-border pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-col md:gap-0 md:overflow-visible md:border-b-0 md:border-t md:pb-0"
+        className="flex w-full min-w-0 max-w-full touch-pan-x gap-2 overflow-x-auto overscroll-x-contain border-b border-market-border pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-col md:gap-0 md:overflow-visible md:border-b-0 md:border-t md:pb-0"
       >
         {sections.map((section) => {
           const isActive = activeSection === section.id;

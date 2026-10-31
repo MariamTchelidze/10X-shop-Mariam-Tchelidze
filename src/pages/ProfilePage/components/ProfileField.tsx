@@ -27,7 +27,7 @@ export function ProfileField({
 }: ProfileFieldProps) {
   return (
     <label
-      className="grid min-w-0 gap-2 text-[10px] uppercase tracking-[0.14em] text-market-muted"
+      className="grid w-full min-w-0 max-w-full gap-2 text-[10px] uppercase tracking-[0.14em] text-market-muted"
       htmlFor={id}
     >
       {label}
@@ -43,7 +43,7 @@ export function ProfileField({
         minLength={minLength}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="min-h-12 w-full border-b border-market-border bg-transparent px-1 text-sm text-market-ink outline-none transition-colors placeholder:text-market-muted focus:border-gold"
+        className="min-h-12 w-full min-w-0 max-w-full border-b border-market-border bg-transparent px-1 text-sm text-market-ink outline-none transition-colors placeholder:text-market-muted focus:border-gold"
       />
     </label>
   );

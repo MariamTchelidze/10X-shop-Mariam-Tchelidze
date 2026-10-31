@@ -18,9 +18,9 @@ export function PurchasesSection({ orders, formatCurrency }: PurchasesSectionPro
       ) : (
         <ul className="divide-y divide-market-border border-y border-market-border">
           {orders.map((order) => (
-            <li key={order.id} className="flex flex-wrap items-center justify-between gap-4 py-4">
-              <div>
-                <p className="text-xs uppercase tracking-widest text-market-ink">{order.id}</p>
+            <li key={order.id} className="flex min-w-0 max-w-full flex-wrap items-center justify-between gap-4 py-4">
+              <div className="min-w-0 max-w-full">
+                <p className="break-all text-xs uppercase tracking-widest text-market-ink">{order.id}</p>
                 <p className="mt-1 text-xs text-market-muted">
                   {formatDate(order.date)} · {order.items.length} line items
                 </p>

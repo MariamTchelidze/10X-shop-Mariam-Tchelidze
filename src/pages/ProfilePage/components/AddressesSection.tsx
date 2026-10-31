@@ -34,8 +34,8 @@ export function AddressesSection({
       {addresses.length > 0 && (
         <ul className="mb-8 grid gap-3 sm:grid-cols-2">
           {addresses.map((address) => (
-            <li key={address.id} className="border border-market-border p-4">
-              <p className="text-sm font-medium text-market-ink">{address.street}</p>
+            <li key={address.id} className="min-w-0 max-w-full border border-market-border p-4">
+              <p className="break-words text-sm font-medium text-market-ink">{address.street}</p>
               <p className="mt-2 text-xs leading-5 text-market-muted">
                 {address.city}, {address.postalCode}
                 <br />
@@ -53,7 +53,7 @@ export function AddressesSection({
           ))}
         </ul>
       )}
-      <form onSubmit={handleSubmit} className="grid gap-5 sm:max-w-xl sm:grid-cols-2">
+      <form onSubmit={handleSubmit} className="grid w-full min-w-0 max-w-full gap-5 sm:max-w-xl sm:grid-cols-2">
         <ProfileField id="address-country" label="Country" value={values.country} onChange={(value) => onFieldChange("country", value)} />
         <ProfileField id="address-city" label="City" value={values.city} onChange={(value) => onFieldChange("city", value)} />
         <ProfileField id="address-street" label="Street" value={values.street} onChange={(value) => onFieldChange("street", value)} />

@@ -8,7 +8,7 @@ interface SectionPanelProps {
 
 export function SectionPanel({ title, intro, children }: SectionPanelProps) {
   return (
-    <section className="min-w-0" aria-labelledby="profile-section-title">
+    <section className="w-full min-w-0 max-w-full" aria-labelledby="profile-section-title">
       <p className="text-[10px] uppercase tracking-[0.18em] text-gold">
         Middle-earth Market · Account
       </p>
@@ -19,7 +19,7 @@ export function SectionPanel({ title, intro, children }: SectionPanelProps) {
         {title}
       </h2>
       <p className="mt-5 text-sm leading-6 text-market-muted">{intro}</p>
-      <div className="mt-7">{children}</div>
+      <div className="mt-7 w-full min-w-0 max-w-full">{children}</div>
     </section>
   );
 }

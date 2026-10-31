@@ -27,7 +27,7 @@ export function GeneralSettingsSection({
       title="General settings"
       intro="Manage your personal details for your journey through the realm."
     >
-      <form onSubmit={handleSubmit} className="grid gap-6 sm:max-w-xl">
+      <form onSubmit={handleSubmit} className="grid w-full min-w-0 max-w-full gap-6 sm:max-w-xl">
         <ProfileField
           id="profile-name"
           label="Full name"

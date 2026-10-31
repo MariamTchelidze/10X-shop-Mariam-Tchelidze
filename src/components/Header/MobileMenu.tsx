@@ -29,11 +29,19 @@ export function MobileMenu() {
 
   useEffect(() => {
     if (!isOpen) return;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousDocumentOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeMenu();
     };
     document.addEventListener("keydown", closeOnEscape);
-    return () => document.removeEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousDocumentOverflow;
+    };
   }, [closeMenu, isOpen]);
 
   const toggleWidget = (widget: FloatingWidgetId) => {
@@ -56,18 +64,18 @@ export function MobileMenu() {
       </button>
 
       {isOpen && (
-        <>
-          <button
-            type="button"
-            aria-label="Close navigation menu"
-            onClick={closeMenu}
-            className="fixed inset-0 z-40 cursor-default bg-black/35"
-          />
-          <aside
-            id="mobile-navigation-drawer"
-            aria-label="Mobile navigation"
-            className="absolute left-0 right-0 top-full z-50 max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-market-border bg-market-paper px-5 pb-7 pt-4 text-market-ink shadow-xl sm:px-6"
-          >
+        <aside
+          id="mobile-navigation-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
+          className="fixed inset-0 z-[60] h-[100dvh] w-screen max-w-none overflow-y-auto overscroll-contain bg-market-paper px-5 pb-7 pt-[max(1rem,env(safe-area-inset-top))] text-market-ink sm:px-6"
+        >
+          <div className="mx-auto flex min-h-12 max-w-2xl items-center justify-between border-b border-market-border pb-3">
+            <span className="font-display text-xs uppercase tracking-[0.16em]">Middle-earth Market</span>
+            <button type="button" aria-label="Close navigation menu" onClick={closeMenu} className="inline-flex h-10 w-10 items-center justify-center text-2xl text-market-ink focus-visible:outline-2 focus-visible:outline-gold">×</button>
+          </div>
+          <div className="mx-auto max-w-2xl">
             <nav aria-label="Account navigation" className="grid border-y border-market-border">
               <Link to={user.isLoggedIn ? "/profile" : "/login"} onClick={closeMenu} className="py-4 text-xs font-medium uppercase tracking-[0.16em]">
                 {user.isLoggedIn ? "My Profile" : "Log In / Register"}
@@ -97,8 +105,8 @@ export function MobileMenu() {
             <section className="mt-5 border-t border-market-border pt-4" aria-label="Realm and currency selector">
               <RealmSelector showLabel />
             </section>
-          </aside>
-        </>
+          </div>
+        </aside>
       )}
     </>
   );

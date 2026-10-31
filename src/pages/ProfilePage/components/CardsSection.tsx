@@ -25,9 +25,9 @@ export function CardsSection({ cards, values, onFieldChange, onSubmit, onRemove 
       {cards.length > 0 && (
         <ul className="mb-8 grid gap-3 sm:grid-cols-2">
           {cards.map((card) => (
-            <li key={card.id} className="border border-market-border bg-market-surface p-5">
-              <p className="font-display text-sm text-market-ink">•••• •••• •••• {card.lastFour}</p>
-              <p className="mt-3 text-xs uppercase tracking-widest text-market-muted">{card.holder}</p>
+            <li key={card.id} className="min-w-0 max-w-full border border-market-border bg-market-surface p-5">
+              <p className="break-words font-display text-sm text-market-ink">•••• •••• •••• {card.lastFour}</p>
+              <p className="mt-3 break-words text-xs uppercase tracking-widest text-market-muted">{card.holder}</p>
               <p className="mt-1 text-xs text-market-muted">Expires {card.expiry}</p>
               <button type="button" onClick={() => onRemove(card.id)} className="mt-4 text-[10px] uppercase tracking-widest text-market-muted underline underline-offset-4">
                 Remove
@@ -36,7 +36,7 @@ export function CardsSection({ cards, values, onFieldChange, onSubmit, onRemove 
           ))}
         </ul>
       )}
-      <form onSubmit={handleSubmit} className="grid gap-5 sm:max-w-xl">
+      <form onSubmit={handleSubmit} className="grid w-full min-w-0 max-w-full gap-5 sm:max-w-xl">
         <ProfileField id="card-holder" label="Cardholder name" autoComplete="cc-name" value={values.holder} onChange={(value) => onFieldChange("holder", value)} />
         <ProfileField id="card-number" label="Card number" inputMode="numeric" autoComplete="cc-number" value={values.number} onChange={(value) => onFieldChange("number", value)} />
         <ProfileField id="card-expiry" label="Expiry (MM/YY)" autoComplete="cc-exp" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])/[0-9]{2}" value={values.expiry} onChange={(value) => onFieldChange("expiry", value)} />
