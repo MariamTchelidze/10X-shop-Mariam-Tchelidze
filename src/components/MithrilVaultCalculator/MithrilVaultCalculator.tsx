@@ -34,7 +34,7 @@ export function MithrilVaultCalculator() {
         aria-label="Mithril Vault currency calculator"
         aria-hidden={!isOpen}
         inert={!isOpen}
-        className={`absolute bottom-0 left-0 origin-bottom-left overflow-y-auto border border-gold/60 bg-market-paper text-market-ink shadow-2xl transition-[width,transform,opacity] duration-300 max-md:max-h-[calc(100dvh-7rem)] ${isOpen ? "w-[calc(100vw-2rem)] max-w-[22rem] translate-y-0 scale-100 opacity-100" : "pointer-events-none w-48 translate-y-2 scale-95 opacity-0"}`}
+        className={`absolute bottom-0 left-0 origin-bottom-left overflow-x-hidden overflow-y-auto border border-gold/60 bg-market-paper text-market-ink shadow-2xl transition-[transform,opacity] duration-200 max-md:max-h-[calc(100dvh-7rem)] ${isOpen ? "w-[calc(100vw-2rem)] max-w-[22rem] translate-y-0 scale-100 opacity-100" : "pointer-events-none w-0 max-w-0 translate-y-1 scale-95 opacity-0"}`}
       >
         <header className="flex items-start justify-between gap-3 border-b border-market-border px-4 py-4 sm:px-5">
           <div className="flex min-w-0 items-center gap-3">
