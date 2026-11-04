@@ -1,5 +1,6 @@
 // პროდუქტის ფასს, მარაგს, რაოდენობას და კალათაში დამატებას აჩვენებს.
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useCart } from "../../../context/CartContext";
 import { useInventory } from "../../../context/InventoryContext";
 import { useRealm } from "../../../context/RealmContext";
@@ -41,7 +42,13 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
 
   return (
     <section className="flex flex-col items-start py-2 md:py-8">
-      <p className="text-xs uppercase tracking-[0.16em] text-market-muted">{product.category}</p>
+      <Link
+        to={`/?category=${encodeURIComponent(product.category)}&page=1`}
+        aria-label={`Browse products in ${product.category}`}
+        className="inline-flex min-h-11 items-center text-xs uppercase tracking-[0.16em] text-market-muted underline underline-offset-4 transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+      >
+        {product.category}
+      </Link>
       <h1 className="mt-3 font-display text-3xl text-market-ink sm:text-4xl">{product.title}</h1>
       <div className="mt-5 flex flex-wrap items-center gap-3">
         <p className="text-base text-market-ink">{formatCurrency(price)}</p>

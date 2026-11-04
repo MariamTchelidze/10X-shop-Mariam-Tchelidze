@@ -47,19 +47,19 @@ export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQua
           <button
             type="button"
             onClick={() => onRemove(item)}
-            className="mt-3 text-xs uppercase tracking-[0.12em] text-market-muted underline underline-offset-4 hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
+            className="mt-3 inline-flex min-h-11 items-center text-xs uppercase tracking-[0.12em] text-market-muted underline underline-offset-4 hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
           >
             Remove
           </button>
         </div>
         <div className="flex items-center justify-between gap-5 sm:flex-col sm:items-end">
-          <div className="flex min-h-10 items-center border border-market-border">
+          <div className="flex min-h-11 items-center border border-market-border">
             <button
               type="button"
               aria-label={`Decrease ${item.title} quantity`}
               disabled={item.quantity <= 1}
               onClick={() => onQuantityChange(item, item.quantity - 1)}
-              className="min-h-10 min-w-10 text-lg text-market-ink disabled:text-market-border"
+              className="min-h-11 min-w-11 text-lg text-market-ink disabled:text-market-border"
             >
               −
             </button>
@@ -70,7 +70,7 @@ export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQua
               aria-label={`Increase ${item.title} quantity`}
               disabled={item.quantity >= maxQuantity}
               onClick={() => onQuantityChange(item, item.quantity + 1)}
-              className="min-h-10 min-w-10 text-lg text-market-ink disabled:text-market-border"
+              className="min-h-11 min-w-11 text-lg text-market-ink disabled:text-market-border"
             >
               +
             </button>

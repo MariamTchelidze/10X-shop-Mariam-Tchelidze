@@ -37,7 +37,7 @@ export function RealmSelector({ showLabel = false }: RealmSelectorProps) {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((open) => !open)}
-        className={`inline-flex min-h-10 items-center text-market-ink transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${showLabel ? "gap-2 px-1" : "w-9 justify-center text-lg"}`}
+        className={`inline-flex min-h-11 items-center text-market-ink transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${showLabel ? "gap-2 px-1" : "w-11 justify-center text-lg"}`}
       >
         <span aria-hidden="true">{realm.marker}</span>
         {showLabel && <span className="text-left text-[10px] uppercase tracking-[0.1em]">{realm.name} · {realm.currencySymbol}</span>}

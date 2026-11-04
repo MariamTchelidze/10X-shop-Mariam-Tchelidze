@@ -73,7 +73,7 @@ function CategoryLinks() {
 
 // ჰედერის მთავარი კომპონენტი, რომელიც მართავს მობილურ და დესკტოპ მენიუებს, ძიებასა და ავტორიზაციას.
 export function Header() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { itemCount } = useCart();
   const { items: wishlistItems } = useWishlist();
   const [requestedDestination, setRequestedDestination] = useState<"/wishlist" | null>(null);
@@ -91,6 +91,12 @@ export function Header() {
     }
 
     navigate("/", { state: { focusSearch: true } });
+  };
+
+  // Logout-ის შემდეგ მომხმარებელს საჯარო კატალოგზე ვაბრუნებთ და კალათას ვინარჩუნებთ.
+  const handleLogout = (): void => {
+    logout();
+    navigate("/", { replace: true });
   };
 
 
@@ -119,7 +125,8 @@ export function Header() {
           <Link
             to="/cart"
             aria-label={itemCount > 0 ? `Shopping bag, ${itemCount} items` : "Shopping bag"}
-            className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+            aria-current={location.pathname === "/cart" ? "page" : undefined}
+            className={`relative inline-flex h-11 w-11 shrink-0 items-center justify-center border-b-2 text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${location.pathname === "/cart" ? "border-market-ink" : "border-transparent"}`}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 8h14l1 13H4L5 8Z" />
@@ -187,17 +194,28 @@ export function Header() {
           </button>
           {/* ავტორიზაციის სტატუსის მიხედვით პროფილი ან შესვლის ღილაკი. */}
           {user.isLoggedIn ? (
-            <Link
-              to="/profile"
-              aria-label={`Profile for ${displayName}`}
-              className="max-w-12 truncate text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:max-w-32 sm:text-xs"
-            >
-              {displayName || "PROFILE"}
-            </Link>
+            <>
+              <Link
+                to="/profile"
+                aria-label={`Profile for ${displayName}`}
+                aria-current={location.pathname === "/profile" ? "page" : undefined}
+                className={`inline-flex min-h-11 max-w-12 items-center truncate border-b-2 text-[10px] font-medium tracking-[0.12em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:max-w-32 sm:text-xs ${location.pathname === "/profile" ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
+              >
+                {displayName || "PROFILE"}
+              </Link>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex min-h-11 items-center text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs"
+              >
+                LOG OUT
+              </button>
+            </>
           ) : (
             <Link
               to="/login"
-              className="text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs"
+              aria-current={location.pathname === "/login" ? "page" : undefined}
+              className={`border-b-2 pb-1 text-[10px] font-medium tracking-[0.12em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs ${location.pathname === "/login" ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
             >
               LOG IN
             </Link>
@@ -208,7 +226,8 @@ export function Header() {
             to="/wishlist"
             onClick={guardWishlistLink()}
             aria-label={wishlistItems.length > 0 ? `Wishlist, ${wishlistItems.length} items` : "Wishlist"}
-            className="relative inline-flex h-10 w-9 shrink-0 items-center justify-center text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink"
+            aria-current={location.pathname === "/wishlist" ? "page" : undefined}
+            className={`relative inline-flex h-11 w-11 shrink-0 items-center justify-center border-b-2 transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink ${location.pathname === "/wishlist" ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" />
@@ -218,7 +237,8 @@ export function Header() {
           <Link
             to="/cart"
             aria-label={itemCount > 0 ? `Bag, ${itemCount} items` : "Bag"}
-            className="inline-flex min-h-10 items-center gap-1.5 text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs"
+            aria-current={location.pathname === "/cart" ? "page" : undefined}
+            className={`inline-flex min-h-11 items-center gap-1.5 border-b-2 text-[10px] font-medium tracking-[0.12em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs ${location.pathname === "/cart" ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
           >
             BAG
             <span className="inline-flex min-w-4 justify-center text-market-ink">

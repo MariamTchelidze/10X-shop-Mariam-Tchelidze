@@ -45,7 +45,7 @@ const socialUrls: Record<SocialName, string> = {
   Spotify: "https://open.spotify.com/",
 };
 
-const linkClass = "text-[10px] leading-5 text-market-muted transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink sm:text-[11px]";
+const linkClass = "inline-flex min-h-11 items-center text-[10px] leading-5 text-market-muted transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink sm:text-[11px]";
 
 function FooterColumn({ title, children }: { title: string; children: ReactNode }) {
   // ყველა ქვედა სვეტს საერთო სათაური და განლაგება აქვს.
@@ -96,7 +96,7 @@ export function Footer() {
           <nav aria-label="Social media" className="sm:col-span-2 lg:col-span-1">
             <h2 className="mb-4 text-[11px] font-medium uppercase tracking-[0.12em] text-market-ink lg:sr-only">Follow us</h2>
             <ul className="flex flex-wrap gap-2 lg:w-9 lg:flex-col">
-              {socials.map((name) => <li key={name}><a href={socialUrls[name]} target="_blank" rel="noreferrer" aria-label={name} title={name} className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-market-ink text-market-paper transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink"><SocialIcon name={name} /></a></li>)}
+              {socials.map((name) => <li key={name}><a href={socialUrls[name]} target="_blank" rel="noreferrer" aria-label={name} title={name} className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-market-ink text-market-paper transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink"><SocialIcon name={name} /></a></li>)}
             </ul>
           </nav>
         </div>

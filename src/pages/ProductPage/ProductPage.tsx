@@ -83,7 +83,7 @@ export function ProductPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-      <Link to="/" className="mb-6 inline-block text-xs uppercase tracking-[0.14em] text-market-muted hover:text-market-ink">
+      <Link to="/" className="mb-6 inline-flex min-h-11 items-center text-xs uppercase tracking-[0.14em] text-market-muted hover:text-market-ink">
         ← Back to catalog
       </Link>
       <div className="grid gap-8 md:grid-cols-2 md:gap-12">

@@ -41,7 +41,7 @@ export function ThemeToggle({ showLabel = false }: ThemeToggleProps) {
       onClick={toggleTheme}
       aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
       title={`Switch to ${isDark ? "light" : "dark"} theme`}
-      className={`inline-flex min-h-10 shrink-0 items-center ${showLabel ? "gap-2 px-1" : "w-9 justify-center"} text-market-ink transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink`}
+      className={`inline-flex min-h-11 shrink-0 items-center ${showLabel ? "gap-2 px-1" : "w-11 justify-center"} text-market-ink transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink`}
     >
       {isDark ? (
         <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

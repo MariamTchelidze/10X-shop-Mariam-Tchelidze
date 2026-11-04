@@ -70,7 +70,7 @@ export function HeroCarousel() {
         <p className="mt-4 hidden max-w-xl text-sm leading-6 text-white/85 min-[769px]:block sm:text-base">Artifacts, apparel, and keepsakes for every road through the realm.</p>
         <nav aria-label="Featured treasures" className="mt-3 grid max-w-[22rem] grid-cols-2 gap-x-3 gap-y-2 sm:mt-6 sm:flex sm:max-w-4xl sm:flex-wrap sm:gap-x-7 sm:gap-y-3">
           {treasures.map(([label, query]) => (
-            <Link key={query} to={`/?q=${encodeURIComponent(query)}&page=1`} className="min-w-0 whitespace-nowrap border-b border-white/60 pb-1 text-[8px] font-medium uppercase tracking-[0.08em] text-white transition-colors hover:border-[#e5d2a4] hover:text-[#e5d2a4] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white min-[400px]:text-[9px] min-[400px]:tracking-[0.1em] sm:text-[10px] sm:tracking-[0.11em]">
+            <Link key={query} to={`/?q=${encodeURIComponent(query)}&page=1`} className="inline-flex min-h-11 min-w-0 items-center whitespace-nowrap border-b border-white/60 pb-1 text-[8px] font-medium uppercase tracking-[0.08em] text-white transition-colors hover:border-[#e5d2a4] hover:text-[#e5d2a4] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white min-[400px]:text-[9px] min-[400px]:tracking-[0.1em] sm:text-[10px] sm:tracking-[0.11em]">
               {label}
             </Link>
           ))}
@@ -78,13 +78,15 @@ export function HeroCarousel() {
       </div>
 
       <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2 sm:bottom-6 sm:right-8">
-        <button type="button" aria-label="Previous slide" onClick={showPrevious} className="inline-flex h-9 w-9 items-center justify-center border border-white/60 bg-black/25 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">‹</button>
+        <button type="button" aria-label="Previous slide" onClick={showPrevious} className="inline-flex h-11 w-11 items-center justify-center border border-white/60 bg-black/25 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">‹</button>
         <div className="flex items-center gap-1.5" role="group" aria-label="Choose featured slide">
           {slides.map((slide, index) => (
-            <button key={slide.src} type="button" aria-label={`Show slide ${index + 1}`} aria-current={index === activeIndex ? "true" : undefined} onClick={() => setActiveIndex(index)} className={`h-2.5 rounded-full border border-white transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${index === activeIndex ? "w-6 bg-white" : "w-2.5 bg-white/30 hover:bg-white/70"}`} />
+            <button key={slide.src} type="button" aria-label={`Show slide ${index + 1}`} aria-current={index === activeIndex ? "true" : undefined} onClick={() => setActiveIndex(index)} className="inline-flex h-11 w-11 shrink-0 items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+              <span aria-hidden="true" className={`h-2.5 rounded-full border border-white transition-all ${index === activeIndex ? "w-6 bg-white" : "w-2.5 bg-white/30 hover:bg-white/70"}`} />
+            </button>
           ))}
         </div>
-        <button type="button" aria-label="Next slide" onClick={showNext} className="inline-flex h-9 w-9 items-center justify-center border border-white/60 bg-black/25 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">›</button>
+        <button type="button" aria-label="Next slide" onClick={showNext} className="inline-flex h-11 w-11 items-center justify-center border border-white/60 bg-black/25 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">›</button>
       </div>
       <p className="sr-only" aria-live="polite">Slide {activeIndex + 1} of {slides.length}</p>
     </section>

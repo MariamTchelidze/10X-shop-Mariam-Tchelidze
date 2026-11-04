@@ -40,7 +40,7 @@ export function Pagination({ page, totalPages, onChange }: PaginationProps) {
   }
 
   const tokens = getPageTokens(page, totalPages);
-  const buttonClass = "inline-flex min-h-10 min-w-10 items-center justify-center text-xs text-market-muted transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink disabled:cursor-not-allowed disabled:text-market-border";
+  const buttonClass = "inline-flex min-h-11 min-w-11 items-center justify-center text-xs text-market-muted transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink disabled:cursor-not-allowed disabled:text-market-border";
 
   return (
     <nav aria-label="Catalog pages" className="mt-10 flex flex-wrap items-center justify-center gap-1 sm:mt-14 sm:gap-2">
