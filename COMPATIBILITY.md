@@ -20,9 +20,9 @@ The header was also inspected at 1025px: it uses the compact logo, bag, wishlist
 
 | Check | Result |
 | --- | --- |
-| Vercel URL listed in README | Present; live catalog page loaded in Chrome. |
-| Direct `/products/93` navigation | Failed: Vercel returned `404: NOT_FOUND`. A rewrite is now configured in `vercel.json`; the live deployment must be redeployed before this can be marked as passing. |
-| Refresh on a deployed nested route | Not verified; the current direct route fails before refresh can be checked. |
+| Vercel URL listed in README | Present. After pushing the current `main` commit, both the root and nested route redirected to Vercel SSO login instead of returning the app shell. |
+| Direct `/products/93` navigation | Inconclusive: Vercel returned its login page, so the SPA response and the `vercel.json` rewrite could not be inspected anonymously. |
+| Refresh on a deployed nested route | Inconclusive for the same Vercel SSO redirect; repeated direct requests returned the login page. |
 | Compatibility screenshots under `docs/compat/` | Not present. |
 
-Firefox verification, physical-device checks, and compatibility screenshots remain outstanding. A deployed build using the new `vercel.json` rewrite must also be checked at `/products/:id` before deployment routing can be marked as passing.
+Firefox verification, physical-device checks, and compatibility screenshots remain outstanding. The Firefox window was present, but the Windows browser-control policy stopped further UI inspection because it could not enforce the current browser URL policy. The user-facing Vercel deployment is protected by SSO, so its SPA rewrite must be retested from an allowed public URL or after its access configuration is made testable. No credentials or security controls were bypassed.

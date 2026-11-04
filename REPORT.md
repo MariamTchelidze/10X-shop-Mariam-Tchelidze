@@ -21,7 +21,7 @@ LOTR Shop (Middle-earth Market) is a responsive single-page storefront built wit
 - **Delivered:** Shared SPA layout and routes, demo Login, public catalog/product/cart flow, protected Checkout, validated local order confirmation, cart clearing, and common not-found/error handling.
 - **Delivered:** CORE responsive header navigation, including direct Catalog and Cart links in the mobile drawer, plus a confirmation before clearing a populated cart.
 - **Evidence:** `npm run typecheck`, `npm run lint`, and `npm run build` pass; known debugging examples are recorded in [DEBUG-LOG.md](./DEBUG-LOG.md).
-- **Release check:** The Vercel catalog loaded in Chrome, but direct `/products/93` navigation returned Vercel `404: NOT_FOUND`. Added `vercel.json` to rewrite SPA paths to `index.html`; this repository change must be deployed and the nested route rechecked before the release check passes.
+- **Release check:** The `vercel.json` SPA rewrite is present on `main` and was pushed. The current Vercel URL redirects anonymous requests for both `/` and `/products/93` to Vercel SSO, so the app shell and nested-route behavior remain unverified; see [COMPATIBILITY.md](./COMPATIBILITY.md).
 - **Browser check:** Chrome responsive emulation was checked at 375px for catalog, product details, cart, checkout, and profile, and at 1025px for the header/widget layout. Login validation and invalid-route handling were also checked in Chrome. Firefox, physical-device checks, and compatibility screenshots remain outstanding; see [COMPATIBILITY.md](./COMPATIBILITY.md).
 
 ## FULL features implemented
