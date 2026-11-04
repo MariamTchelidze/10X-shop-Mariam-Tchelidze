@@ -42,7 +42,7 @@ export function CatalogResults({
         <button
           type="button"
           onClick={onRetry}
-          className="mt-5 border-b border-market-ink pb-1 text-xs uppercase tracking-[0.14em] text-market-ink hover:text-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
+          className="mt-5 inline-flex min-h-11 items-center border-b border-market-ink pb-1 text-xs uppercase tracking-[0.14em] text-market-ink hover:text-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
         >
           Try again
         </button>
@@ -58,7 +58,7 @@ export function CatalogResults({
           <button
             type="button"
             onClick={onClearFilters}
-            className="mt-4 text-xs uppercase tracking-[0.14em] text-market-ink underline underline-offset-4"
+            className="mt-4 inline-flex min-h-11 items-center text-xs uppercase tracking-[0.14em] text-market-ink underline underline-offset-4"
           >
             Clear filters
           </button>

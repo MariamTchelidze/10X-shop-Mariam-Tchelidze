@@ -43,7 +43,7 @@ function CategoryLinks() {
       <Link
         to="/"
         aria-current={location.pathname === "/" && !currentParams.has("q") && !currentParams.has("category") ? "page" : undefined}
-        className={`inline-flex min-h-10 shrink-0 items-center border-b-2 text-[10px] font-medium tracking-[0.16em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink sm:text-xs ${location.pathname === "/" && !currentParams.has("q") && !currentParams.has("category") ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
+        className={`inline-flex min-h-11 shrink-0 items-center border-b-2 text-[10px] font-medium tracking-[0.16em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink sm:text-xs ${location.pathname === "/" && !currentParams.has("q") && !currentParams.has("category") ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
       >
         CATALOG
       </Link>
@@ -61,7 +61,7 @@ function CategoryLinks() {
             key={category.label}
             to={getCategoryHref(location.pathname, location.search, category)}
             aria-current={isActive ? "page" : undefined}
-            className={`inline-flex min-h-10 shrink-0 items-center border-b-2 text-[10px] font-medium tracking-[0.16em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink sm:text-xs ${isActive ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
+            className={`inline-flex min-h-11 shrink-0 items-center border-b-2 text-[10px] font-medium tracking-[0.16em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink sm:text-xs ${isActive ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
           >
             {category.label}
           </Link>
@@ -163,7 +163,7 @@ export function Header() {
           <button
             type="button"
             onClick={handleSearchClick}
-            className="text-[10px] font-medium tracking-[0.14em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs lg:hidden"
+            className="inline-flex min-h-11 items-center text-[10px] font-medium tracking-[0.14em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs lg:hidden"
           >
             SEARCH
           </button>
@@ -188,7 +188,7 @@ export function Header() {
           <button
             type="button"
             onClick={handleSearchClick}
-            className="hidden text-xs font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink lg:inline-flex"
+            className="hidden min-h-11 items-center text-xs font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink lg:inline-flex"
           >
             SEARCH
           </button>
@@ -215,7 +215,7 @@ export function Header() {
             <Link
               to="/login"
               aria-current={location.pathname === "/login" ? "page" : undefined}
-              className={`border-b-2 pb-1 text-[10px] font-medium tracking-[0.12em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs ${location.pathname === "/login" ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
+              className={`inline-flex min-h-11 items-center border-b-2 px-1 pb-1 text-[10px] font-medium tracking-[0.12em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs ${location.pathname === "/login" ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
             >
               LOG IN
             </Link>

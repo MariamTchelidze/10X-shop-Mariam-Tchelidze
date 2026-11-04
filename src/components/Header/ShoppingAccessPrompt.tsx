@@ -35,7 +35,7 @@ export function ShoppingAccessPrompt({ destination, onClose }: ShoppingAccessPro
       onClick={closeOnBackdrop}
     >
       <section role="dialog" aria-modal="true" aria-labelledby="shopping-access-title" className="relative w-full max-w-md border border-gold/60 bg-market-paper p-6 text-market-ink shadow-2xl sm:p-8">
-        <button type="button" onClick={onClose} aria-label="Close sign-in prompt" className="absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center text-xl text-market-muted hover:text-market-ink focus-visible:outline-2 focus-visible:outline-gold">×</button>
+        <button type="button" onClick={onClose} aria-label="Close sign-in prompt" className="absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center text-xl text-market-muted hover:text-market-ink focus-visible:outline-2 focus-visible:outline-gold">×</button>
         <p className="text-[10px] uppercase tracking-[0.18em] text-gold">The market awaits</p>
         <h2 id="shopping-access-title" className="mt-3 pr-8 font-display text-2xl">Sign in to continue</h2>
         <p className="mt-4 text-sm leading-6 text-market-muted">To check your bag or wishlist, please sign in or register first.</p>
