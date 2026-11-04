@@ -1,3 +1,4 @@
+// კატალოგის ფილტრებს URL-თან სინქრონულად მართავს და შედეგებს აჩვენებს.
 import { useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { CatalogToolbar } from "../../components/CatalogToolbar/CatalogToolbar";
@@ -47,6 +48,7 @@ export function CatalogPage() {
       return;
     }
 
+    // URL-ში არასწორ ან ურთიერთგამომრიცხავ ფილტრებს ვასწორებთ history-ის ზედმეტი ჩანაწერის გარეშე.
     setSearchParams(
       (current) => {
         current.set("page", String(page));
@@ -68,6 +70,7 @@ export function CatalogPage() {
       return;
     }
 
+    // მცირე დაყოვნება ძიებას აკონტროლებს და ზედმეტ API მოთხოვნებს ამცირებს.
     const timeoutId = window.setTimeout(() => {
       setSearchParams(
         (current) => {
@@ -92,6 +95,7 @@ export function CatalogPage() {
   const lastResult = Math.min(page * CATALOG_PAGE_SIZE, total);
 
   const handleCategoryChange = (value: string): void => {
+    // კატეგორიის არჩევისას ძიებას ვასუფთავებთ და პირველ გვერდზე ვბრუნდებით.
     setSearchInput("");
     setSearchParams((current) => {
       current.delete("q");
@@ -118,6 +122,7 @@ export function CatalogPage() {
   };
 
   const handlePageChange = (nextPage: number): void => {
+    // გვერდის მნიშვნელობას ხელმისაწვდომ დიაპაზონში ვზღუდავთ.
     const boundedPage = Math.min(Math.max(1, nextPage), Math.max(1, totalPages));
     setSearchParams((current) => {
       current.set("page", String(boundedPage));

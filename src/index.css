@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
+/* სინათლისა და სიბნელის თემების ფერები, შრიფტები და საერთო სტილებია აღწერილი. */
+
 @theme inline {
+  /* Tailwind utility კლასებს ცვალებად theme ცვლადებთან ვაკავშირებთ. */
   --color-market-ink: var(--text-primary);
   --color-market-paper: var(--bg-primary);
   --color-market-muted: var(--text-muted);
@@ -39,6 +42,7 @@
 }
 
 :root {
+  /* სინათლის Shire თემის ფერებსა და შრიფტებს აქ ვაყენებთ. */
   color-scheme: light;
   --bg-primary: #f7f3e9;
   --bg-secondary: #dbc9a4;
@@ -65,6 +69,7 @@
 
 :root.dark,
 .dark {
+  /* .dark კლასის ჩართვისას მუქი თემის ფერები საერთო ცვლადებს ანაცვლებს. */
   color-scheme: dark;
   --bg-primary: #0b0b0b;
   --bg-secondary: #1a1a1a;

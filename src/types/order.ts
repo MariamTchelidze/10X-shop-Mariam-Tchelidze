@@ -1,3 +1,4 @@
+// შეკვეთისა და მიწოდების მისამართის მონაცემთა სტრუქტურას განსაზღვრავს.
 import type { CartItem } from "./cart";
 
 export interface ShippingAddress {

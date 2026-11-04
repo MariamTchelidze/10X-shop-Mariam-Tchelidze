@@ -1,3 +1,4 @@
+// კალათის პროდუქტისა და მისი არჩეული ვარიანტების მონაცემთა ტიპებს განსაზღვრავს.
 export interface CartItem {
   productId: number;
   title: string;

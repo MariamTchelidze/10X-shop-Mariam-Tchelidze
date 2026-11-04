@@ -1,3 +1,4 @@
+// შესვლის, რეგისტრაციის, პროფილის განახლებისა და გამოსვლის მდგომარეობას მართავს.
 import { createContext, useContext, useState, type ReactNode } from "react";
 import type { AuthUser, RegisteredUser } from "../types/user";
 
@@ -18,6 +19,7 @@ const guestUser: AuthUser = { username: "", fullName: "", email: "", address: ""
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 function readRegisteredUsers(): RegisteredUser[] {
+  // საცავიდან მიღებულ JSON-ს ვკითხულობთ; დაზიანებული მონაცემისას ცარიელ სიას ვაბრუნებთ.
   try {
     const value: unknown = JSON.parse(localStorage.getItem(USERS_KEY) ?? "[]");
     return Array.isArray(value) ? value as RegisteredUser[] : [];
@@ -27,6 +29,7 @@ function readRegisteredUsers(): RegisteredUser[] {
 }
 
 function readCurrentUser(): AuthUser {
+  // სესიის აღდგენისას მხოლოდ საჭირო ველების მქონე ჩანაწერს ვთვლით მოქმედ მომხმარებლად.
   try {
     const value: unknown = JSON.parse(localStorage.getItem(CURRENT_USER_KEY) ?? "null");
     if (typeof value === "object" && value !== null && "email" in value && "fullName" in value) {
@@ -42,6 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser>(readCurrentUser);
 
   const login = (email: string, password: string): LoginResult => {
+    // ელფოსტას ვანორმალიზებთ და რეგისტრაციასა და პაროლს თანმიმდევრობით ვამოწმებთ.
     const normalizedEmail = email.trim().toLowerCase();
     const registered = readRegisteredUsers().find((entry) => entry.email.toLowerCase() === normalizedEmail);
     if (!registered) return "not-found";
@@ -53,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = (fullName: string, email: string, password: string): RegisterResult => {
+    // უკვე გამოყენებულ ელფოსტაზე ახალ ანგარიშს არ ვქმნით.
     const users = readRegisteredUsers();
     const normalizedEmail = email.trim().toLowerCase();
     if (users.some((entry) => entry.email.toLowerCase() === normalizedEmail)) return "exists";
@@ -65,6 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const updateProfile: AuthContextValue["updateProfile"] = (details) => {
+    // პროფილის ცვლილებას მიმდინარე სესიასა და მომხმარებლების სიაში ვინახავთ.
     setUser((current) => {
       if (!current.isLoggedIn) return current;
       const nextUser = { ...current, ...details, username: details.email || current.username };

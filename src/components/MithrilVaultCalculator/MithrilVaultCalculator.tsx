@@ -1,3 +1,4 @@
+// მცურავი Mithril Vault კალკულატორის ხილვადობასა და დახურვას მართავს.
 import { useCallback, useRef } from "react";
 import { useFloatingWidgets } from "../../context/FloatingWidgetContext";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
@@ -8,10 +9,12 @@ export function MithrilVaultCalculator() {
   const { activeWidget, setActiveWidget } = useFloatingWidgets();
   const isOpen = activeWidget === "mithril-vault";
 
+  // გახსნა სხვა მცურავ ვიჯეტს ავტომატურად ხურავს საერთო აქტიური ID-ის შეცვლით.
   const updateOpenState = useCallback((next: boolean) => {
     setActiveWidget(next ? "mithril-vault" : null);
   }, [setActiveWidget]);
 
+  // პანელის გარეთ დაჭერა მხოლოდ მაშინ უსმენს მოვლენას, როცა კალკულატორი გახსნილია.
   useOutsideClick(containerRef, () => updateOpenState(false), isOpen);
 
   return (

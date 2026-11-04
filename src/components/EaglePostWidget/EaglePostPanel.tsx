@@ -1,7 +1,9 @@
+// ელფოსტის გამოწერის ფორმასა და შენახულ დადასტურებას აჩვენებს.
 import { useState, type FormEvent } from "react";
 
 const SUBSCRIPTION_KEY = "middle-market-eagle-post-email";
 
+// შენახული მისამართი აბონენტის წინა არჩევანს აღადგენს.
 function readSubscription(): string {
   try {
     return localStorage.getItem(SUBSCRIPTION_KEY) ?? "";
@@ -20,12 +22,13 @@ export function EaglePostPanel({ onClose }: EaglePostPanelProps) {
 
   const handleSubscribe = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // მისამართს ვასუფთავებთ და ნორმალიზებულ მნიშვნელობას ვიმახსოვრებთ.
     const normalizedEmail = email.trim().toLowerCase();
     if (!normalizedEmail) return;
     try {
       localStorage.setItem(SUBSCRIPTION_KEY, normalizedEmail);
     } catch {
-      // Keep the current-session confirmation if browser storage is unavailable.
+      // საცავის მიუწვდომლობის შემთხვევაშიც, დადასტურება მიმდინარე სესიაში გამოჩნდება.
     }
     setSubscribedEmail(normalizedEmail);
   };

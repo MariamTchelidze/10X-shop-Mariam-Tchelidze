@@ -1,3 +1,4 @@
+// კატალოგის პროდუქტის ბარათს, სწრაფ დამატებასა და დამხმარე ფანჯრებს მართავს.
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../context/AuthContext";
@@ -30,6 +31,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const hasVariants = Boolean(product.sizes?.length || product.colors?.length);
   const stockStatus = getStockStatus(stock);
 
+  // მარაგს ვამოწმებთ ჯერ; შემდეგ სტუმარს კალათის კონტექსტი შესვლის შეტყობინებას აჩვენებს.
   const handleQuickAdd = (): void => {
     if (stock < 1) {
       setIsStockAlertOpen(true);
@@ -49,6 +51,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const handleVariantSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
+    // ფორმა არ იგზავნება, სანამ საჭირო ზომა და ფერი არჩეული არ არის.
     if (stock < 1) {
       setIsVariantPickerOpen(false);
       setIsStockAlertOpen(true);

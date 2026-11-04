@@ -1,3 +1,4 @@
+// პროდუქტის შეფასებებს ავტორით, ტექსტითა და თარიღით ჩამოთვლის.
 import type { Review } from "../../types/product";
 import { StarRating } from "./StarRating";
 import { formatDate } from "../../utils/formatters";
@@ -7,6 +8,7 @@ interface ReviewListProps {
 }
 
 export function ReviewList({ reviews }: ReviewListProps) {
+  // ცარიელი სიისთვის ცალკე მდგომარეობას ვაჩვენებთ.
   if (reviews.length === 0) {
     return (
       <p className="border-y border-market-border py-6 text-sm text-market-muted">

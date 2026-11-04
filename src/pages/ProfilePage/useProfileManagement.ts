@@ -1,3 +1,4 @@
+// პროფილის მისამართებს, დაბრუნების მოთხოვნებს, ბარათებსა და შეკვეთებს მართავს.
 import { useRef, useState } from "react";
 import type { AuthUser } from "../../types/user";
 import type { Order } from "../../types/order";
@@ -31,6 +32,7 @@ const emptyCard: CardFormValues = {
 };
 
 function readSaved<T>(key: string): T[] {
+  // მომხმარებლის პროფილის სიებს localStorage-დან ვკითხულობთ, დაზიანებულ JSON-ზე კი ცარიელს ვაბრუნებთ.
   try {
     const value: unknown = JSON.parse(localStorage.getItem(key) ?? "[]");
     return Array.isArray(value) ? (value as T[]) : [];
@@ -45,6 +47,7 @@ interface UseProfileManagementOptions {
 }
 
 export function useProfileManagement({ user, updateProfile }: UseProfileManagementOptions) {
+  // მომხმარებლის მიხედვით ცალკე გასაღები ინახავს მისამართებს, ბარათებსა და მოთხოვნებს.
   const storagePrefixRef = useRef(`middle-market-${user.username || user.email}`);
   const storagePrefix = storagePrefixRef.current;
   const [name, setName] = useState(user.fullName || user.username);
@@ -83,6 +86,7 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
   };
 
   const saveProfile = () => {
+    // AuthContext-ის განახლება Header-საც აჩვენებს ახალ სახელსა და ელფოსტას.
     updateProfile({
       fullName: name.trim(),
       email: email.trim(),
@@ -96,6 +100,7 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
   };
 
   const saveAddress = () => {
+    // რედაქტირებისას არსებულ ჩანაწერს ვცვლით, სხვა შემთხვევაში ახალ ID-ს ვქმნით.
     const wasEditing = editingAddressId !== null;
     const next = wasEditing
       ? addresses.map((address) =>
@@ -150,6 +155,7 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
   };
 
   const saveCard = () => {
+        // ვალიდაციის შემდეგ სრულ ნომერს არ ვინახავთ; მხოლოდ ბოლო ოთხ ციფრს ვტოვებთ.
     const digits = cardForm.number.replace(/\D/g, "");
     if (digits.length < 12 || digits.length > 19) {
       setNotice("Enter a valid card number (12–19 digits).");

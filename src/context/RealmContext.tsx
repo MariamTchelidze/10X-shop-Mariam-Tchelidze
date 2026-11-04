@@ -1,3 +1,4 @@
+// არჩეულ რეგიონსა და ვალუტას გლობალურად აზიარებს და ფასებს აფორმატებს.
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 import type { Realm } from "../types/realm";
 
@@ -20,6 +21,7 @@ const DEFAULT_REALM = REALMS[0];
 const RealmContext = createContext<RealmContextValue | undefined>(undefined);
 
 function getInitialRealm(): Realm {
+  // შენახულ რეგიონს დასაშვებ სიაში ვეძებთ; უცნობი მნიშვნელობისას ნაგულისხმევს ვიყენებთ.
   try {
     const storedValue: unknown = JSON.parse(localStorage.getItem(REALM_KEY) ?? "null");
     if (typeof storedValue === "object" && storedValue !== null && "id" in storedValue) {
@@ -36,17 +38,19 @@ export function RealmProvider({ children }: { children: ReactNode }) {
   const [realm, setCurrentRealm] = useState<Realm>(getInitialRealm);
 
   const setRealm = useCallback((realmId: string) => {
+    // მხოლოდ ცნობილ რეგიონს ვირჩევთ და არჩევანს სესიასა და საცავში ვინახავთ.
     const nextRealm = REALMS.find((entry) => entry.id === realmId);
     if (!nextRealm) return;
     setCurrentRealm(nextRealm);
     try {
       localStorage.setItem(REALM_KEY, JSON.stringify({ id: nextRealm.id, multiplier: nextRealm.multiplier }));
     } catch {
-      // Changing the realm still works for the current session without browser storage.
+      // საცავის მიუწვდომლობის შემთხვევაშიც, რეგიონი მიმდინარე სესიაში შეიცვლება.
     }
   }, []);
 
   const formatCurrency = useCallback((amount: number) => {
+    // ფასის გადაყვანა ერთ ადგილზეა, რომ ყველა გვერდზე ერთნაირად გამოისახოს.
     const convertedAmount = amount * realm.multiplier;
     const formattedAmount = new Intl.NumberFormat("en", {
       minimumFractionDigits: 2,

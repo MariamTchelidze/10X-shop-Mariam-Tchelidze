@@ -1,3 +1,4 @@
+// პროფილის სექციების, მისამართების, დაბრუნებისა და ბარათის ტიპებს განსაზღვრავს.
 export type ProfileSectionId = "general" | "addresses" | "purchases" | "refunds" | "cards";
 
 export interface ProfileAddress {

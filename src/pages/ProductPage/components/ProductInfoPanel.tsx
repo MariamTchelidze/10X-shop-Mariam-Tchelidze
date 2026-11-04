@@ -1,3 +1,4 @@
+// პროდუქტის ფასს, მარაგს, რაოდენობას და კალათაში დამატებას აჩვენებს.
 import { useEffect, useState } from "react";
 import { useCart } from "../../../context/CartContext";
 import { useInventory } from "../../../context/InventoryContext";
@@ -22,15 +23,18 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
   const stockStatus = getStockStatus(stock);
 
   useEffect(() => {
+    // სხვა პროდუქტზე გადასვლისას წინა რაოდენობასა და შეტყობინებას ვასუფთავებთ.
     setQuantity(1);
     setCartMessage(null);
   }, [product.id]);
 
   useEffect(() => {
+    // მარაგის შემცირებისას არჩეულ რაოდენობას ხელმისაწვდომ ზღვრამდე ვამცირებთ.
     setQuantity((current) => Math.min(current, Math.max(1, stock)));
   }, [stock]);
 
   const handleAddToCart = (): void => {
+    // კალათის კონტექსტი ამოწმებს შესვლის მდგომარეობასა და პროდუქტის მარაგს.
     const added = addItem(product, quantity);
     setCartMessage(
       added ? "Added to cart." : "Your cart already contains the available stock.",

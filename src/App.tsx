@@ -41,6 +41,7 @@ import {
 } from "./pages/FooterPages/FooterPages";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 
+// საერთო ჩარჩო ყველა მარშრუტისთვის Header-ს, Footer-სა და დესკტოპის ვიჯეტებს აწყობს.
 function AppLayout() {
   const { pathname } = useLocation();
   const showEaglePost = pathname !== "/login" && !pathname.startsWith("/login/");
@@ -48,6 +49,7 @@ function AppLayout() {
   const { setActiveWidget } = useFloatingWidgets();
 
   useEffect(() => {
+    // მობილურზე და შესვლის გვერდზე მცურავ ვიჯეტებს ვხურავთ, რომ ეკრანს არ დაეფაროს.
     if (!isDesktopViewport || !showEaglePost) setActiveWidget(null);
   }, [isDesktopViewport, setActiveWidget, showEaglePost]);
 
@@ -64,6 +66,7 @@ function AppLayout() {
   );
 }
 
+// უცნობი URL მომხმარებელს კატალოგში დაბრუნების გზას სთავაზობს.
 function NotFoundPage() {
   return (
     <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -79,6 +82,7 @@ function NotFoundPage() {
 export function App() {
   return (
     <BrowserRouter>
+      {/* საერთო მდგომარეობის პროვაიდერები მარშრუტების შიგნით არსებულ გვერდებს უზიარებენ მონაცემებს. */}
       <AuthProvider>
         <ToastProvider>
           <RealmProvider>
@@ -86,6 +90,7 @@ export function App() {
           <InventoryProvider>
           <CartProvider>
           <FloatingWidgetProvider>
+            {/* მარშრუტები საერთო Layout-ს იყენებს; ანგარიშისა და checkout-ის გვერდები დაცულია. */}
             <Routes>
             <Route element={<AppLayout />}>
               <Route path="/" element={<CatalogPage />} />

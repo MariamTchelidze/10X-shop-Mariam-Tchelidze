@@ -1,8 +1,10 @@
+// ელფური ფოთლის დეკორატიულ SVG სიმბოლოს ხატავს.
 interface ElvenLeafMarkProps {
   className?: string;
 }
 
 export function ElvenLeafMark({ className = "h-5 w-5" }: ElvenLeafMarkProps) {
+  // SVG currentColor-ს იყენებს, ამიტომ სიმბოლოს ფერი მშობლის ტექსტის ფერს მიჰყვება.
   return (
     <svg viewBox="0 0 32 32" aria-hidden="true" className={`${className} fill-none stroke-current`} strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round">
       <path d="M6 26c1-10 6-17 20-20-1 14-7 20-20 20Z" />

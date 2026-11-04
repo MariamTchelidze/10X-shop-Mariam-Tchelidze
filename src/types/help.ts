@@ -1,3 +1,4 @@
+// დახმარების შეკითხვებისა და მათი კატეგორიების მონაცემებს განსაზღვრავს.
 export interface FaqItem {
   id: string;
   question: string;

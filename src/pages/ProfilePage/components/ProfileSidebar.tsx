@@ -1,3 +1,4 @@
+// პროფილის სექციებს შორის გადასასვლელ გვერდით მენიუს მართავს.
 import type { ProfileSectionId } from "../../../types/profile";
 
 interface ProfileSidebarProps {
@@ -19,6 +20,7 @@ export function ProfileSidebar({
   onSectionChange,
   onSignOut,
 }: ProfileSidebarProps) {
+  // activeSection აქტიურ განყოფილებას აჩვენებს; ღილაკის მოქმედება არჩევანს მშობელს ატყობინებს.
   return (
     <aside className="h-fit w-full min-w-0 max-w-full md:sticky md:top-28">
       <p className="mb-3 hidden text-[10px] uppercase tracking-[0.16em] text-market-muted md:block">

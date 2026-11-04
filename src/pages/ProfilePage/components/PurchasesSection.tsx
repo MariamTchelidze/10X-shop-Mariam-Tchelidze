@@ -1,3 +1,4 @@
+// მომხმარებლის წინა შეკვეთებსა და შეკვეთების ისტორიის ბმულს აჩვენებს.
 import { Link } from "react-router";
 import type { Order } from "../../../types/order";
 import { SectionPanel } from "./SectionPanel";
@@ -9,6 +10,7 @@ interface PurchasesSectionProps {
 }
 
 export function PurchasesSection({ orders, formatCurrency }: PurchasesSectionProps) {
+  // შეკვეთების არარსებობისას ცარიელ მდგომარეობას ვაჩვენებთ, სხვა შემთხვევაში კი მათ სიას.
   return (
     <SectionPanel title="My purchases" intro="Review placed orders and their latest saved status.">
       {orders.length === 0 ? (

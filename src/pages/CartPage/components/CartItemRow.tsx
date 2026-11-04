@@ -1,7 +1,9 @@
+// კალათის ერთ პროდუქტს, არჩეულ ვარიანტებს, ფასსა და რაოდენობის მართვას აჩვენებს.
 import { Link } from "react-router";
 import type { CartItem } from "../../../types/cart";
 import { discountedPrice, lineTotal } from "../../../utils/product";
 
+// Props აღწერს მონაცემებსა და მოქმედებებს, რომლებსაც მშობელი კომპონენტი გადასცემს.
 interface CartItemRowProps {
   item: CartItem;
   maxQuantity: number;
@@ -11,7 +13,9 @@ interface CartItemRowProps {
 }
 
 export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQuantityChange }: CartItemRowProps) {
+  // ერთეულის ფასი ფასდაკლების შემდეგ გამოითვლება.
   const unitPrice = discountedPrice(item.price, item.discountPercentage);
+  // ვაჩვენებთ მხოლოდ იმ ზომასა და ფერს, რომლებიც მომხმარებელმა აირჩია.
   const variants = [
     item.size ? `Size: ${item.size}` : "",
     item.color ? `Color: ${item.color}` : "",
@@ -19,6 +23,7 @@ export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQua
 
   return (
     <li className="flex gap-4 py-5 sm:gap-6">
+      {/* სურათზე დაჭერით პროდუქტის დეტალების გვერდზე გადავალთ. */}
       <Link to={`/products/${item.productId}`} className="w-24 shrink-0 bg-market-surface sm:w-32">
         <img
           src={item.thumbnail}
@@ -29,6 +34,7 @@ export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQua
           className="aspect-[3/4] h-full w-full object-cover"
         />
       </Link>
+
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-4 sm:flex-row sm:items-start">
         <div className="min-w-0">
           <Link to={`/products/${item.productId}`} className="text-sm font-medium text-market-ink hover:underline">
@@ -58,6 +64,7 @@ export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQua
               −
             </button>
             <span className="min-w-8 text-center text-sm" aria-live="polite">{item.quantity}</span>
+
             <button
               type="button"
               aria-label={`Increase ${item.title} quantity`}
@@ -68,6 +75,7 @@ export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQua
               +
             </button>
           </div>
+
           <p className="text-sm font-medium text-market-ink">
             {formatCurrency(lineTotal(item.price, item.discountPercentage, item.quantity))}
           </p>

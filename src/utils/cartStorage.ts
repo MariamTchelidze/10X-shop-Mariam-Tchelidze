@@ -1,3 +1,4 @@
+// კალათის მონაცემებს ამოწმებს, localStorage-დან კითხულობს და ინახავს.
 import type { CartItem } from "../types/cart";
 
 const CART_STORAGE_KEY = "lotr_cart";
@@ -5,6 +6,7 @@ const CART_STORAGE_KEY = "lotr_cart";
 type GetStock = (productId: number, fallbackStock: number) => number;
 
 function isCartItem(value: unknown): value is CartItem {
+  // ადგილობრივ საცავში არსებული ნებისმიერი მონაცემი ვიყენებთ მხოლოდ ველების შემოწმების შემდეგ.
   if (typeof value !== "object" || value === null) return false;
   if (
     !("productId" in value) || !("title" in value) || !("thumbnail" in value) ||
@@ -28,6 +30,7 @@ function isCartItem(value: unknown): value is CartItem {
 }
 
 export function readCartItems(getStock: GetStock): CartItem[] {
+  // აღდგენისას კალათის რაოდენობებს მიმდინარე მარაგთან ვათანხმებთ.
   try {
     const saved: unknown = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) ?? "[]");
     if (!Array.isArray(saved)) return [];
@@ -54,9 +57,10 @@ export function readCartItems(getStock: GetStock): CartItem[] {
 }
 
 export function saveCartItems(items: readonly CartItem[]): void {
+  // საცავის შეცდომა მიმდინარე React კალათას არ უნდა უშლიდეს ხელს.
   try {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
   } catch {
-    // Keep the in-memory cart usable if browser storage is unavailable.
+    // ბრაუზერის საცავის მიუწვდომლობისას კალათა მიმდინარე სესიაში მაინც მუშაობს.
   }
 }

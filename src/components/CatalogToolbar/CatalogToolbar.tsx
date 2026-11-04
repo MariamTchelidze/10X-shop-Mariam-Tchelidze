@@ -1,7 +1,13 @@
+// კატალოგის ძიებისა და ფილტრების მართვის ხელსაწყოთა ზოლია.
+// 1. იმპორტები და ტიპიზაციის კონტრაქტები (Interfaces)
 import { useEffect, useState } from "react";
 import { fetchCategories } from "../../api/products";
 import type { CatalogSortOption, Category } from "../../types/catalog";
 
+/*
+ * CatalogToolbar კომპონენტის შემავალი პარამეტრების (Props) სტრუქტურა.
+ * განსაზღვრავს ძიების, კატეგორიებისა და სორტირების მართვის ფუნქციებსა და მნიშვნელობებს.
+ */
 interface CatalogToolbarProps {
   focusSearch?: boolean;
   searchValue: string;
@@ -11,7 +17,10 @@ interface CatalogToolbarProps {
   onCategoryChange: (value: string) => void;
   onSortChange: (value: CatalogSortOption) => void;
 }
-
+/*
+ * სორტირების შესაძლო ვარიანტები ინტერფეისისთვის.
+ * აკავშირებს შიდა გასაღებებს (value) მომხმარებლისთვის სახელს (label).
+ */
 const sortOptions: { value: CatalogSortOption; label: string }[] = [
   { value: "", label: "Default" },
   { value: "price-asc", label: "Price: low to high" },
@@ -20,6 +29,7 @@ const sortOptions: { value: CatalogSortOption; label: string }[] = [
   { value: "title-asc", label: "Name A–Z" },
 ];
 
+// 3. ძირითადი კომპონენტი (CatalogToolbar)
 export function CatalogToolbar({
   focusSearch = false,
   searchValue,
@@ -29,11 +39,14 @@ export function CatalogToolbar({
   onCategoryChange,
   onSortChange,
 }: CatalogToolbarProps) {
+  // შიდა ਸტატუსები კატეგორიების ასატვირთად, ჩატვირთვის პროცესისა და შეცდომების სამართავად
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [categoryError, setCategoryError] = useState<string | null>(null);
 
+  // 4. გვერდის ჩატვირთვის ეფექტი (Side Effects & API Calls)
   useEffect(() => {
+    // AbortController გამოიყენება იმისათვის, რომ ძველი/აქტუალური მოთხოვნა გავაუქმოთ, თუ კომპონენტი დაიხურა
     const controller = new AbortController();
 
     const loadCategories = async (): Promise<void> => {
@@ -56,11 +69,14 @@ export function CatalogToolbar({
     };
 
     void loadCategories();
+    // Cleanup ფუნქცია, რომელიც აუქმებს ქსელურ მოთხოვნას კომპონენტის განადგურებისას
     return () => controller.abort();
   }, []);
 
+  // 5. ვიზუალური რენდერი (JSX UI Layout)
   return (
     <div className="mb-8 grid grid-cols-1 gap-5 sm:mb-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+      {/* ბლოკი 1: პროდუქტების ძიების ინპუტი */}
       <div>
         <label htmlFor="catalog-search" className="mb-1.5 block text-[10px] uppercase tracking-[0.14em] text-market-muted">
           Search
@@ -75,6 +91,8 @@ export function CatalogToolbar({
           className="min-h-11 w-full border-b border-market-border bg-transparent px-1 text-sm text-market-ink outline-none placeholder:text-market-muted focus:border-market-ink"
         />
       </div>
+      
+      {/* ბლოკი 2: კატეგორიების მიხედვით ფილტრაციის ჩამოსაშლელი სია */}
       <div>
         <label htmlFor="catalog-category" className="mb-1.5 block text-[10px] uppercase tracking-[0.14em] text-market-muted">
           Category
@@ -95,6 +113,8 @@ export function CatalogToolbar({
         </select>
         {categoryError && <p className="mt-1 text-xs text-market-muted" role="status">Categories unavailable</p>}
       </div>
+
+      {/* ბლოკი 3: დახარისხების (Sort) ჩამოსაშლელი სია */}
       <div>
         <label htmlFor="catalog-sort" className="mb-1.5 block text-[10px] uppercase tracking-[0.14em] text-market-muted">
           Sort by

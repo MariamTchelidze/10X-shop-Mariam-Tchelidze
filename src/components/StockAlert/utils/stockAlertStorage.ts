@@ -1,8 +1,10 @@
+// პროდუქტების მარაგის შეტყობინების ელფოსტებს localStorage-ში ინახავს.
 const STOCK_ALERTS_KEY = "middle-market-stock-alerts";
 
 type StockAlertsByProduct = Record<string, string[]>;
 
 function readAllStockAlerts(): StockAlertsByProduct {
+  // შენახულ მნიშვნელობას ვამოწმებთ, რადგან localStorage-ში JSON შეიძლება დაზიანებული იყოს.
   try {
     const parsed: unknown = JSON.parse(localStorage.getItem(STOCK_ALERTS_KEY) ?? "{}");
     if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) return {};
@@ -22,6 +24,7 @@ export function getStockAlertEmails(productId: number): string[] {
 }
 
 export function subscribeToStockAlert(productId: number, email: string): void {
+  // ერთსა და იმავე ელფოსტას ერთი პროდუქტისთვის ორჯერ არ ვინახავთ.
   const normalizedEmail = email.trim().toLowerCase();
   const subscriptions = readAllStockAlerts();
   const productKey = String(productId);

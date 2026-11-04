@@ -1,3 +1,4 @@
+// შეკვეთის ფორმას ამოწმებს, შეკვეთას ინახავს და მარაგს ამცირებს.
 import { useState, type FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { useCart } from "../../context/CartContext";
@@ -27,6 +28,7 @@ export function CheckoutPage() {
   const [errors, setErrors] = useState<CheckoutErrors>({});
 
   if (items.length === 0) {
+    // უშინაარსო შეკვეთის თავიდან ასაცილებლად ცარიელი კალათა უკან გადადის.
     return <Navigate to="/cart" replace state={{ message: "Your cart is empty." }} />;
   }
 
@@ -37,6 +39,7 @@ export function CheckoutPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
+    // ყველა ველი იწმინდება კიდეებზე არსებული გამოტოვებებისგან და შემდეგ მოწმდება.
     const fullName = values.fullName.trim();
     const email = values.email.trim();
     const address = values.address.trim();
@@ -59,6 +62,7 @@ export function CheckoutPage() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
+    // დემო შეკვეთას ვინახავთ, მარაგს ვამცირებთ და დადასტურების გვერდზე გადავდივართ.
     const order: Order = {
       id: `MM-${Date.now().toString(36).toUpperCase()}`,
       username: user.username,

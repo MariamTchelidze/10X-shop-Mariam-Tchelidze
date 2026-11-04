@@ -1,3 +1,4 @@
+// ქვედა მენიუს საინფორმაციო ბმულებისთვის საერთო გვერდის შაბლონს იძლევა.
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 
@@ -8,6 +9,7 @@ interface FooterInfoPageProps {
 }
 
 function FooterInfoPage({ title, intro, details }: FooterInfoPageProps) {
+  // ყველა საინფორმაციო მარშრუტი ამ საერთო ჩარჩოს იყენებს, შიგთავსი კი გვერდების მიხედვით იცვლება.
   return (
     <main className="mx-auto min-h-[60vh] w-full max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <p className="text-[10px] uppercase tracking-[0.18em] text-market-muted">Middle Market · Customer care</p>

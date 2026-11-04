@@ -1,3 +1,4 @@
+// კალათის პროდუქტებს, რაოდენობებსა და ჯამურ ფასს მართავს.
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Product } from "../types/product";
 import type { CartItem, CartVariants } from "../types/cart";
@@ -30,10 +31,12 @@ export function CartProvider({ children }: CartProviderProps) {
   const [items, setItems] = useState<CartItem[]>(() => readCartItems(getStock));
 
   useEffect(() => {
+    // კალათის ყოველი ცვლილება localStorage-თან სინქრონდება.
     saveCartItems(items);
   }, [items]);
 
   const addItem = (product: Product, quantity: number, variants: CartVariants = {}): boolean => {
+    // სტუმარს და მარაგზე მეტი რაოდენობის დამატებას არ ვუშვებთ.
     if (!user.isLoggedIn) {
       addToast("for adding the product to the cart please log in first", "info");
       return false;
@@ -104,6 +107,7 @@ export function CartProvider({ children }: CartProviderProps) {
     const quantityInOtherVariants = items
       .filter((item) => item.productId === productId && !(item.size === variants.size && item.color === variants.color))
       .reduce((total, item) => total + item.quantity, 0);
+    // სხვა ზომისა თუ ფერის რაოდენობაც იმავე პროდუქტის საერთო მარაგში ითვლება.
     const maxQuantity = Math.max(1, stock - quantityInOtherVariants);
 
     setItems((currentItems) =>
@@ -123,6 +127,7 @@ export function CartProvider({ children }: CartProviderProps) {
     addToast("CART CLEARED", "info");
   };
 
+  // Header-ის badge და შეჯამება კალათის მიმდინარე მონაცემებიდან გამოითვლება.
   const itemCount = items.reduce((count, item) => count + item.quantity, 0);
   const subtotal = items.reduce(
     (sum, item) => sum + lineTotal(item.price, item.discountPercentage, item.quantity),

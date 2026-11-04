@@ -1,3 +1,4 @@
+// შესული მომხმარებლისთვის ახალი შეფასების ფორმას ამოწმებს და აგზავნის.
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import type { Review } from "../../types/product";
@@ -22,6 +23,7 @@ export function ReviewForm({ isLoggedIn, reviewerName, onSubmit }: ReviewFormPro
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // ველების გასუფთავებულ მნიშვნელობებს ვამოწმებთ; შეცდომისას შეყვანილ ტექსტს ვინარჩუნებთ.
     const normalizedTitle = title.trim();
     const normalizedComment = comment.trim();
     const normalizedRealm = realm.trim();
@@ -62,6 +64,7 @@ export function ReviewForm({ isLoggedIn, reviewerName, onSubmit }: ReviewFormPro
   };
 
   if (!isLoggedIn) {
+    // სტუმარს ფორმის ნაცვლად ანგარიშზე შესვლის მოქმედებას ვთავაზობთ.
     return (
       <div className="border border-market-border bg-market-surface p-5 sm:p-6">
         <h3 className="font-display text-lg text-market-ink">Join the travelers’ table</h3>

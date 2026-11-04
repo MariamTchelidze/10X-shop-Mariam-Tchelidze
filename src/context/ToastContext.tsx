@@ -1,3 +1,4 @@
+// გლობალურ შეტყობინებებს ქმნის და სამი წამის შემდეგ ავტომატურად შლის.
 import {
   createContext,
   useCallback,
@@ -23,6 +24,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const timers = useRef(new Map<number, ReturnType<typeof setTimeout>>());
 
   const removeToast = useCallback((id: number) => {
+    // შეტყობინების წაშლისას მის ავტომატურ ტაიმერსაც ვაუქმებთ.
     const timer = timers.current.get(id);
     if (timer !== undefined) {
       clearTimeout(timer);
@@ -32,6 +34,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addToast = useCallback((message: string, type: ToastType) => {
+    // თითოეულ შეტყობინებას ID ენიჭება და სამ წამში ავტომატურად იხურება.
     const id = nextId.current + 1;
     nextId.current = id;
     setToasts((current) => [...current, { id, message, type }]);
@@ -42,6 +45,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     timers.current.set(id, timer);
   }, []);
 
+  // Provider-ის მოხსნისას დარჩენილ ტაიმერებს ვასუფთავებთ.
   useEffect(() => () => {
     timers.current.forEach(clearTimeout);
     timers.current.clear();

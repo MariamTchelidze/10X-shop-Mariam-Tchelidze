@@ -1,3 +1,4 @@
+// მობილური ნავიგაციის სრულეკრანიან მენიუსა და ვიჯეტების პანელებს მართავს.
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -18,6 +19,7 @@ export function MobileMenu() {
   const { user } = useAuth();
   const location = useLocation();
 
+  // მისამართი იცვლება და გვერდით მენიუსთან ერთად ღია ვიჯეტსაც ვხურავთ.
   const closeMenu = useCallback(() => {
     setIsOpen(false);
     setSelectedWidget(null);
@@ -29,6 +31,7 @@ export function MobileMenu() {
 
   useEffect(() => {
     if (!isOpen) return;
+    // მენიუს გახსნისას უკანა გვერდს ვკეტავთ; Escape მენიუს ხურავს.
     const previousBodyOverflow = document.body.style.overflow;
     const previousDocumentOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
@@ -45,6 +48,7 @@ export function MobileMenu() {
   }, [closeMenu, isOpen]);
 
   const toggleWidget = (widget: FloatingWidgetId) => {
+    // იმავე ვიჯეტზე დაჭერა ხურავს მას, სხვა ვიჯეტზე დაჭერა კი მას ხსნის.
     setSelectedWidget((current) => current === widget ? null : widget);
   };
 

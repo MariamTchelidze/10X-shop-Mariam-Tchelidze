@@ -1,3 +1,4 @@
+// შესვლისა და რეგისტრაციის ფორმებს ვალიდაციითა და გადამისამართებით მართავს.
 import { useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
@@ -20,12 +21,14 @@ export function LoginPage() {
   const navigate = useNavigate();
 
   const navigateAfterAuth = () => {
+    // თუ შესვლამდე დაცულ ბმულზე იყო მომხმარებელი, წარმატების შემდეგ იქვე ვაბრუნებთ.
     const from = (location.state as { from?: unknown } | null)?.from;
     navigate(typeof from === "string" && from.startsWith("/") ? from : "/", { replace: true });
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
+    // რეგისტრაციისა და შესვლის ვალიდაცია სხვადასხვა მოთხოვნებს ამოწმებს.
     const nextErrors: FormErrors = {};
     const fullName = values.fullName.trim();
     const email = values.email.trim();
@@ -55,6 +58,7 @@ export function LoginPage() {
     }
 
     const result = login(email, values.password);
+    // შედეგის ტიპის მიხედვით ვაჩვენებთ შეტყობინებას ან ორივე credential ველს ვნიშნავთ.
     if (result === "not-found") {
       addToast("User with this email does not exist", "error");
       setCredentialsInvalid(true);

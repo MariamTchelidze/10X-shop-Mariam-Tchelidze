@@ -1,3 +1,4 @@
+// სურვილების სიას ინახავს და მის ცვლილებებზე შეტყობინებებს აჩვენებს.
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 import type { Product } from "../types/product";
 import { useToast } from "./ToastContext";
@@ -23,6 +24,7 @@ function isProduct(value: unknown): value is Product {
 }
 
 function readWishlist(): Product[] {
+  // შენახული მონაცემებიდან მხოლოდ ვალიდურ პროდუქტის ჩანაწერებს ვტოვებთ.
   try {
     const value: unknown = JSON.parse(localStorage.getItem(WISHLIST_KEY) ?? "[]");
     return Array.isArray(value) ? value.filter(isProduct) : [];
@@ -35,6 +37,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<Product[]>(readWishlist);
   const { addToast } = useToast();
 
+  // ერთსა და იმავე პროდუქტს მეორედ არ ვამატებთ და ცვლილებას საცავში ვინახავთ.
   const addToWishlist = useCallback((product: Product) => {
     if (items.some((item) => item.id === product.id)) return;
     const next = [...items, product];

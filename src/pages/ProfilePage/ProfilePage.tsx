@@ -1,3 +1,4 @@
+// პროფილის სექციებს აქტიური მენიუს მიხედვით აჩვენებს.
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
@@ -19,11 +20,13 @@ export function ProfilePage() {
   const profile = useProfileManagement({ user, updateProfile });
 
   const handleSignOut = () => {
+        // სესიიდან გასვლის შემდეგ მომხმარებელს მთავარ გვერდზე ვაბრუნებთ.
     logout();
     navigate("/", { replace: true });
   };
 
   const changeSection = (section: ProfileSectionId) => {
+    // სექციის შეცვლისას წინა მოქმედების სტატუსს ვასუფთავებთ.
     setActiveSection(section);
     profile.clearNotice();
   };

@@ -1,3 +1,4 @@
+// შეკვეთის ფორმის ველებისა და ვალიდაციის შეცდომების ტიპებს განსაზღვრავს.
 export interface CheckoutValues {
   fullName: string;
   email: string;

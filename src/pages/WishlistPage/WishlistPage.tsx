@@ -1,3 +1,4 @@
+// სურვილების სიაში შენახულ პროდუქტებს ან ცარიელ მდგომარეობას აჩვენებს.
 import { Link } from "react-router-dom";
 import { ProductGrid } from "../../components/ProductGrid/ProductGrid";
 import { useWishlist } from "../../context/WishlistContext";
@@ -6,6 +7,7 @@ export function WishlistPage() {
   const { items } = useWishlist();
 
   if (items.length === 0) {
+    // შენახული პროდუქტის გარეშე კატალოგში დაბრუნების ბმულს ვაჩვენებთ.
     return (
       <main className="mx-auto flex min-h-[55vh] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8">
         <p className="text-[10px] uppercase tracking-[0.2em] text-gold">Treasures saved for another day</p>

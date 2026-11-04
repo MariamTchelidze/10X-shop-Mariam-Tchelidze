@@ -1,3 +1,4 @@
+// მომხმარებელს შუახმელეთის რეგიონსა და მის ვალუტას არჩვევინებს.
 import { useEffect, useRef, useState } from "react";
 import { REALMS, useRealm } from "../../context/RealmContext";
 
@@ -12,6 +13,7 @@ export function RealmSelector({ showLabel = false }: RealmSelectorProps) {
 
   useEffect(() => {
     if (!isOpen) return;
+    // გარეთ დაჭერა ან Escape რეგიონის არჩევის სიას ხურავს.
     const closeOnOutsideClick = (event: PointerEvent) => {
       if (!containerRef.current?.contains(event.target as Node)) setIsOpen(false);
     };
@@ -26,6 +28,7 @@ export function RealmSelector({ showLabel = false }: RealmSelectorProps) {
     };
   }, [isOpen]);
 
+  // მიმდინარე რეგიონს მონიშნულად ვაჩვენებთ და მის ვალუტის მონაცემებს ვხატავთ.
   return (
     <div className="relative shrink-0" ref={containerRef}>
       <button

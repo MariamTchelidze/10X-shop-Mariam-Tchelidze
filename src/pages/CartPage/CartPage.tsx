@@ -1,3 +1,4 @@
+// კალათის შიგთავსს, რაოდენობის ლიმიტებსა და შეკვეთის შეჯამებას აჩვენებს.
 import { Link } from "react-router";
 import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
@@ -11,6 +12,7 @@ export function CartPage() {
   const { formatCurrency } = useRealm();
   const { getStock } = useInventory();
 
+  // სხვა ვარიანტებში არჩეული რაოდენობა საერთო მარაგიდან გამოირიცხება.
   const getMaxQuantity = (item: CartItem): number => {
     const otherVariantQuantity = items
       .filter((entry) => entry.productId === item.productId && !(entry.size === item.size && entry.color === item.color))
@@ -19,6 +21,7 @@ export function CartPage() {
   };
 
   if (items.length === 0) {
+    // ცარიელი კალათისთვის პროდუქტების დათვალიერების ბმულს ვაჩვენებთ.
     return (
       <main className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8">
         <h1 className="font-display text-3xl text-market-ink">Your cart is empty</h1>

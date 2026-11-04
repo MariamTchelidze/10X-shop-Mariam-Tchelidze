@@ -1,3 +1,4 @@
+// პროდუქტის შეფასებებს ინახავს და შეფასების სიასა და ფორმას აერთიანებს.
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
@@ -10,6 +11,7 @@ interface ProductReviewsContainerProps {
 }
 
 function readSavedReviews(productId: number): Review[] {
+  // თითოეული პროდუქტის შეფასებას ცალკე გასაღებით ვკითხულობთ და არასწორ მონაცემებს ვფილტრავთ.
   try {
     const value: unknown = JSON.parse(
       localStorage.getItem(`10x-shop-reviews-${productId}`) ?? "[]",
@@ -41,10 +43,12 @@ export function ProductReviewsContainer({ product }: ProductReviewsContainerProp
   const reviews = [...product.reviews, ...savedReviews];
 
   useEffect(() => {
+    // სხვა პროდუქტის გახსნისას შესაბამისი ID-ით შენახულ შეფასებებს ვტვირთავთ.
     setSavedReviews(readSavedReviews(product.id));
   }, [product.id]);
 
   const handleReviewSubmit = (review: Omit<Review, "date">) => {
+    // ახალ შეფასებას თარიღს ვუმატებთ და ამ პროდუქტის სიაში ვინახავთ.
     const nextReview: Review = { ...review, date: new Date().toISOString() };
     const nextReviews = [...savedReviews, nextReview];
     setSavedReviews(nextReviews);

@@ -1,3 +1,4 @@
+// არჩეული მცურავი ვიჯეტის შესაბამის პანელს აჩვენებს მობილურ მენიუში.
 import type { FloatingWidgetId } from "../../types/floatingWidget";
 import { CouncilChatPanel } from "../CouncilSupport/CouncilChatPanel";
 import { EaglePostPanel } from "../EaglePostWidget/EaglePostPanel";
@@ -9,6 +10,7 @@ interface MobileWidgetPanelProps {
 }
 
 export function MobileWidgetPanel({ widget, onClose }: MobileWidgetPanelProps) {
+  // არჩევანის გარეშე პანელის ელემენტს გვერდზე არ ვქმნით.
   if (!widget) return null;
 
   return (

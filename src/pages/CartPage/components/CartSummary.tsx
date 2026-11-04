@@ -1,3 +1,4 @@
+// კალათის ჯამს, პრომოკოდსა და შეკვეთაზე გადასვლის ბმულს მართავს.
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import { useToast } from "../../../context/ToastContext";
@@ -17,6 +18,7 @@ export function CartSummary({ subtotal, formatCurrency }: CartSummaryProps) {
 
   const applyPromoCode = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // კოდს დიდი ასოებით ვამოწმებთ და არასწორი შეყვანისას ფასდაკლებას ვხსნით.
     if (promoInput.trim().toUpperCase() !== "10X10") {
       setPromoApplied(false);
       setPromoError("This promo code is not valid.");

@@ -1,3 +1,4 @@
+// პროფილის სექციებს საერთო სათაურსა და განმარტების ჩარჩოს აძლევს.
 import type { ReactNode } from "react";
 
 interface SectionPanelProps {
@@ -7,6 +8,7 @@ interface SectionPanelProps {
 }
 
 export function SectionPanel({ title, intro, children }: SectionPanelProps) {
+  // სათაური და აღწერა საერთო ჩარჩოშია, ხოლო განსხვავებული შიგთავსი children-ით გადაეცემა.
   return (
     <section className="w-full min-w-0 max-w-full" aria-labelledby="profile-section-title">
       <p className="text-[10px] uppercase tracking-[0.18em] text-gold">

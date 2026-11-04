@@ -1,3 +1,4 @@
+// მომხმარებლის შენახულ შეკვეთებს თარიღითა და დეტალებით აჩვენებს.
 import { useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../context/AuthContext";
@@ -9,6 +10,7 @@ import { lineTotal } from "../../utils/product";
 export function OrdersPage() {
   const { user } = useAuth();
   const { formatCurrency } = useRealm();
+  // მხოლოდ მიმდინარე მომხმარებლის სახელით შენახულ შეკვეთებს ვკითხულობთ.
   const [orders] = useState(() => readOrders().filter((order) => order.username === user.username));
 
   return (

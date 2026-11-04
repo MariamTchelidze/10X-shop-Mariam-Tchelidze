@@ -1,3 +1,4 @@
+// პროფილის სექციებში გამოსაყენებელ საერთო ველს აჩვენებს.
 interface ProfileFieldProps {
   id: string;
   label: string;
@@ -25,6 +26,7 @@ export function ProfileField({
   pattern,
   minLength,
 }: ProfileFieldProps) {
+  // ყველა პარამეტრი მშობლისგან მოდის, რის გამოც ველი კონტროლირებადია და ხელახლა გამოიყენება.
   return (
     <label
       className="grid w-full min-w-0 max-w-full gap-2 text-[10px] uppercase tracking-[0.14em] text-market-muted"

@@ -1,3 +1,4 @@
+// იმავე კატეგორიის მსგავს პროდუქტებს იტვირთავს და აჩვენებს.
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { fetchProducts } from "../../../api/products";
@@ -14,6 +15,7 @@ export function RelatedProducts({ product }: RelatedProductsProps) {
   const { formatCurrency } = useRealm();
 
   useEffect(() => {
+        // კატეგორიის შეცვლისას ძველ შედეგებს ვშლით და წინა მოთხოვნას ვაუქმებთ.
     const controller = new AbortController();
     setProducts([]);
 
@@ -23,6 +25,7 @@ export function RelatedProducts({ product }: RelatedProductsProps) {
     )
       .then((response) => {
         if (!controller.signal.aborted) {
+                    // მიმდინარე პროდუქტს ვფილტრავთ და მაქსიმუმ ოთხ მსგავს პროდუქტს ვტოვებთ.
           setProducts(
             response.products.filter((entry) => entry.id !== product.id).slice(0, 4),
           );

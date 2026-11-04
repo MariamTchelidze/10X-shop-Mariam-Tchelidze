@@ -1,3 +1,4 @@
+// კატალოგის ჩატვირთვის, შეცდომის, ცარიელი შედეგისა და პროდუქტის სიის ხედვებს არჩევს.
 import type { Product } from "../../../types/product";
 import { Pagination } from "../../../components/Pagination/Pagination";
 import { ProductGrid } from "../../../components/ProductGrid/ProductGrid";
@@ -25,6 +26,7 @@ export function CatalogResults({
   onClearFilters,
   onPageChange,
 }: CatalogResultsProps) {
+  // ჩატვირთვის, შეცდომისა და ცარიელი შედეგის UI ერთ კომპონენტში განისაზღვრება.
   if (isLoading) {
     return (
       <p className="py-16 text-center text-sm text-market-muted" role="status">

@@ -1,3 +1,4 @@
+// შეკვეთის პროდუქტებსა და გადასახდელ ჯამს აჯამებს.
 import type { CartItem } from "../../../types/cart";
 import { lineTotal } from "../../../utils/product";
 
@@ -8,6 +9,7 @@ interface OrderSummaryProps {
 }
 
 export function OrderSummary({ items, subtotal, formatCurrency }: OrderSummaryProps) {
+  // თითოეული ხაზის ფასდაკლებული ჯამი და მთელი კალათის ჯამი ცალ-ცალკე ჩანს.
   return (
     <aside className="h-fit border border-market-border p-5 sm:p-6">
       <h2 className="font-display text-2xl text-market-ink">Order summary</h2>

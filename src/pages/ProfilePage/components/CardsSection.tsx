@@ -1,3 +1,4 @@
+// ბარათის დამალულ მონაცემებს აჩვენებს და ბარათის უსაფრთხო მინიშნებას ინახავს.
 import type { FormEvent } from "react";
 import type { CardFormValues, SavedCard } from "../../../types/profile";
 import { ProfileField } from "./ProfileField";
@@ -14,6 +15,7 @@ interface CardsSectionProps {
 export function CardsSection({ cards, values, onFieldChange, onSubmit, onRemove }: CardsSectionProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // ფორმა ინახავს ბარათის უსაფრთხო მინიშნებას; სრული ნომერი state-ის გარეთ არ გადის.
     onSubmit();
   };
 

@@ -1,3 +1,4 @@
+// საიტის დახმარების, კომპანიის, კატეგორიებისა და სოციალური ბმულების ქვედა ნაწილს ქმნის.
 import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 
@@ -16,6 +17,7 @@ const helpLinks = [
   ["CANCEL MY SUBSCRIPTION", "/help/cancel-subscription"],
 ] as const;
 
+// ბმულების ჩამონათვალი მონაცემად ინახება, რათა სვეტები ერთნაირად აიგოს.
 const companyLinks = [
   ["ABOUT MIDDLE MARKET", "/about/about-us"],
   ["WORK WITH US", "/about/work-with-us"],
@@ -46,6 +48,7 @@ const socialUrls: Record<SocialName, string> = {
 const linkClass = "text-[10px] leading-5 text-market-muted transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink sm:text-[11px]";
 
 function FooterColumn({ title, children }: { title: string; children: ReactNode }) {
+  // ყველა ქვედა სვეტს საერთო სათაური და განლაგება აქვს.
   return (
     <section>
       <h2 className="mb-4 text-[11px] font-medium uppercase tracking-[0.12em] text-market-ink">{title}</h2>
@@ -55,6 +58,7 @@ function FooterColumn({ title, children }: { title: string; children: ReactNode 
 }
 
 function SocialIcon({ name }: { name: SocialName }) {
+  // სახელის მიხედვით შესაბამისი inline SVG ხატულა აირჩევა.
   const iconClass = "h-4 w-4 fill-current";
   switch (name) {
     case "Instagram": return <svg viewBox="0 0 24 24" aria-hidden="true" className={iconClass}><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9Zm4.5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.25-3.25a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z" /></svg>;

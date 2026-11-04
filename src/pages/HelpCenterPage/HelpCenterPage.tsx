@@ -1,3 +1,4 @@
+// დახმარების თემებსა და გასაშლელ კითხვებს კატეგორიების მიხედვით აჩვენებს.
 import { useState } from "react";
 import type { FaqCategory } from "../../types/help";
 
@@ -47,6 +48,7 @@ const categories: FaqCategory[] = [
 export function HelpCenterPage() {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(() => new Set());
 
+  // Set საშუალებას გვაძლევს, რამდენიმე პასუხი ერთდროულად ღია დარჩეს.
   const toggleItem = (id: string) => {
     setExpandedItems((current) => {
       const next = new Set(current);
@@ -56,6 +58,7 @@ export function HelpCenterPage() {
     });
   };
 
+  // კატეგორიები და მათი შეკითხვები მონაცემებიდან ერთნაირი accordion-ებად იხატება.
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <header className="relative mb-10 overflow-hidden border border-gold/40 bg-market-surface px-5 py-10 sm:mb-14 sm:px-10 sm:py-14">

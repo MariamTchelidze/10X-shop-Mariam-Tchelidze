@@ -1,3 +1,4 @@
+// სტუმარს კალათისა და სურვილების სიის სანახავად შესვლას სთავაზობს.
 import { useEffect, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 
@@ -8,6 +9,7 @@ interface ShoppingAccessPromptProps {
 
 export function ShoppingAccessPrompt({ destination, onClose }: ShoppingAccessPromptProps) {
   useEffect(() => {
+    // შეტყობინების გახსნისას უკანა გვერდს ვკეტავთ და Escape-ით დახურვას ვამატებთ.
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -21,6 +23,7 @@ export function ShoppingAccessPrompt({ destination, onClose }: ShoppingAccessPro
   }, [onClose]);
 
   const closeOnBackdrop = (event: MouseEvent<HTMLDivElement>) => {
+    // შეტყობინების გარე ფენაზე დაჭერა ხურავს ფანჯარას.
     if (event.target === event.currentTarget) onClose();
   };
 

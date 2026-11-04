@@ -1,5 +1,12 @@
+// 1. ტიპების იმპორტი (Type Imports)
 import type { CouncilQuestion } from "../../types/support";
 
+// 2. წინასწარ განსაზღვრული კითხვებისა და პასუხების მასივი (FAQ Data Constants)
+
+/*
+ * ეს მასივი ინახავს საბჭოს ვიჯეტისთვის წინასწარ მომზადებულ ხშირად დასმულ კითხვებსა და პასუხებს.
+ * პასუხები აღწერს დემო მაღაზიის შესაძლებლობებს და განკუთვნილია საგანმანათლებლო მიზნებისთვის.
+ */
 export const councilQuestions: CouncilQuestion[] = [
   {
     id: "delivery-time",

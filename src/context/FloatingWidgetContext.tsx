@@ -1,3 +1,4 @@
+// ერთდროულად გახსნილი მცურავი ვიჯეტის იდენტიფიკატორს ინახავს.
 import { createContext, useContext, useState, type ReactNode } from "react";
 import type { FloatingWidgetId } from "../types/floatingWidget";
 
@@ -9,6 +10,7 @@ interface FloatingWidgetContextValue {
 const FloatingWidgetContext = createContext<FloatingWidgetContextValue | undefined>(undefined);
 
 export function FloatingWidgetProvider({ children }: { children: ReactNode }) {
+  // null ნიშნავს, რომ ამჟამად არცერთი მცურავი პანელი არ არის გახსნილი.
   const [activeWidget, setActiveWidget] = useState<FloatingWidgetId | null>(null);
 
   return (

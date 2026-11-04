@@ -1,3 +1,4 @@
+// პროდუქტების მარაგს ინახავს და შეკვეთისას რაოდენობას ამცირებს.
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 import type { CartItem } from "../types/cart";
 
@@ -12,6 +13,7 @@ interface InventoryContextValue {
 const InventoryContext = createContext<InventoryContextValue | undefined>(undefined);
 
 function readSavedInventory(): StockByProductId {
+  // შენახულ მარაგში მხოლოდ ნულის ან მეტი მთელი რიცხვის მნიშვნელობებს ვიღებთ.
   try {
     const saved: unknown = JSON.parse(localStorage.getItem(INVENTORY_KEY) ?? "{}");
     if (typeof saved !== "object" || saved === null || Array.isArray(saved)) return {};
@@ -38,6 +40,7 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
   const decrementStock = useCallback((items: readonly CartItem[]) => {
     if (items.length === 0) return;
 
+    // ერთი პროდუქტისთვის შეკვეთილი ზომებისა და ფერების რაოდენობებს წინასწარ ვაჯამებთ.
     const purchases = new Map<number, { quantity: number; originalStock: number }>();
     for (const item of items) {
       const current = purchases.get(item.productId);
@@ -57,7 +60,7 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       try {
         localStorage.setItem(INVENTORY_KEY, JSON.stringify(next));
       } catch {
-        // The in-memory inventory still updates if browser storage is unavailable.
+        // ბრაუზერის საცავი მიუწვდომელიც რომ იყოს, მარაგი მიმდინარე სესიაში განახლდება.
       }
       return next;
     });

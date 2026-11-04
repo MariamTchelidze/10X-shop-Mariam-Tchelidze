@@ -1,3 +1,4 @@
+// კატალოგის გვერდებს ითვლის და გვერდებს შორის გადასვლას აჩვენებს.
 interface PaginationProps {
   page: number;
   totalPages: number;
@@ -7,6 +8,7 @@ interface PaginationProps {
 type PageToken = number | "start-ellipsis" | "end-ellipsis";
 
 function getPageTokens(page: number, totalPages: number): PageToken[] {
+  // ბევრი გვერდის დროს ნავიგაციაში მხოლოდ დასაწყისს, ახლო გვერდებსა და ბოლოს ვაჩვენებთ.
   if (totalPages <= 5) {
     return Array.from({ length: totalPages }, (_, index) => index + 1);
   }
@@ -32,6 +34,7 @@ function getPageTokens(page: number, totalPages: number): PageToken[] {
 }
 
 export function Pagination({ page, totalPages, onChange }: PaginationProps) {
+  // მხოლოდ ერთი გვერდისას გვერდების ნავიგაციას არ ვაჩვენებთ.
   if (totalPages <= 1) {
     return null;
   }

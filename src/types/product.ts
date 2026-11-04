@@ -1,3 +1,4 @@
+// პროდუქტის, შეფასებისა და API პასუხის ტიპებს განსაზღვრავს.
 export interface Review {
   rating: number;
   comment: string;

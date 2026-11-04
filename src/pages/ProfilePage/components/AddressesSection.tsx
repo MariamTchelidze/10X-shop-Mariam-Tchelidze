@@ -1,3 +1,4 @@
+// მისამართების დამატების, შეცვლისა და წაშლის ფორმასა და სიას აჩვენებს.
 import type { FormEvent } from "react";
 import type { ProfileAddress, ProfileAddressForm } from "../../../types/profile";
 import { ProfileField } from "./ProfileField";
@@ -26,6 +27,7 @@ export function AddressesSection({
 }: AddressesSectionProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // მონაცემების შენახვა hook-ში ხდება; ეს კომპონენტი მხოლოდ ფორმის მოვლენას გადასცემს.
     onSubmit();
   };
 

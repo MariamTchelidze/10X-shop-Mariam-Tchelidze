@@ -1,3 +1,4 @@
+// სათაურის ნავიგაციას, ანგარიშის მოქმედებებსა და საყიდლების ჩანთის წვდომას აერთიანებს.
 import { useState, type MouseEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -8,6 +9,8 @@ import { RealmSelector } from "./RealmSelector";
 import { MobileMenu } from "./MobileMenu";
 import { ShoppingAccessPrompt } from "./ShoppingAccessPrompt";
 
+
+// საიტის ძირითადი კატეგორიების სია შესაბამისი ფილტრაციის პარამეტრებით.
 const categoryLinks = [
   { label: "APPAREL", category: "womens-dresses" },
   { label: "ACCESSORIES", category: "womens-bags" },
@@ -15,6 +18,7 @@ const categoryLinks = [
   { label: "COLLECTIBLES", query: "watch" },
 ] as const;
 
+// მიმდინარე მისამართის ზედმეტ ფილტრებს შლის და არჩეულ კატეგორიას თავიდან იწყებს.
 function getCategoryHref(pathname: string, search: string, categoryLink: (typeof categoryLinks)[number]): string {
   const params = new URLSearchParams(pathname === "/" ? search : "");
   params.delete("q");
@@ -25,21 +29,26 @@ function getCategoryHref(pathname: string, search: string, categoryLink: (typeof
   return `/?${params.toString()}`;
 }
 
+// კატეგორიების ნავიგაციის კომპონენტი, რომელიც აგენერირებს და აფერადებს აქტიურ ბმულებს.
 function CategoryLinks() {
   const location = useLocation();
   const currentParams = new URLSearchParams(location.search);
 
+  // URL-ის პარამეტრით ვადგენთ აქტიურ კატეგორიას და შესაბამის ბმულებს ვხატავთ.
   return (
     <nav
       aria-label="Shop by category"
       className="flex items-center gap-5 lg:gap-7"
     >
       {categoryLinks.map((category) => {
+
+        // ამოწმებს არის თუ არა მოცემული კატეგორია ამჟამად არჩეული.
         const isActive =
           location.pathname === "/" &&
           (("category" in category && currentParams.get("category") === category.category) ||
             ("query" in category && currentParams.get("q") === category.query));
 
+            // თითოეული კატეგორიისთვის არენდერებს შესაბამის ბმულს.
         return (
           <Link
             key={category.label}
@@ -55,6 +64,7 @@ function CategoryLinks() {
   );
 }
 
+// ჰედერის მთავარი კომპონენტი, რომელიც მართავს მობილურ და დესკტოპ მენიუებს, ძიებასა და ავტორიზაციას.
 export function Header() {
   const { user } = useAuth();
   const { itemCount } = useCart();
@@ -62,8 +72,11 @@ export function Header() {
   const [requestedDestination, setRequestedDestination] = useState<"/cart" | "/wishlist" | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // ადგენს გამოსატან მომხმარებლის სახელს პრიორიტეტების მიხედვით.
   const displayName = user.fullName || user.email || user.username;
 
+  // მთავარ გვერდზე ძიებას ფოკუსს ვაძლევთ, სხვა გვერდიდან კი კატალოგზე გადავდივართ.
   const handleSearchClick = (): void => {
     if (location.pathname === "/") {
       document.getElementById("catalog-search")?.focus();
@@ -73,20 +86,29 @@ export function Header() {
     navigate("/", { state: { focusSearch: true } });
   };
 
+
+  // ამოწმებს მომხმარებლის ავტორიზაციას და სტუმრის შემთხვევაში ხსნის შესვლის შეტყობინებას.
   const guardShoppingLink = (destination: "/cart" | "/wishlist") =>
     (event: MouseEvent<HTMLAnchorElement>): void => {
+      // სტუმრის შემთხვევაში გვერდზე გადასვლის ნაცვლად შესვლის შეტყობინებას ვხსნით.
       if (user.isLoggedIn) return;
       event.preventDefault();
       setRequestedDestination(destination);
     };
 
+  // მობილურსა და დიდ ეკრანზე სათაურის შესაბამის განლაგებას ვაჩვენებთ.
   return (
     <header className="sticky top-0 z-50 border-b border-market-border bg-market-paper">
+
+      {/* მობილური მოწყობილობების ჰედერის განლაგება ლოგოთი და სწრაფი ღილაკებით. */}
       <div className="mx-auto flex min-h-16 max-w-[1600px] items-center justify-between gap-4 px-4 sm:px-6 min-[1025px]:hidden">
         <div className="flex min-w-0 items-center gap-1">
+
+          {/* მთავარ გვერდზე გადამსვლელი ლოგო მობილურისთვის. */}
           <Link to="/" aria-label="Middle-earth Market home" className="shrink-0 rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink">
             <img src="/images/Logo.png" alt="Middle-earth Market" width={1254} height={1254} className="h-10 w-10 object-contain sm:h-11 sm:w-11" />
           </Link>
+          {/* კალათის გვერდზე გადასვლის ღილაკი რაოდენობის მაჩვენებლით. */}
           <Link
             to="/cart"
             onClick={guardShoppingLink("/cart")}
@@ -99,6 +121,7 @@ export function Header() {
             </svg>
             {itemCount > 0 && <span className="absolute right-0 top-0 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-market-ink px-1 text-[9px] leading-none text-market-paper">{itemCount}</span>}
           </Link>
+          {/* სურვილების სიის ღილაკი შესაბამისი რაოდენობის ბეჯით. */}
           <Link
             to="/wishlist"
             onClick={guardShoppingLink("/wishlist")}
@@ -111,14 +134,19 @@ export function Header() {
             {wishlistItems.length > 0 && <span className="absolute right-0 top-0 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-market-ink px-1 text-[9px] leading-none text-market-paper">{wishlistItems.length}</span>}
           </Link>
         </div>
+
+        {/* მობილური მენიუს გამომწვევი კომპონენტი. */}
         <MobileMenu />
       </div>
 
+{/* დიდი ეკრანების (დესკტოპის) ბადეზე დაფუძნებული განლაგება. */}
       <div className="mx-auto hidden min-h-16 max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:px-6 min-[1025px]:grid lg:min-h-20 lg:px-10">
         <div className="min-w-0">
+          {/* დესკტოპ ვერსიისთვის კატეგორიების ჩვენება. */}
           <div className="hidden lg:block">
             <CategoryLinks />
           </div>
+          {/* საძიებო ღილაკი საშუალო ზომის ეკრანებისთვის. */}
           <button
             type="button"
             onClick={handleSearchClick}
@@ -127,7 +155,7 @@ export function Header() {
             SEARCH
           </button>
         </div>
-
+    {/* შუა ნაწილში განთავსებული მთავარი ლოგო. */}
         <Link
           to="/"
           aria-label="Middle-earth Market home"
@@ -142,6 +170,7 @@ export function Header() {
           />
         </Link>
 
+{/* მარჯვენა მხარეს განთავსებული ძიების, ავტორიზაციის და კალათის მართვის ელემენტები. */}
         <div className="flex items-center justify-self-end gap-2 sm:gap-4 lg:gap-6">
           <button
             type="button"
@@ -150,6 +179,7 @@ export function Header() {
           >
             SEARCH
           </button>
+          {/* ავტორიზაციის სტატუსის მიხედვით პროფილი ან შესვლის ღილაკი. */}
           {user.isLoggedIn ? (
             <Link
               to="/profile"
@@ -166,6 +196,7 @@ export function Header() {
               LOG IN
             </Link>
           )}
+          {/* რეგიონების ასარჩევი კომპონენტი. */}
           <RealmSelector />
           <Link
             to="/wishlist"

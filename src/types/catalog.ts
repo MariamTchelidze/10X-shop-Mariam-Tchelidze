@@ -1,3 +1,4 @@
+// კატალოგის ძიების, დახარისხების, კატეგორიებისა და გვერდების ტიპებს განსაზღვრავს.
 export const CATALOG_PAGE_SIZE = 12;
 
 export type CatalogSortOption =

@@ -1,3 +1,4 @@
+// მარაგის შეტყობინების ფორმას მოდალურ ფანჯარაში აჩვენებს.
 import { useEffect, useRef, type MouseEvent } from "react";
 import type { Product } from "../../types/product";
 import { StockAlertForm } from "./StockAlertForm";
@@ -11,6 +12,7 @@ export function StockAlertModal({ product, onClose }: StockAlertModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    // მოდალის გახსნისას ფოკუსს დახურვის ღილაკზე ვაყენებთ და Escape-ის listener-ს ვამატებთ.
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
@@ -27,6 +29,7 @@ export function StockAlertModal({ product, onClose }: StockAlertModalProps) {
   }, [onClose]);
 
   const closeOnBackdrop = (event: MouseEvent<HTMLDivElement>) => {
+    // ფონის ფენა ამოწმებს, რომ მომხმარებელს მოდალის გარეთ დაეჭირა.
     if (event.target === event.currentTarget) onClose();
   };
 

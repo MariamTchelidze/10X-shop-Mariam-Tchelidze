@@ -1,3 +1,4 @@
+// ვარსკვლავების შეფასებას აჩვენებს ან მომხმარებელს არჩევინებს.
 interface StarRatingProps {
   rating: number;
   onChange?: (rating: number) => void;
@@ -5,6 +6,7 @@ interface StarRatingProps {
 }
 
 export function StarRating({ rating, onChange, label = "Rating" }: StarRatingProps) {
+  // onChange-ის გარეშე ვარსკვლავები მხოლოდ შეფასებას აჩვენებს; callback-ით კი არჩევადია.
   if (!onChange) {
     return (
       <span role="img" aria-label={`${rating} out of 5 stars`} className="inline-flex gap-1 text-gold">

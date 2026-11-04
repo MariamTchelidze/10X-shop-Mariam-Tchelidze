@@ -1,3 +1,4 @@
+// შესული და რეგისტრირებული მომხმარებლის მონაცემების ტიპებს განსაზღვრავს.
 export interface AuthUser {
   username: string;
   fullName: string;

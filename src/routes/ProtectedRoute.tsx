@@ -1,3 +1,4 @@
+// დაუმოწმებელ მომხმარებელს შესვლის გვერდზე აგზავნის და საწყის მისამართს ინახავს.
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "../context/AuthContext";
 
@@ -6,6 +7,7 @@ export function ProtectedRoute() {
   const location = useLocation();
 
   if (!user.isLoggedIn) {
+    // შესვლის შემდეგ მომხმარებელს დაცულ თავდაპირველ მისამართზე ვაბრუნებთ.
     return (
       <Navigate
         to="/login"

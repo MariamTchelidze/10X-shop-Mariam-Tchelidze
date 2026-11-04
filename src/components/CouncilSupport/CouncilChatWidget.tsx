@@ -1,32 +1,51 @@
+// 1. იმპორტები და ჰუკები (Imports & Hooks)
 import { useCallback, useEffect, useRef } from "react";
 import { useFloatingWidgets } from "../../context/FloatingWidgetContext";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { CouncilChatPanel } from "./CouncilChatPanel";
 import { ElvenLeafMark } from "./ElvenLeafMark";
 
+
+// 2. ძირითადი კომპონენტი (CouncilChatWidget)
 export function CouncilChatWidget() {
+  // ვქმნით რეფს კონტეინერისთვის, რათა დავადგინოთ კლიკი მის გარეთ გასულა თუ არა.
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // გლობალური კონტექსტიდან ვითხოვთ აქტიური ვიჯეტის მართვის ფუნქციებს.
   const { activeWidget, setActiveWidget } = useFloatingWidgets();
+
+  // ვამოწმებთ, გახსნილია თუ არა ამჟამად კონკრეტულად „Council“ ვიჯეტი.
   const isOpen = activeWidget === "council";
 
+  // 3. მდგომარეობის მართვის ლოგიკა (State Handlers)
+
+  // მემორიზებული ფუნქცია ცვლის ვიჯეტის ღია/დახურულ სტატუსს გლობალურ კონტექსტში.
   const updateOpenState = useCallback((next: boolean) => {
     setActiveWidget(next ? "council" : null);
   }, [setActiveWidget]);
 
+  // ვიყენებთქასთომ ჰუკს: კვირტზე გარეთ დაკლიკებისას ვიჯეტი ავტომატურად იხურება.
   useOutsideClick(containerRef, () => updateOpenState(false), isOpen);
 
+  // ეფექტი უზრუნველყოფს Escape ღილაკით ვიჯეტის დახურვას მხოლოდ მაშინ, როცა ის ღიაა.
   useEffect(() => {
+    // Escape ღილაკი ღია პანელს ხურავს; listener მხოლოდ გახსნილ მდგომარეობაში არსებობს.
     if (!isOpen) return;
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") updateOpenState(false);
     };
 
+    // ქლიანაპ ფუნქცია შლის ლისენერს კომპონენტის დახურვისას.
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
   }, [isOpen, updateOpenState]);
 
+
+  // 4. ვიზუალური რენდერი (JSX UI Layout)
   return (
     <div ref={containerRef} className="relative h-12 w-48 shrink-0">
+
+      {/* ანიმაციური პანელი, რომელიც იხსნება ღილაკზე დაჭერისას. */}
       <div
         aria-hidden={!isOpen}
         inert={!isOpen}
@@ -35,6 +54,7 @@ export function CouncilChatWidget() {
         <CouncilChatPanel onClose={() => updateOpenState(false)} />
       </div>
 
+{/* საწყისი ღილაკი, რომელიც ჩანს ვიჯეტის დახურულ მდგომარეობაში. */}
       {!isOpen && (
         <button
           type="button"

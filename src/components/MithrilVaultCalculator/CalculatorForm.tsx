@@ -1,3 +1,4 @@
+// სხვადასხვა რეგიონის ვალუტებს შორის თანხას ითვლის.
 import { useState } from "react";
 import { REALMS, useRealm } from "../../context/RealmContext";
 import { convertRealmCurrency, formatRealmAmount } from "./utils/currencyConversion";
@@ -9,6 +10,7 @@ export function CalculatorForm() {
     () => REALMS.find((option) => option.id !== realm.id)?.id ?? realm.id,
   );
   const [amount, setAmount] = useState("1");
+  // არჩეული ID-ებიდან ვიღებთ რეგიონებს და მხოლოდ სწორი რიცხვითი თანხის დროს ვითვლით შედეგს.
   const sourceRealm = REALMS.find((option) => option.id === sourceId) ?? REALMS[0];
   const targetRealm = REALMS.find((option) => option.id === targetId) ?? REALMS[0];
   const numericAmount = amount.trim() === "" ? Number.NaN : Number(amount);
@@ -18,6 +20,7 @@ export function CalculatorForm() {
   const exchangeRate = convertRealmCurrency(1, sourceRealm, targetRealm);
 
   const swapRealms = () => {
+    // ერთი განახლებით ადგილებს ვუცვლით მიმდინარე საწყის და სამიზნე რეგიონებს.
     setSourceId(targetRealm.id);
     setTargetId(sourceRealm.id);
   };

@@ -1,3 +1,4 @@
+// კატალოგის პროდუქტებს API-დან იტვირთავს და მოთხოვნის გაუქმებას მართავს.
 import { useEffect, useState } from "react";
 import type { SetURLSearchParams } from "react-router-dom";
 import { fetchProducts } from "../../api/products";
@@ -22,6 +23,7 @@ export function useCatalogProducts({
   const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
+    // ფილტრების ცვლილება ახალ მოთხოვნას იწყებს და წინა მოთხოვნის გაუქმებასაც აწყობს.
     const controller = new AbortController();
     const params: CatalogQuery = { q, category, sort, page };
 

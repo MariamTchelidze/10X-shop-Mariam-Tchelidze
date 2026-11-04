@@ -1,3 +1,4 @@
+// მარაგის დაბრუნების შეტყობინებისთვის ელფოსტას აგროვებს.
 import { useState, type FormEvent } from "react";
 import { getStockAlertEmails, subscribeToStockAlert } from "./utils/stockAlertStorage";
 
@@ -9,6 +10,7 @@ interface StockAlertFormProps {
 type FormStatus = "editing" | "saved";
 
 export function StockAlertForm({ productId, productTitle }: StockAlertFormProps) {
+  // თუ ამ პროდუქტზე ელფოსტა უკვე რეგისტრირებულია, წინა მდგომარეობას აღვადგენთ.
   const [savedEmail] = useState(() => {
     const savedEmails = getStockAlertEmails(productId);
     return savedEmails[savedEmails.length - 1] ?? "";
@@ -19,6 +21,7 @@ export function StockAlertForm({ productId, productTitle }: StockAlertFormProps)
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // ჯერ ცარიელ ელფოსტას ვამოწმებთ და შენახვის შეცდომას მომხმარებელს ვაჩვენებთ.
     const normalizedEmail = email.trim().toLowerCase();
     if (!normalizedEmail) {
       setError("Enter your email address to receive a raven's message.");

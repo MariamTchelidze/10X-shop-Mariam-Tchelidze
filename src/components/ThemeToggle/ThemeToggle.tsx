@@ -1,3 +1,4 @@
+// თემას ცვლის, არჩევანს ინახავს და გვერდის სხვა ნაწილებს ცვლილებას ატყობინებს.
 import { useEffect, useState } from "react";
 
 const THEME_STORAGE_KEY = "10x-shop-theme";
@@ -14,6 +15,7 @@ export function ThemeToggle({ showLabel = false }: ThemeToggleProps) {
   const [isDark, setIsDark] = useState(isDarkTheme);
 
   useEffect(() => {
+    // თუ თემის სხვა ღილაკმა ფერი შეცვალა, ამ ღილაკის მდგომარეობასაც ვაახლებთ.
     const syncThemeState = () => setIsDark(isDarkTheme());
     window.addEventListener("theme-change", syncThemeState);
     return () => window.removeEventListener("theme-change", syncThemeState);
@@ -21,11 +23,12 @@ export function ThemeToggle({ showLabel = false }: ThemeToggleProps) {
 
   const toggleTheme = () => {
     const nextIsDark = !isDark;
+    // HTML კლასის შეცვლა CSS თემას აახლებს, არჩევანი კი შემდეგი ვიზიტისთვის ინახება.
     document.documentElement.classList.toggle("dark", nextIsDark);
     try {
       localStorage.setItem(THEME_STORAGE_KEY, nextIsDark ? "dark" : "light");
     } catch {
-      // Keep the current session toggle functional if browser storage is unavailable.
+      // საცავის მიუწვდომლობის შემთხვევაშიც, თემის შეცვლა მიმდინარე სესიაში იმუშავებს.
     }
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", nextIsDark ? "#0B0B0B" : "#F7F3E9");
     setIsDark(nextIsDark);

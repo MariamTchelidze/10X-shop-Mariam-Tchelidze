@@ -1,3 +1,4 @@
+// თანხის დაბრუნების მოთხოვნას აგზავნის და წინა მოთხოვნებს აჩვენებს.
 import type { FormEvent } from "react";
 import type { RefundFormValues, RefundRequest } from "../../../types/profile";
 import { ProfileField } from "./ProfileField";
@@ -14,6 +15,7 @@ interface RefundsSectionProps {
 export function RefundsSection({ requests, values, onFieldChange, onSubmit }: RefundsSectionProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // თანხის დაბრუნების მოთხოვნას პროფილის hook ინახავს.
     onSubmit();
   };
 

@@ -1,3 +1,4 @@
+// პროდუქტის დეტალებს იტვირთავს და შეფასებებთან ერთად აჩვენებს.
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { fetchProductById } from "../../api/products";
@@ -15,6 +16,7 @@ export function ProductPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // ID-ის ვალიდაციის შემდეგ პროდუქტის მოთხოვნას ვიწყებთ და გვერდის ცვლილებაზე ვაუქმებთ.
     const controller = new AbortController();
     if (!isValidId) {
       setProduct(null);
@@ -51,6 +53,7 @@ export function ProductPage() {
     return () => controller.abort();
   }, [isValidId, productId]);
 
+  // ჩატვირთვის, პროდუქტის არქონისა და მოთხოვნის შეცდომის მდგომარეობებს ცალ-ცალკე ვხატავთ.
   if (isLoading) {
     return (
       <main className="mx-auto max-w-7xl px-4 py-16 text-center text-sm text-market-muted" role="status">

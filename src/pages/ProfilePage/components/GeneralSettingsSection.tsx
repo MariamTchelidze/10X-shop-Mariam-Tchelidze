@@ -1,3 +1,4 @@
+// პროფილის სახელისა და ელფოსტის შესაცვლელ ნაწილს აჩვენებს.
 import type { FormEvent } from "react";
 import { SectionPanel } from "./SectionPanel";
 import { ProfileField } from "./ProfileField";
@@ -19,6 +20,7 @@ export function GeneralSettingsSection({
 }: GeneralSettingsSectionProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // ველების კონტროლი მშობელ hook-შია, ამიტომ ფორმა მხოლოდ შენახვას ითხოვს.
     onSave();
   };
 

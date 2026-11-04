@@ -1,3 +1,4 @@
+// შეკვეთის საკონტაქტო და მისამართის ველებს კონტროლირებულ ფორმად აჩვენებს.
 import type { FormEvent } from "react";
 import type { CheckoutErrors, CheckoutValues } from "../../../types/checkout";
 
@@ -27,6 +28,7 @@ function CheckoutField({
   autoComplete,
   onChange,
 }: CheckoutFieldProps) {
+  // ველის ID-სთან შეხამებული error ID ეკრანის წამკითხველისთვის გამოიყენება.
   const errorId = `${id}-error`;
 
   return (
@@ -51,6 +53,7 @@ function CheckoutField({
 }
 
 export function CheckoutForm({ values, errors, onFieldChange, onSubmit }: CheckoutFormProps) {
+  // საერთო props-ის შემქმნელი თითოეული ველის მონაცემებს ფორმის მდგომარეობას უკავშირებს.
   const fieldProps = (id: keyof CheckoutValues, label: string, autoComplete: string, type?: "text" | "email") => ({
     id,
     label,

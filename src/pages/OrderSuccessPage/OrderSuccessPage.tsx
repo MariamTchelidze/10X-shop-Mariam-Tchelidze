@@ -1,3 +1,4 @@
+// დასრულებული შეკვეთის დადასტურებასა და შეჯამებას აჩვენებს.
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -18,11 +19,13 @@ export function OrderSuccessPage() {
   const { user } = useAuth();
   const { items, clearCart } = useCart();
   const { formatCurrency } = useRealm();
+  // ჯერ მარშრუტის მდგომარეობას ვიყენებთ; გვერდის განახლებისას ბოლო შენახულ შეკვეთას ვეძებთ.
   const [order] = useState<Order | null>(() =>
     routeState?.order ?? readOrders().find((savedOrder) => savedOrder.username === user.username) ?? null,
   );
 
   useEffect(() => {
+    // დადასტურების გვერდზე უკვე დასრულებული შესყიდვის კალათას ვასუფთავებთ.
     if (items.length > 0) clearCart();
   }, [clearCart, items.length]);
 
@@ -37,6 +40,7 @@ export function OrderSuccessPage() {
     );
   }
 
+  // ძველი შეკვეთების ჩანაწერებისთვის არასავალდებულო ჯამებს ნაგულისხმევ მნიშვნელობებს ვაძლევთ.
   const subtotal = order.subtotal ?? order.total;
   const shipping = order.shipping ?? 0;
   const taxes = order.taxes ?? 0;

@@ -1,3 +1,4 @@
+// პაროლის ველს ხილვადობის ჩართვა-გამორთვის ღილაკით აჩვენებს.
 interface PasswordFieldProps {
   id: string;
   label: string;
@@ -21,6 +22,7 @@ export function PasswordField({
   onChange,
   onToggleVisibility,
 }: PasswordFieldProps) {
+  // ხილვადობის ღილაკი მხოლოდ input-ის type-ს ცვლის და მიმდინარე მნიშვნელობას ინარჩუნებს.
   return (
     <div>
       <label htmlFor={id} className="mb-2 block text-xs uppercase tracking-[0.16em] text-market-muted">{label}</label>
@@ -51,6 +53,7 @@ export function PasswordField({
 }
 
 function PasswordVisibilityIcon({ visible }: { visible: boolean }) {
+  // თვალის SVG ხატულა input-ის ხილულ მდგომარეობას შეესაბამება.
   return visible ? (
     <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8" />

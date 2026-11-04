@@ -1,3 +1,4 @@
+// Eagle Post-ის მცურავი ღილაკისა და პანელის მდგომარეობას მართავს.
 import { useRef } from "react";
 import { useFloatingWidgets } from "../../context/FloatingWidgetContext";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
@@ -7,6 +8,7 @@ export function EaglePostWidget() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { activeWidget, setActiveWidget } = useFloatingWidgets();
   const isOpen = activeWidget === "eagle-post";
+  // გახსნის მდგომარეობა საერთო კონტექსტში ინახება სხვა ვიჯეტებთან კოორდინაციისთვის.
   const setIsOpen = (open: boolean) => setActiveWidget(open ? "eagle-post" : null);
 
   useOutsideClick(containerRef, () => setIsOpen(false), isOpen);

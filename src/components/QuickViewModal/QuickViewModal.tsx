@@ -1,3 +1,4 @@
+// პროდუქტის მოკლე დეტალებს მოდალურ ფანჯარაში აჩვენებს.
 import { useEffect, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
@@ -26,6 +27,7 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
   const stockStatus = getStockStatus(stock);
 
   useEffect(() => {
+    // მოდალის გახსნისას ფონს ვკეტავთ, დახურვისას კი წინა scroll მდგომარეობას აღვადგენთ.
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
@@ -40,11 +42,13 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
   }, [onClose]);
 
   const handleBackdropMouseDown = (event: MouseEvent<HTMLDivElement>) => {
+    // შიგთავსზე დაჭერა მოდალს არ ხურავს; მხოლოდ გარე ფენის დაჭერაა დახურვის მიზეზი.
     if (event.target === event.currentTarget) onClose();
   };
 
   const handleAddToBag = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // მარაგი და არჩეული ვარიანტები მოწმდება კალათაში დამატებამდე.
     if (stock < 1) {
       setIsStockAlertOpen(true);
       return;

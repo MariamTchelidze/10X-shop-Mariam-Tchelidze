@@ -1,3 +1,4 @@
+// მთავარი გვერდის სურათების სლაიდერს ავტომატური და ხელით მართვით აჩვენებს.
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -23,6 +24,7 @@ export function HeroCarousel() {
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    // ავტომატურ გადასვლას ვაჩერებთ, როცა მომხმარებელი კარუსელთანაა ან მოძრაობის შემცირებას ითხოვს.
     if (isPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const intervalId = window.setInterval(() => {
@@ -31,6 +33,7 @@ export function HeroCarousel() {
     return () => window.clearInterval(intervalId);
   }, [isPaused]);
 
+  // ინდექსს ციკლურად ვცვლით, რომ ბოლო სლაიდიდან შემდეგზე და პირიქით გადასვლა მუშაობდეს.
   const showPrevious = () => setActiveIndex((current) => (current - 1 + slides.length) % slides.length);
   const showNext = () => setActiveIndex((current) => (current + 1) % slides.length);
 

@@ -1,3 +1,4 @@
+// ერთი შეტყობინების ტიპს შესაბამის სტილში აჩვენებს და დახურვას უზრუნველყოფს.
 import type { ToastMessage, ToastType } from "../../types/toast";
 
 interface ToastProps {
@@ -18,6 +19,7 @@ const typeIcons: Record<ToastType, string> = {
 };
 
 export function Toast({ toast, onClose }: ToastProps) {
+  // შეტყობინების ტიპის მიხედვით ზემოთ განსაზღვრულ ფერსა და სიმბოლოს ვირჩევთ.
   return (
     <div
       role={toast.type === "error" ? "alert" : "status"}

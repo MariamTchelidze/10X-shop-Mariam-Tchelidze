@@ -1,3 +1,4 @@
+// კალკულატორის სათაურს, დახურვის ღილაკსა და ფორმას აერთიანებს.
 import { CalculatorForm } from "./CalculatorForm";
 
 interface MithrilVaultPanelProps {
@@ -5,6 +6,7 @@ interface MithrilVaultPanelProps {
 }
 
 export function MithrilVaultPanel({ onClose }: MithrilVaultPanelProps) {
+  // პანელი სათაურსა და გაცვლის ფორმას აერთიანებს; დახურვას მშობელს ატყობინებს.
   return (
     <>
       <header className="flex items-start justify-between gap-3 border-b border-market-border px-4 py-4 sm:px-5">
@@ -23,6 +25,7 @@ export function MithrilVaultPanel({ onClose }: MithrilVaultPanelProps) {
 }
 
 export function VaultMark() {
+  // ვექტორული ნიშანი მიმდინარე ტექსტურ ფერს იყენებს.
   return (
     <svg viewBox="0 0 32 32" aria-hidden="true" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="16" cy="16" r="12" />
