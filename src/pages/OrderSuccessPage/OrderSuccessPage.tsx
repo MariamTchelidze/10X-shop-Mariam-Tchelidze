@@ -61,7 +61,7 @@ export function OrderSuccessPage() {
         <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full border-[10px] border-gold/25 sm:h-48 sm:w-48" />
         <p className="relative text-[10px] uppercase tracking-[0.2em] text-earth">Your treasure is secured</p>
         <h1 className="relative mx-auto mt-4 max-w-3xl font-display text-3xl leading-tight text-market-ink sm:text-5xl">Your Order Has Been Dispatched to Middle-earth</h1>
-        <p className="relative mt-4 text-sm leading-6 text-market-muted">Thank you. Your order has been placed and is ready for its journey.</p>
+        <p className="relative mt-4 text-sm leading-6 text-market-muted">Thank you! Your order has been placed.</p>
         <p className="relative mt-6 font-display text-sm tracking-[0.12em] text-gold">REFERENCE · #{order.id}</p>
       </header>
 

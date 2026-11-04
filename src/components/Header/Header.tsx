@@ -38,8 +38,15 @@ function CategoryLinks() {
   return (
     <nav
       aria-label="Shop by category"
-      className="flex items-center gap-5 lg:gap-7"
+      className="flex flex-wrap items-center gap-x-5 gap-y-1 lg:gap-x-7"
     >
+      <Link
+        to="/"
+        aria-current={location.pathname === "/" && !currentParams.has("q") && !currentParams.has("category") ? "page" : undefined}
+        className={`inline-flex min-h-10 shrink-0 items-center border-b-2 text-[10px] font-medium tracking-[0.16em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink sm:text-xs ${location.pathname === "/" && !currentParams.has("q") && !currentParams.has("category") ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
+      >
+        CATALOG
+      </Link>
       {categoryLinks.map((category) => {
 
         // ამოწმებს არის თუ არა მოცემული კატეგორია ამჟამად არჩეული.

@@ -112,6 +112,17 @@ src/
 └── utils/        # Formatting, storage, and product helpers
 ```
 
+## Architecture and data flow
+
+The route-level pages compose reusable UI components, while Context providers hold shared authentication, cart, inventory, wishlist, realm, and notification state. A page requests catalog data through the typed DummyJSON API service; loading, error, and empty states are rendered by the page. User actions call handlers that update React state immutably, and the cart is synchronized to browser storage so its badge and totals stay consistent across the app. Checkout is guarded by the local authentication state and creates a local demo order without contacting a payment service.
+
+## Demo account and credits
+
+- **Demo login:** `emilys` / `emilyspass`. The local demo also accepts any non-empty username with a password of at least six characters on a fresh browser profile.
+- **Author:** Mariam Tchelidze.
+- **Development assistance:** OpenAI Codex was used for implementation support and code review; all changes were reviewed against the project requirements.
+- **Product data:** [DummyJSON](https://dummyjson.com/).
+
 ## Main routes
 
 `/` catalog · `/products/:id` product details · `/cart` bag · `/wishlist` wishlist · `/checkout` checkout · `/login` sign in/register · `/profile` account · `/orders` order history · `/help-center` help and lore

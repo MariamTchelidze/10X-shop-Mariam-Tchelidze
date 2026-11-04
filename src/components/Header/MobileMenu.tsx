@@ -84,6 +84,12 @@ export function MobileMenu() {
               <Link to={user.isLoggedIn ? "/profile" : "/login"} onClick={closeMenu} className="py-4 text-xs font-medium uppercase tracking-[0.16em]">
                 {user.isLoggedIn ? "My Profile" : "Log In / Register"}
               </Link>
+              <Link to="/" onClick={closeMenu} className="border-t border-market-border py-4 text-xs font-medium uppercase tracking-[0.16em]">
+                Catalog
+              </Link>
+              <Link to="/cart" onClick={closeMenu} className="border-t border-market-border py-4 text-xs font-medium uppercase tracking-[0.16em]">
+                Cart
+              </Link>
             </nav>
 
             <section className="mt-5" aria-label="Theme controller">

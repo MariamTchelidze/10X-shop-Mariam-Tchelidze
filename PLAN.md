@@ -12,6 +12,22 @@ Complete the required CORE storefront flow first, then implement FULL and BONUS 
 | 2 | Oct 24–30, 2026 | Implement product details, shared cart state, cart quantity/removal/totals, controlled checkout, and local order confirmation. | Complete |
 | 3 | Oct 31–Nov 6, 2026 | Finish responsive states and error/empty flows; verify typecheck and production build; finalize project docs; prepare hosting with SPA route fallback. | Code checks and docs complete; verify the published URL and direct-route fallback externally |
 
+## CORE work breakdown and risks
+
+| Epic | Estimate | Week | Definition of done |
+| --- | ---: | --- | --- |
+| Auth and shared layout | 5 h | 1 | Shared Header/Footer routes render; Login updates AuthContext; protected Checkout redirects back after login. |
+| Catalog and product details | 7 h | 1–2 | Typed API data renders in cards; details route handles loading, errors, missing IDs, and add-to-cart. |
+| Cart and checkout | 8 h | 2 | Cart quantity, removal, clearing, and totals update; controlled Checkout validates and confirms an order. |
+| Responsive and quality pass | 5 h | 3 | CORE routes fit 375px; typecheck, lint, build, and error handling complete. |
+| Documentation and release | 3 h | 3 | README, PLAN, REPORT, and DEBUG-LOG are present; deployment URL and SPA fallback are checked. |
+
+| Risk | Mitigation |
+| --- | --- |
+| DummyJSON is unavailable or slow | Show a clear loading/error state and allow the user to retry the request. |
+| Browser storage is unavailable or full | Catch storage failures and show an inline Checkout error instead of pretending the order was saved. |
+| Nested routes fail after a production refresh | Configure the host to serve `index.html` as the SPA fallback and verify a direct product-route refresh. |
+
 ## CORE definition of done
 
 - Routes work for `/`, `/login`, `/products/:id`, `/cart`, `/checkout`, and `*`, with a shared layout and protected checkout redirect.

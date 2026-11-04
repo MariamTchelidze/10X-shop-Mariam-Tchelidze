@@ -16,6 +16,13 @@ LOTR Shop (Middle-earth Market) is a responsive single-page storefront built wit
 | Checkout | Protected, validated checkout form and local order simulation with order confirmation. No payment is collected. |
 | Responsive design | Mobile-first layouts and responsive Tailwind utilities across catalog, product, cart, checkout, and account views. |
 
+## Planned versus delivered
+
+- **Delivered:** Shared SPA layout and routes, demo Login, public catalog/product/cart flow, protected Checkout, validated local order confirmation, cart clearing, and common not-found/error handling.
+- **Delivered:** CORE responsive header navigation, including direct Catalog and Cart links in the mobile drawer, plus a confirmation before clearing a populated cart.
+- **Evidence:** `npm run typecheck`, `npm run lint`, and `npm run build` pass; known debugging examples are recorded in [DEBUG-LOG.md](./DEBUG-LOG.md).
+- **Release check still needed:** The README includes the Vercel URL, but live availability and nested-route refresh behavior were not confirmed in this environment.
+
 ## FULL features implemented
 
 - URL-synced catalog search, category filtering, sorting, and pagination.
