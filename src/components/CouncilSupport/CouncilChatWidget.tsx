@@ -43,7 +43,7 @@ export function CouncilChatWidget() {
 
   // 4. ვიზუალური რენდერი (JSX UI Layout)
   return (
-    <div ref={containerRef} className="relative h-12 w-48 shrink-0">
+    <div ref={containerRef} className="group relative h-11 w-11 shrink-0">
 
       {/* ანიმაციური პანელი, რომელიც იხსნება ღილაკზე დაჭერისას. */}
       <div
@@ -60,11 +60,12 @@ export function CouncilChatWidget() {
           type="button"
           onClick={() => updateOpenState(true)}
           aria-label="Open The Council of Elrond support"
+          title="Ask the Council"
           aria-expanded={false}
-          className="inline-flex h-12 w-full items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold max-[1024px]:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center border border-gold/60 bg-market-paper text-market-ink shadow-lg transition-colors hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold max-[1279px]:hidden"
         >
           <ElvenLeafMark />
-          <span className="font-display text-[10px] uppercase tracking-[0.1em] sm:text-xs">Ask the Council</span>
+          <span className="sr-only">Ask the Council</span>
         </button>
       )}
     </div>

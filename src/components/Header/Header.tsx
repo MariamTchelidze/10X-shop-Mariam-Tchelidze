@@ -114,7 +114,7 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-market-border bg-market-paper">
 
       {/* მობილური მოწყობილობების ჰედერის განლაგება ლოგოთი და სწრაფი ღილაკებით. */}
-      <div className="mx-auto flex min-h-16 max-w-[1600px] items-center justify-between gap-4 px-4 sm:px-6 min-[1025px]:hidden">
+      <div className="mx-auto flex min-h-16 max-w-[1600px] items-center justify-between gap-4 px-4 sm:px-6 min-[1280px]:hidden">
         <div className="flex min-w-0 items-center gap-1">
 
           {/* მთავარ გვერდზე გადამსვლელი ლოგო მობილურისთვის. */}
@@ -153,7 +153,7 @@ export function Header() {
       </div>
 
 {/* დიდი ეკრანების (დესკტოპის) ბადეზე დაფუძნებული განლაგება. */}
-      <div className="mx-auto hidden min-h-16 max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:px-6 min-[1025px]:grid lg:min-h-20 lg:px-10">
+      <div className="mx-auto hidden min-h-16 max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 sm:px-6 min-[1280px]:grid lg:min-h-20 lg:px-10">
         <div className="min-w-0">
           {/* დესკტოპ ვერსიისთვის კატეგორიების ჩვენება. */}
           <div className="hidden lg:block">

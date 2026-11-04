@@ -48,7 +48,7 @@ import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
 function AppLayout() {
   const { pathname } = useLocation();
   const showEaglePost = pathname !== "/login" && !pathname.startsWith("/login/");
-  const isDesktopViewport = useMediaQuery("(min-width: 1025px)");
+  const isDesktopViewport = useMediaQuery("(min-width: 1280px)");
   const { setActiveWidget } = useFloatingWidgets();
 
   useEffect(() => {

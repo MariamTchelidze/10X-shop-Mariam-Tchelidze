@@ -21,7 +21,8 @@ LOTR Shop (Middle-earth Market) is a responsive single-page storefront built wit
 - **Delivered:** Shared SPA layout and routes, demo Login, public catalog/product/cart flow, protected Checkout, validated local order confirmation, cart clearing, and common not-found/error handling.
 - **Delivered:** CORE responsive header navigation, including direct Catalog and Cart links in the mobile drawer, plus a confirmation before clearing a populated cart.
 - **Evidence:** `npm run typecheck`, `npm run lint`, and `npm run build` pass; known debugging examples are recorded in [DEBUG-LOG.md](./DEBUG-LOG.md).
-- **Release check still needed:** The README includes the Vercel URL, but live availability and nested-route refresh behavior were not confirmed in this environment.
+- **Release check:** The Vercel catalog loaded in Chrome, but direct `/products/93` navigation returned Vercel `404: NOT_FOUND`. Added `vercel.json` to rewrite SPA paths to `index.html`; this repository change must be deployed and the nested route rechecked before the release check passes.
+- **Browser check:** Chrome responsive emulation was checked at 375px for catalog, product details, and profile, and at 1025px for the header/widget layout. Firefox and the other CORE routes still require verification; see [COMPATIBILITY.md](./COMPATIBILITY.md).
 
 ## FULL features implemented
 
@@ -56,5 +57,5 @@ The app includes the catalog (`/`), login (`/login`), product details (`/product
 - The catalog depends on the DummyJSON API and an internet connection.
 - User accounts, cart, orders, profile information, wishlist, reviews, and preferences use browser `localStorage`; data is local to that browser and is not a secure production backend. Registered passwords are stored as salted PBKDF2 hashes, while the CORE demo login still accepts any username with a password of at least six characters.
 - Checkout is simulated. No payment processor, real order fulfillment, or live carrier tracking is connected.
-- A Vercel demo URL is listed in the README. Its live availability and direct-route SPA fallback were not independently verified during this code review.
+- The Vercel demo URL is listed in the README. The live catalog is reachable, but the current deployment does not serve nested SPA routes directly; the new rewrite fix is pending deployment verification.
 - Verification in this review: `npm run typecheck`, `npm run lint`, `npm run build`, and `git diff --check` completed successfully.

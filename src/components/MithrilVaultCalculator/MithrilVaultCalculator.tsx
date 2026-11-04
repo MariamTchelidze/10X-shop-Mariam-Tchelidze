@@ -20,7 +20,7 @@ export function MithrilVaultCalculator() {
   return (
     <div
       ref={containerRef}
-      className="fixed bottom-6 left-6 z-50 max-[1024px]:hidden"
+      className="fixed bottom-4 left-4 z-50 max-[1279px]:hidden"
     >
       <button
         type="button"
@@ -29,10 +29,11 @@ export function MithrilVaultCalculator() {
         aria-expanded={isOpen}
         aria-hidden={isOpen}
         tabIndex={isOpen ? -1 : 0}
-        className={`inline-flex min-h-12 w-48 items-center justify-start gap-2 border border-gold/60 bg-market-paper px-4 text-left text-market-ink shadow-lg transition-all duration-300 hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${isOpen ? "pointer-events-none absolute left-0 top-0 scale-95 opacity-0" : "relative scale-100 opacity-100"}`}
+        title="Mithril Vault calculator"
+        className={`inline-flex h-11 w-11 items-center justify-center border border-gold/60 bg-market-paper text-market-ink shadow-lg transition-all duration-300 hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${isOpen ? "pointer-events-none absolute left-0 top-0 scale-95 opacity-0" : "relative scale-100 opacity-100"}`}
       >
         <VaultMark />
-        <span className="font-display text-xs uppercase tracking-[0.12em]">Mithril Vault</span>
+        <span className="sr-only">Mithril Vault</span>
       </button>
 
       <aside

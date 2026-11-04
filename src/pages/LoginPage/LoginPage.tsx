@@ -42,9 +42,9 @@ export function LoginPage() {
       if (values.password.length < 8) nextErrors.password = "Password must be at least 8 characters.";
       if (values.confirmPassword !== values.password) nextErrors.confirmPassword = "Passwords do not match.";
     } else {
-      if (!identifier) nextErrors.email = "Username is required.";
-      if (!values.password) nextErrors.password = "Password is required.";
-      else if (values.password.length < 6) nextErrors.password = "Password must be at least 6 characters.";
+      if (!identifier) nextErrors.email = "Username is required";
+      if (!values.password) nextErrors.password = "Password is required";
+      else if (values.password.length < 6) nextErrors.password = "Password must be at least 6 characters";
     }
 
     setErrors(nextErrors);
