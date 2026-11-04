@@ -1,7 +1,6 @@
 // კატალოგის პროდუქტის ბარათს, სწრაფ დამატებასა და დამხმარე ფანჯრებს მართავს.
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
-import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useRealm } from "../../context/RealmContext";
@@ -16,7 +15,6 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { user } = useAuth();
   const { addItem } = useCart();
   const { formatCurrency } = useRealm();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -35,10 +33,6 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleQuickAdd = (): void => {
     if (stock < 1) {
       setIsStockAlertOpen(true);
-      return;
-    }
-    if (!user.isLoggedIn) {
-      addItem(product, 1);
       return;
     }
     if (hasVariants) {
@@ -61,11 +55,11 @@ export function ProductCard({ product }: ProductCardProps) {
       setVariantError("Choose your options to continue.");
       return;
     }
-    addItem(product, 1, {
+    const wasAdded = addItem(product, 1, {
       ...(selectedSize ? { size: selectedSize } : {}),
       ...(selectedColor ? { color: selectedColor } : {}),
     });
-    setIsVariantPickerOpen(false);
+    if (wasAdded) setIsVariantPickerOpen(false);
   };
 
   return (

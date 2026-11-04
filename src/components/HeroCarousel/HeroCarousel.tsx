@@ -54,6 +54,8 @@ export function HeroCarousel() {
           key={slide.src}
           src={slide.src}
           alt={slide.alt}
+          width={1920}
+          height={1080}
           aria-hidden={index !== activeIndex}
           fetchPriority={index === 0 ? "high" : "auto"}
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 motion-reduce:transition-none ${index === activeIndex ? "opacity-100" : "opacity-0"}`}

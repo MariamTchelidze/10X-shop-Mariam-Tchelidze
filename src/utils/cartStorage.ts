@@ -1,5 +1,5 @@
 // კალათის მონაცემებს ამოწმებს, localStorage-დან კითხულობს და ინახავს.
-import type { CartItem } from "../types/cart";
+import type { CartItem, CartState } from "../types/cart";
 
 const CART_STORAGE_KEY = "lotr_cart";
 
@@ -29,16 +29,26 @@ function isCartItem(value: unknown): value is CartItem {
   );
 }
 
-export function readCartItems(getStock: GetStock): CartItem[] {
+function isCartState(value: unknown): value is { items: unknown; promoCode: unknown } {
+  return typeof value === "object" && value !== null && "items" in value && "promoCode" in value;
+}
+
+export function readCartState(getStock: GetStock): CartState {
   // აღდგენისას კალათის რაოდენობებს მიმდინარე მარაგთან ვათანხმებთ.
   try {
-    const saved: unknown = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) ?? "[]");
-    if (!Array.isArray(saved)) return [];
+    const stored: unknown = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) ?? "null");
+    // ძველი ვერსიის array ფორმატსაც ვკითხულობთ, რათა მომხმარებლის კალათა არ დაიკარგოს.
+    const saved = Array.isArray(stored)
+      ? { items: stored, promoCode: null }
+      : isCartState(stored)
+        ? stored
+        : { items: [], promoCode: null };
+    if (!Array.isArray(saved.items)) return { items: [], promoCode: null };
 
     const reservedByProduct = new Map<number, number>();
     const restoredItems: CartItem[] = [];
 
-    for (const value of saved) {
+    for (const value of saved.items) {
       if (!isCartItem(value)) continue;
 
       const stock = getStock(value.productId, value.stock);
@@ -50,16 +60,19 @@ export function readCartItems(getStock: GetStock): CartItem[] {
       restoredItems.push({ ...value, stock, quantity });
     }
 
-    return restoredItems;
+    return {
+      items: restoredItems,
+      promoCode: saved.promoCode === "10X10" ? "10X10" : null,
+    };
   } catch {
-    return [];
+    return { items: [], promoCode: null };
   }
 }
 
-export function saveCartItems(items: readonly CartItem[]): void {
+export function saveCartState(state: CartState): void {
   // საცავის შეცდომა მიმდინარე React კალათას არ უნდა უშლიდეს ხელს.
   try {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state));
   } catch {
     // ბრაუზერის საცავის მიუწვდომლობისას კალათა მიმდინარე სესიაში მაინც მუშაობს.
   }

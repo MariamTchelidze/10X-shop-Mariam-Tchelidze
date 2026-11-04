@@ -6,4 +6,4 @@ export interface CheckoutValues {
   city: string;
 }
 
-export type CheckoutErrors = Partial<Record<keyof CheckoutValues, string>>;
+export type CheckoutErrors = Partial<Record<keyof CheckoutValues, string>> & { submit?: string };

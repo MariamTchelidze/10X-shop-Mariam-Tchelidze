@@ -1,20 +1,24 @@
 // კალათის პროდუქტებს, რაოდენობებსა და ჯამურ ფასს მართავს.
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Product } from "../types/product";
-import type { CartItem, CartVariants } from "../types/cart";
+import type { CartItem, CartState, CartVariants } from "../types/cart";
 import { useToast } from "./ToastContext";
-import { useAuth } from "./AuthContext";
 import { useInventory } from "./InventoryContext";
-import { readCartItems, saveCartItems } from "../utils/cartStorage";
+import { readCartState, saveCartState } from "../utils/cartStorage";
 import { lineTotal } from "../utils/product";
 
 interface CartContextValue {
   items: CartItem[];
+  promoCode: string | null;
   itemCount: number;
   subtotal: number;
+  discount: number;
+  total: number;
   addItem: (product: Product, quantity: number, variants?: CartVariants) => boolean;
   removeItem: (productId: number, variants?: CartVariants) => void;
   updateQuantity: (productId: number, quantity: number, variants?: CartVariants) => void;
+  applyPromoCode: (code: string) => boolean;
+  removePromoCode: () => void;
   clearCart: () => void;
 }
 
@@ -26,21 +30,17 @@ interface CartProviderProps {
 
 export function CartProvider({ children }: CartProviderProps) {
   const { addToast } = useToast();
-  const { user } = useAuth();
   const { getStock } = useInventory();
-  const [items, setItems] = useState<CartItem[]>(() => readCartItems(getStock));
+  const [cart, setCart] = useState<CartState>(() => readCartState(getStock));
+  const { items, promoCode } = cart;
 
   useEffect(() => {
     // კალათის ყოველი ცვლილება localStorage-თან სინქრონდება.
-    saveCartItems(items);
-  }, [items]);
+    saveCartState(cart);
+  }, [cart]);
 
   const addItem = (product: Product, quantity: number, variants: CartVariants = {}): boolean => {
-    // სტუმარს და მარაგზე მეტი რაოდენობის დამატებას არ ვუშვებთ.
-    if (!user.isLoggedIn) {
-      addToast("for adding the product to the cart please log in first", "info");
-      return false;
-    }
+    // დანართის flow-ში სტუმარსაც შეუძლია კალათის შევსება; Login საჭიროა Checkout-ზე.
     const stock = getStock(product.id, product.stock);
     if (!Number.isInteger(quantity) || quantity < 1 || stock < 1) {
       return false;
@@ -69,14 +69,15 @@ export function CartProvider({ children }: CartProviderProps) {
       ...(variants.color ? { color: variants.color } : {}),
     };
 
-    setItems((currentItems) => {
+    setCart((currentCart) => {
+      const currentItems = currentCart.items;
       if (currentItem) {
-        return currentItems.map((item) =>
+        return { ...currentCart, items: currentItems.map((item) =>
           item.productId === product.id && item.size === variants.size && item.color === variants.color ? cartItem : item,
-        );
+        ) };
       }
 
-      return [...currentItems, cartItem];
+      return { ...currentCart, items: [...currentItems, cartItem] };
     });
 
     addToast("ADDED TO BAG", "success");
@@ -88,9 +89,10 @@ export function CartProvider({ children }: CartProviderProps) {
     if (!items.some((item) => item.productId === productId && item.size === variants.size && item.color === variants.color)) {
       return;
     }
-    setItems((currentItems) =>
-      currentItems.filter((item) => !(item.productId === productId && item.size === variants.size && item.color === variants.color)),
-    );
+    setCart((current) => ({
+      ...current,
+      items: current.items.filter((item) => !(item.productId === productId && item.size === variants.size && item.color === variants.color)),
+    }));
     addToast("ITEM REMOVED", "info");
   };
 
@@ -108,23 +110,35 @@ export function CartProvider({ children }: CartProviderProps) {
       .filter((item) => item.productId === productId && !(item.size === variants.size && item.color === variants.color))
       .reduce((total, item) => total + item.quantity, 0);
     // სხვა ზომისა თუ ფერის რაოდენობაც იმავე პროდუქტის საერთო მარაგში ითვლება.
-    const maxQuantity = Math.max(1, stock - quantityInOtherVariants);
+    const maxQuantity = Math.max(0, stock - quantityInOtherVariants);
 
-    setItems((currentItems) =>
-      currentItems.map((item) =>
-        item.productId === productId && item.size === variants.size && item.color === variants.color
-          ? { ...item, stock, quantity: Math.min(quantity, maxQuantity) }
-          : item,
-      ),
-    );
+    setCart((current) => ({
+      ...current,
+      items: maxQuantity === 0
+        ? current.items.filter((item) => !(item.productId === productId && item.size === variants.size && item.color === variants.color))
+        : current.items.map((item) =>
+            item.productId === productId && item.size === variants.size && item.color === variants.color
+              ? { ...item, stock, quantity: Math.min(quantity, maxQuantity) }
+              : item,
+          ),
+    }));
+  };
+
+  const applyPromoCode = (code: string): boolean => {
+    if (code.trim().toUpperCase() !== "10X10") return false;
+    setCart((current) => ({ ...current, promoCode: "10X10" }));
+    return true;
+  };
+
+  const removePromoCode = (): void => {
+    setCart((current) => ({ ...current, promoCode: null }));
   };
 
   const clearCart = (): void => {
-    if (items.length === 0) {
-      return;
-    }
-    setItems([]);
-    addToast("CART CLEARED", "info");
+    if (items.length === 0 && promoCode === null) return;
+    const hadItems = items.length > 0;
+    setCart({ items: [], promoCode: null });
+    if (hadItems) addToast("CART CLEARED", "info");
   };
 
   // Header-ის badge და შეჯამება კალათის მიმდინარე მონაცემებიდან გამოითვლება.
@@ -133,13 +147,20 @@ export function CartProvider({ children }: CartProviderProps) {
     (sum, item) => sum + lineTotal(item.price, item.discountPercentage, item.quantity),
     0,
   );
+  const discount = promoCode === "10X10" ? Number((subtotal * 0.1).toFixed(2)) : 0;
+  const total = Math.max(0, subtotal - discount);
   const value: CartContextValue = {
     items,
+    promoCode,
     itemCount,
     subtotal,
+    discount,
+    total,
     addItem,
     removeItem,
     updateQuantity,
+    applyPromoCode,
+    removePromoCode,
     clearCart,
   };
 

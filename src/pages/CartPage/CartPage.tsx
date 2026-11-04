@@ -8,7 +8,7 @@ import { CartItemRow } from "./components/CartItemRow";
 import { CartSummary } from "./components/CartSummary";
 
 export function CartPage() {
-  const { items, subtotal, removeItem, updateQuantity } = useCart();
+  const { items, subtotal, discount, total, promoCode, applyPromoCode, removePromoCode, removeItem, updateQuantity } = useCart();
   const { formatCurrency } = useRealm();
   const { getStock } = useInventory();
 
@@ -60,7 +60,15 @@ export function CartPage() {
             />
           ))}
         </ul>
-        <CartSummary subtotal={subtotal} formatCurrency={formatCurrency} />
+        <CartSummary
+          subtotal={subtotal}
+          discount={discount}
+          total={total}
+          promoCode={promoCode}
+          onApplyPromoCode={applyPromoCode}
+          onRemovePromoCode={removePromoCode}
+          formatCurrency={formatCurrency}
+        />
       </div>
     </main>
   );

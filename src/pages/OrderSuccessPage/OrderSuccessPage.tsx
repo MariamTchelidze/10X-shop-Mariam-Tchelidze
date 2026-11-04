@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
 import type { Order } from "../../types/order";
-import { readOrders } from "../../utils/orders";
+import { isOrder, readOrders } from "../../utils/orders";
 import { discountedPrice } from "../../utils/product";
 import { formatDate } from "../../utils/formatters";
 
@@ -16,18 +16,26 @@ interface OrderSuccessLocationState {
 export function OrderSuccessPage() {
   const location = useLocation();
   const routeState = location.state as OrderSuccessLocationState | null;
+  const routeOrder: unknown = routeState?.order;
   const { user } = useAuth();
   const { items, clearCart } = useCart();
   const { formatCurrency } = useRealm();
   // ჯერ მარშრუტის მდგომარეობას ვიყენებთ; გვერდის განახლებისას ბოლო შენახულ შეკვეთას ვეძებთ.
   const [order] = useState<Order | null>(() =>
-    routeState?.order ?? readOrders().find((savedOrder) => savedOrder.username === user.username) ?? null,
+    (isOrder(routeOrder) && routeOrder.username === user.username ? routeOrder : undefined) ??
+      readOrders().find((savedOrder) => savedOrder.username === user.username) ?? null,
   );
 
+  const cartMatchesOrder = Boolean(order) && items.length === (order?.items.length ?? -1) &&
+    (order?.items.every((orderedItem) => items.some((cartItem) =>
+      cartItem.productId === orderedItem.productId && cartItem.quantity === orderedItem.quantity &&
+      cartItem.size === orderedItem.size && cartItem.color === orderedItem.color,
+    )) ?? false);
+
   useEffect(() => {
-    // დადასტურების გვერდზე უკვე დასრულებული შესყიდვის კალათას ვასუფთავებთ.
-    if (items.length > 0) clearCart();
-  }, [clearCart, items.length]);
+    // მხოლოდ იმ კალათას ვასუფთავებთ, რომლის ნივთებიც ნაჩვენებ შეკვეთას ემთხვევა.
+    if (cartMatchesOrder) clearCart();
+  }, [cartMatchesOrder, clearCart]);
 
   if (!order) {
     return (
@@ -42,6 +50,7 @@ export function OrderSuccessPage() {
 
   // ძველი შეკვეთების ჩანაწერებისთვის არასავალდებულო ჯამებს ნაგულისხმევ მნიშვნელობებს ვაძლევთ.
   const subtotal = order.subtotal ?? order.total;
+  const discount = order.discount ?? 0;
   const shipping = order.shipping ?? 0;
   const taxes = order.taxes ?? 0;
   const address = order.shippingAddress;
@@ -98,6 +107,7 @@ export function OrderSuccessPage() {
           <h2 className="font-display text-xl text-market-ink">Order total</h2>
           <dl className="mt-5 space-y-4 text-sm">
             <div className="flex justify-between gap-4 text-market-muted"><dt>Subtotal</dt><dd>{formatCurrency(subtotal)}</dd></div>
+            {order.promoCode && <div className="flex justify-between gap-4 text-market-muted"><dt>Discount ({order.promoCode} −10%)</dt><dd>−{formatCurrency(discount)}</dd></div>}
             <div className="flex justify-between gap-4 text-market-muted"><dt>Shipping</dt><dd>{shipping === 0 ? "Complimentary" : formatCurrency(shipping)}</dd></div>
             <div className="flex justify-between gap-4 text-market-muted"><dt>Taxes</dt><dd>{formatCurrency(taxes)}</dd></div>
             <div className="flex justify-between gap-4 border-t border-market-border pt-4 font-medium text-market-ink"><dt>Total</dt><dd>{formatCurrency(order.total)}</dd></div>

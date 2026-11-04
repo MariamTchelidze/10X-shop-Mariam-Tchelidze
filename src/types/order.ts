@@ -14,10 +14,14 @@ export interface Order {
   date: string;
   items: CartItem[];
   total: number;
-  status: "Placed";
+  status?: OrderStatus | "Placed";
   subtotal?: number;
+  discount?: number;
+  promoCode?: string | null;
   shipping?: number;
   taxes?: number;
   shippingAddress?: ShippingAddress;
   paymentMethod?: string;
 }
+
+export type OrderStatus = "Processing" | "Shipped" | "Delivered";

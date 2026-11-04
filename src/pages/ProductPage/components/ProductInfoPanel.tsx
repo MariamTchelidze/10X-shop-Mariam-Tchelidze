@@ -34,11 +34,9 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
   }, [stock]);
 
   const handleAddToCart = (): void => {
-    // კალათის კონტექსტი ამოწმებს შესვლის მდგომარეობასა და პროდუქტის მარაგს.
+    // კალათის კონტექსტი საერთო მარაგის ზღვარს ამოწმებს.
     const added = addItem(product, quantity);
-    setCartMessage(
-      added ? "Added to cart." : "Your cart already contains the available stock.",
-    );
+    setCartMessage(added ? "Added to cart." : "All available stock is already in your bag.");
   };
 
   return (

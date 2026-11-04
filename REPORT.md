@@ -19,7 +19,10 @@ LOTR Shop (Middle-earth Market) is a responsive single-page storefront built wit
 ## FULL features implemented
 
 - URL-synced catalog search, category filtering, sorting, and pagination.
-- Cart promo code (`10X10`) and global toast notifications.
+- Cart promo code (`10X10`), persisted with the cart and included in checkout/order totals.
+- Order detail pages with reorder action and a simulated order-status timeline.
+- Shared error boundary, common not-found page, and scroll-to-top behavior on route changes.
+- Profile action to clear saved cart, orders, and product reviews while keeping the account and theme.
 
 ## BONUS features implemented
 
@@ -44,6 +47,7 @@ The app includes the catalog (`/`), login (`/login`), product details (`/product
 ## Scope and limitations
 
 - The catalog depends on the DummyJSON API and an internet connection.
-- User accounts, cart, orders, profile information, wishlist, reviews, and preferences use browser `localStorage`; data is local to that browser and is not a secure production backend.
+- User accounts, cart, orders, profile information, wishlist, reviews, and preferences use browser `localStorage`; data is local to that browser and is not a secure production backend. Registered passwords are stored as salted PBKDF2 hashes, while the CORE demo login still accepts any username with a password of at least six characters.
 - Checkout is simulated. No payment processor, real order fulfillment, or live carrier tracking is connected.
-- The repository has no published deployment URL or hosting configuration yet. A static deployment must provide an SPA fallback for direct route loads; the README should be updated with the public demo URL after deployment.
+- A Vercel demo URL is listed in the README. Its live availability and direct-route SPA fallback were not independently verified during this code review.
+- Verification in this review: `npm run typecheck`, `npm run lint`, `npm run build`, and `git diff --check` completed successfully.

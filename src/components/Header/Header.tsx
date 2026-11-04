@@ -69,7 +69,7 @@ export function Header() {
   const { user } = useAuth();
   const { itemCount } = useCart();
   const { items: wishlistItems } = useWishlist();
-  const [requestedDestination, setRequestedDestination] = useState<"/cart" | "/wishlist" | null>(null);
+  const [requestedDestination, setRequestedDestination] = useState<"/wishlist" | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -88,12 +88,12 @@ export function Header() {
 
 
   // ამოწმებს მომხმარებლის ავტორიზაციას და სტუმრის შემთხვევაში ხსნის შესვლის შეტყობინებას.
-  const guardShoppingLink = (destination: "/cart" | "/wishlist") =>
+  const guardWishlistLink = () =>
     (event: MouseEvent<HTMLAnchorElement>): void => {
       // სტუმრის შემთხვევაში გვერდზე გადასვლის ნაცვლად შესვლის შეტყობინებას ვხსნით.
       if (user.isLoggedIn) return;
       event.preventDefault();
-      setRequestedDestination(destination);
+      setRequestedDestination("/wishlist");
     };
 
   // მობილურსა და დიდ ეკრანზე სათაურის შესაბამის განლაგებას ვაჩვენებთ.
@@ -111,7 +111,6 @@ export function Header() {
           {/* კალათის გვერდზე გადასვლის ღილაკი რაოდენობის მაჩვენებლით. */}
           <Link
             to="/cart"
-            onClick={guardShoppingLink("/cart")}
             aria-label={itemCount > 0 ? `Shopping bag, ${itemCount} items` : "Shopping bag"}
             className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
@@ -124,7 +123,7 @@ export function Header() {
           {/* სურვილების სიის ღილაკი შესაბამისი რაოდენობის ბეჯით. */}
           <Link
             to="/wishlist"
-            onClick={guardShoppingLink("/wishlist")}
+            onClick={guardWishlistLink()}
             aria-label={wishlistItems.length > 0 ? `Wishlist, ${wishlistItems.length} items` : "Wishlist"}
             className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
@@ -200,7 +199,7 @@ export function Header() {
           <RealmSelector />
           <Link
             to="/wishlist"
-            onClick={guardShoppingLink("/wishlist")}
+            onClick={guardWishlistLink()}
             aria-label={wishlistItems.length > 0 ? `Wishlist, ${wishlistItems.length} items` : "Wishlist"}
             className="relative inline-flex h-10 w-9 shrink-0 items-center justify-center text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-market-ink"
           >
@@ -211,7 +210,6 @@ export function Header() {
           </Link>
           <Link
             to="/cart"
-            onClick={guardShoppingLink("/cart")}
             aria-label={itemCount > 0 ? `Bag, ${itemCount} items` : "Bag"}
             className="inline-flex min-h-10 items-center gap-1.5 text-[10px] font-medium tracking-[0.12em] text-market-muted transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs"
           >

@@ -6,6 +6,7 @@ import { ProductReviewsContainer } from "../../components/ProductReviews/Product
 import type { Product } from "../../types/product";
 import { ProductInfoPanel } from "./components/ProductInfoPanel";
 import { RelatedProducts } from "./components/RelatedProducts";
+import { NotFoundPage } from "../NotFoundPage/NotFoundPage";
 
 export function ProductPage() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ export function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     // ID-ის ვალიდაციის შემდეგ პროდუქტის მოთხოვნას ვიწყებთ და გვერდის ცვლილებაზე ვაუქმებთ.
@@ -51,7 +53,7 @@ export function ProductPage() {
 
     void loadProduct();
     return () => controller.abort();
-  }, [isValidId, productId]);
+  }, [isValidId, productId, retryCount]);
 
   // ჩატვირთვის, პროდუქტის არქონისა და მოთხოვნის შეცდომის მდგომარეობებს ცალ-ცალკე ვხატავთ.
   if (isLoading) {
@@ -64,13 +66,7 @@ export function ProductPage() {
 
   if (!isValidId || (!error && product === null)) {
     return (
-      <main className="mx-auto max-w-7xl px-4 py-16 text-center">
-        <h1 className="font-display text-3xl text-market-ink">Page not found</h1>
-        <p className="mt-3 text-sm text-market-muted">The product you are looking for does not exist.</p>
-        <Link to="/" className="mt-6 inline-block text-xs uppercase tracking-[0.14em] text-market-ink underline">
-          Back to catalog
-        </Link>
-      </main>
+      <NotFoundPage />
     );
   }
 
@@ -78,9 +74,9 @@ export function ProductPage() {
     return (
       <main className="mx-auto max-w-7xl px-4 py-16 text-center" role="alert">
         <p className="text-sm text-market-muted">{error ?? "Unable to load this product."}</p>
-        <Link to="/" className="mt-6 inline-block text-xs uppercase tracking-[0.14em] text-market-ink underline">
-          Back to catalog
-        </Link>
+        <button type="button" onClick={() => setRetryCount((count) => count + 1)} className="mt-6 inline-flex min-h-11 items-center border border-market-border px-5 text-xs uppercase tracking-[0.14em] text-market-ink hover:border-market-ink">
+          Retry
+        </button>
       </main>
     );
   }

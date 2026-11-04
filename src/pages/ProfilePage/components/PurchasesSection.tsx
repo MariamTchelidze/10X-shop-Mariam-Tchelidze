@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import type { Order } from "../../../types/order";
 import { SectionPanel } from "./SectionPanel";
 import { formatDate } from "../../../utils/formatters";
+import { getOrderStatus } from "../../../utils/orders";
 
 interface PurchasesSectionProps {
   orders: Order[];
@@ -28,7 +29,7 @@ export function PurchasesSection({ orders, formatCurrency }: PurchasesSectionPro
                 </p>
               </div>
               <div className="flex items-center gap-4">
-                <span className="border border-gold px-3 py-1 text-[10px] uppercase tracking-widest">{order.status}</span>
+                <span className="border border-gold px-3 py-1 text-[10px] uppercase tracking-widest">{getOrderStatus(order)}</span>
                 <span className="text-sm">{formatCurrency(order.total)}</span>
               </div>
             </li>

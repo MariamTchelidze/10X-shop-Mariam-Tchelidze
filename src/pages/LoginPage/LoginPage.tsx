@@ -1,4 +1,4 @@
-// შესვლისა და რეგისტრაციის ფორმებს ვალიდაციითა და გადამისამართებით მართავს.
+// Login-ისა და დამატებითი რეგისტრაციის კონტროლირებად ფორმებს მართავს.
 import { useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
@@ -16,61 +16,69 @@ export function LoginPage() {
   const [credentialsInvalid, setCredentialsInvalid] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { login, register } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
-  const navigateAfterAuth = () => {
-    // თუ შესვლამდე დაცულ ბმულზე იყო მომხმარებელი, წარმატების შემდეგ იქვე ვაბრუნებთ.
+  const navigateAfterAuth = (): void => {
+    // დაცულ გვერდზე გადასვლამდე შენახულ მისამართს მხოლოდ შიდა route-ისას ვიღებთ.
     const from = (location.state as { from?: unknown } | null)?.from;
     navigate(typeof from === "string" && from.startsWith("/") ? from : "/", { replace: true });
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
-    // რეგისტრაციისა და შესვლის ვალიდაცია სხვადასხვა მოთხოვნებს ამოწმებს.
+    if (isSubmitting) return;
+
+    // CORE Login-ს username/password სჭირდება; რეგისტრაციას დამატებით email-ის ვალიდაცია აქვს.
     const nextErrors: FormErrors = {};
+    const identifier = values.email.trim();
     const fullName = values.fullName.trim();
-    const email = values.email.trim();
 
     if (isRegistering) {
       if (!fullName) nextErrors.fullName = "Full name is required.";
-      if (!email.includes("@") || !email.includes(".")) nextErrors.email = "Enter a valid email address.";
+      if (!identifier.includes("@") || !identifier.includes(".")) nextErrors.email = "Enter a valid email address.";
       if (values.password.length < 8) nextErrors.password = "Password must be at least 8 characters.";
       if (values.confirmPassword !== values.password) nextErrors.confirmPassword = "Passwords do not match.";
-    } else if (!email.includes("@") || !email.includes(".") || values.password.length < 8) {
-      setErrors({ email: "Enter valid login credentials.", password: "Enter valid login credentials." });
-      setCredentialsInvalid(true);
-      return;
+    } else {
+      if (!identifier) nextErrors.email = "Username is required.";
+      if (!values.password) nextErrors.password = "Password is required.";
+      else if (values.password.length < 6) nextErrors.password = "Password must be at least 6 characters.";
     }
+
     setErrors(nextErrors);
     setCredentialsInvalid(false);
     if (Object.keys(nextErrors).length > 0) return;
 
-    if (isRegistering) {
-      if (register(fullName, email, values.password) === "exists") {
-        setErrors({ email: "An account with this email already exists." });
-        return;
+    setIsSubmitting(true);
+    try {
+      if (isRegistering) {
+        const result = await register(fullName, identifier, values.password);
+        if (result === "exists") {
+          setErrors({ email: "An account with this email already exists." });
+          return;
+        }
+        if (result === "storage-error") {
+          setErrors({ email: "Unable to save this account in browser storage." });
+          return;
+        }
+        addToast("ACCOUNT CREATED", "success");
+      } else {
+        const result = await login(identifier, values.password);
+        if (result === "invalid") {
+          setCredentialsInvalid(true);
+          setErrors({ email: "Email or password is incorrect.", password: "Email or password is incorrect." });
+          return;
+        }
+        addToast("WELCOME BACK", "success");
       }
-      addToast("ACCOUNT CREATED", "success");
       navigateAfterAuth();
-      return;
+    } catch {
+      setErrors({ password: "Unable to complete sign in. Please try again." });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const result = login(email, values.password);
-    // შედეგის ტიპის მიხედვით ვაჩვენებთ შეტყობინებას ან ორივე credential ველს ვნიშნავთ.
-    if (result === "not-found") {
-      addToast("User with this email does not exist", "error");
-      setCredentialsInvalid(true);
-      return;
-    }
-    if (result === "invalid") {
-      setCredentialsInvalid(true);
-      setErrors({ email: "Email or password is incorrect.", password: "Email or password is incorrect." });
-      return;
-    }
-    addToast("WELCOME BACK", "success");
-    navigateAfterAuth();
   };
 
   const inputClass = (field: keyof FormValues): string =>
@@ -86,8 +94,8 @@ export function LoginPage() {
           {errors.fullName && <p className="mt-2 text-sm text-error" role="alert">{errors.fullName}</p>}
         </div>}
         <div>
-          <label htmlFor="email" className="mb-2 block text-xs uppercase tracking-[0.16em] text-market-muted">Email</label>
-          <input id="email" name="email" type="email" autoComplete="email" value={values.email} aria-invalid={Boolean(errors.email) || credentialsInvalid} onChange={(event) => { setValues((current) => ({ ...current, email: event.target.value })); setErrors((current) => ({ ...current, email: undefined })); setCredentialsInvalid(false); }} className={inputClass("email")} />
+          <label htmlFor="email" className="mb-2 block text-xs uppercase tracking-[0.16em] text-market-muted">{isRegistering ? "Email" : "Username"}</label>
+          <input id="email" name={isRegistering ? "email" : "username"} type={isRegistering ? "email" : "text"} autoComplete={isRegistering ? "email" : "username"} value={values.email} aria-invalid={Boolean(errors.email) || credentialsInvalid} onChange={(event) => { setValues((current) => ({ ...current, email: event.target.value })); setErrors((current) => ({ ...current, email: undefined })); setCredentialsInvalid(false); }} className={inputClass("email")} />
           {errors.email && <p className="mt-2 text-sm text-error" role="alert">{errors.email}</p>}
         </div>
         <PasswordField
@@ -121,8 +129,8 @@ export function LoginPage() {
             onToggleVisibility={() => setIsConfirmationVisible((visible) => !visible)}
           />
         )}
-        <button type="submit" className="min-h-12 w-full bg-market-ink px-5 text-xs font-medium uppercase tracking-[0.16em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink">
-          {isRegistering ? "Register" : "Log in"}
+        <button type="submit" disabled={isSubmitting} className="min-h-12 w-full bg-market-ink px-5 text-xs font-medium uppercase tracking-[0.16em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink disabled:cursor-wait disabled:opacity-60">
+          {isSubmitting ? "Please wait…" : isRegistering ? "Register" : "Log in"}
         </button>
       </form>
       <button type="button" onClick={() => { setIsRegistering((current) => !current); setErrors({}); setCredentialsInvalid(false); setValues((current) => ({ ...current, confirmPassword: "" })); setIsPasswordVisible(false); setIsConfirmationVisible(false); }} className="mt-6 text-center text-xs uppercase tracking-[0.14em] text-market-muted underline-offset-4 hover:text-market-ink hover:underline">

@@ -15,3 +15,8 @@ export interface CartVariants {
   size?: string;
   color?: string;
 }
+
+export interface CartState {
+  items: CartItem[];
+  promoCode: string | null;
+}

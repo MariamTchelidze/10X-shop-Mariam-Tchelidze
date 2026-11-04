@@ -10,6 +10,7 @@ export interface AuthUser {
 export interface RegisteredUser {
   fullName: string;
   email: string;
-  password: string;
+  passwordHash: string;
+  passwordSalt: string;
   address: string;
 }

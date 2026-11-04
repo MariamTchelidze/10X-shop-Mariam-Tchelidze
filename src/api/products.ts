@@ -3,6 +3,49 @@ import type { Product, ProductsResponse } from "../types/product";
 import type { CatalogQuery, Category } from "../types/catalog";
 import { CATALOG_PAGE_SIZE } from "../types/catalog";
 
+function isReview(value: unknown): boolean {
+  if (typeof value !== "object" || value === null) return false;
+  return "rating" in value && typeof value.rating === "number" &&
+    "comment" in value && typeof value.comment === "string" &&
+    "date" in value && typeof value.date === "string" &&
+    "reviewerName" in value && typeof value.reviewerName === "string";
+}
+
+function isProduct(value: unknown): value is Product {
+  if (typeof value !== "object" || value === null) return false;
+  return "id" in value && typeof value.id === "number" && Number.isInteger(value.id) &&
+    "title" in value && typeof value.title === "string" &&
+    "description" in value && typeof value.description === "string" &&
+    "category" in value && typeof value.category === "string" &&
+    "price" in value && typeof value.price === "number" && Number.isFinite(value.price) &&
+    "discountPercentage" in value && typeof value.discountPercentage === "number" &&
+    "rating" in value && typeof value.rating === "number" &&
+    "stock" in value && typeof value.stock === "number" && Number.isInteger(value.stock) &&
+    "thumbnail" in value && typeof value.thumbnail === "string" &&
+    "images" in value && Array.isArray(value.images) && value.images.every((image) => typeof image === "string") &&
+    "reviews" in value && Array.isArray(value.reviews) && value.reviews.every(isReview);
+}
+
+function isProductsResponse(value: unknown): value is ProductsResponse {
+  if (typeof value !== "object" || value === null) return false;
+  return "products" in value && Array.isArray(value.products) && value.products.every(isProduct) &&
+    "total" in value && typeof value.total === "number" && Number.isInteger(value.total) &&
+    "skip" in value && typeof value.skip === "number" && Number.isInteger(value.skip) &&
+    "limit" in value && typeof value.limit === "number" && Number.isInteger(value.limit);
+}
+
+function isCategory(value: unknown): value is Category {
+  if (typeof value !== "object" || value === null) return false;
+  return "slug" in value && typeof value.slug === "string" &&
+    "name" in value && typeof value.name === "string" &&
+    "url" in value && typeof value.url === "string";
+}
+
+async function readJson(response: Response): Promise<unknown> {
+  const payload: unknown = await response.json();
+  return payload;
+}
+
 // ძირითადი მისამართი, საიდანაც მონაცემები მოგვაქვს
 const API_BASE = "https://dummyjson.com";
 
@@ -46,7 +89,9 @@ export async function fetchProducts(
     throw new Error(`Unable to load products (HTTP ${response.status}).`);
   }
 
-  const data = (await response.json()) as ProductsResponse;
+  const payload = await readJson(response);
+  if (!isProductsResponse(payload)) throw new Error("The product service returned an invalid response.");
+  const data = payload;
   // ვაბრუნებთ მონაცემებს და დამატებით ვზრუნავთ კლიენტის მხარეს დახარისხებაზეც (სანდოობისთვის)
   return { ...data, products: sortProducts(data.products, query.sort) };
 }
@@ -60,7 +105,11 @@ export async function fetchCategories(signal?: AbortSignal): Promise<Category[]>
     throw new Error(`Unable to load categories (HTTP ${response.status}).`);
   }
 
-  return (await response.json()) as Category[];
+  const payload = await readJson(response);
+  if (!Array.isArray(payload) || !payload.every(isCategory)) {
+    throw new Error("The category service returned an invalid response.");
+  }
+  return payload;
 }
 
 /**
@@ -81,7 +130,9 @@ export async function fetchProductById(
     throw new Error(`Unable to load this product (HTTP ${response.status}).`);
   }
 
-  return (await response.json()) as Product;
+  const payload = await readJson(response);
+  if (!isProduct(payload)) throw new Error("The product service returned an invalid product.");
+  return payload;
 }
 
 interface SortConfig {

@@ -5,6 +5,11 @@ import { useToast } from "../../context/ToastContext";
 import type { Product, Review } from "../../types/product";
 import { ReviewForm } from "./ReviewForm";
 import { ReviewList } from "./ReviewList";
+import { REVIEW_STORAGE_PREFIX } from "../../utils/reviews";
+
+function getReviewsStorageKey(productId: number): string {
+  return `${REVIEW_STORAGE_PREFIX}${productId}`;
+}
 
 interface ProductReviewsContainerProps {
   product: Product;
@@ -14,7 +19,7 @@ function readSavedReviews(productId: number): Review[] {
   // თითოეული პროდუქტის შეფასებას ცალკე გასაღებით ვკითხულობთ და არასწორ მონაცემებს ვფილტრავთ.
   try {
     const value: unknown = JSON.parse(
-      localStorage.getItem(`10x-shop-reviews-${productId}`) ?? "[]",
+      localStorage.getItem(getReviewsStorageKey(productId)) ?? "[]",
     );
     if (!Array.isArray(value)) return [];
     return value.filter(isReview);
@@ -52,7 +57,7 @@ export function ProductReviewsContainer({ product }: ProductReviewsContainerProp
     const nextReview: Review = { ...review, date: new Date().toISOString() };
     const nextReviews = [...savedReviews, nextReview];
     setSavedReviews(nextReviews);
-    localStorage.setItem(`10x-shop-reviews-${product.id}`, JSON.stringify(nextReviews));
+    localStorage.setItem(getReviewsStorageKey(product.id), JSON.stringify(nextReviews));
     addToast("YOUR TAVERN TALE HAS BEEN RECORDED", "success");
   };
 

@@ -1,12 +1,12 @@
 // შეკვეთის ფორმას ამოწმებს, შეკვეთას ინახავს და მარაგს ამცირებს.
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 import { useRealm } from "../../context/RealmContext";
 import { useInventory } from "../../context/InventoryContext";
 import type { Order } from "../../types/order";
-import { saveOrder } from "../../utils/orders";
+import { createOrderId, saveOrder } from "../../utils/orders";
 import { CheckoutForm } from "./components/CheckoutForm";
 import { OrderSummary } from "./components/OrderSummary";
 import type { CheckoutErrors, CheckoutValues } from "../../types/checkout";
@@ -19,13 +19,15 @@ const emptyValues: CheckoutValues = {
 };
 
 export function CheckoutPage() {
-  const { items, subtotal } = useCart();
+  const { items, subtotal, discount, total, promoCode } = useCart();
   const { user } = useAuth();
   const { decrementStock } = useInventory();
   const { formatCurrency } = useRealm();
   const navigate = useNavigate();
   const [values, setValues] = useState<CheckoutValues>(emptyValues);
   const [errors, setErrors] = useState<CheckoutErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submissionLock = useRef(false);
 
   if (items.length === 0) {
     // უშინაარსო შეკვეთის თავიდან ასაცილებლად ცარიელი კალათა უკან გადადის.
@@ -34,11 +36,12 @@ export function CheckoutPage() {
 
   const updateField = (field: keyof CheckoutValues, value: string): void => {
     setValues((current) => ({ ...current, [field]: value }));
-    setErrors((current) => ({ ...current, [field]: undefined }));
+    setErrors((current) => ({ ...current, [field]: undefined, submit: undefined }));
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
+    if (submissionLock.current) return;
     // ყველა ველი იწმინდება კიდეებზე არსებული გამოტოვებებისგან და შემდეგ მოწმდება.
     const fullName = values.fullName.trim();
     const email = values.email.trim();
@@ -62,21 +65,29 @@ export function CheckoutPage() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    // დემო შეკვეთას ვინახავთ, მარაგს ვამცირებთ და დადასტურების გვერდზე გადავდივართ.
+    submissionLock.current = true;
+    setIsSubmitting(true);
+    // შეკვეთის ჯამში CartContext-ის promo ფასდაკლებაც შედის.
     const order: Order = {
-      id: `MM-${Date.now().toString(36).toUpperCase()}`,
+      id: createOrderId(),
       username: user.username,
       date: new Date().toISOString(),
       items: items.map((item) => ({ ...item })),
-      total: subtotal,
-      status: "Placed",
+      total,
       subtotal,
+      discount,
+      promoCode,
       shipping: 0,
       taxes: 0,
       shippingAddress: { fullName, email, address, city },
       paymentMethod: "Demo checkout — no payment collected",
     };
-    saveOrder(order);
+    if (!saveOrder(order)) {
+      submissionLock.current = false;
+      setIsSubmitting(false);
+      setErrors({ submit: "Unable to save your order in browser storage. Please try again." });
+      return;
+    }
     decrementStock(items);
     navigate("/order-success", { replace: true, state: { order } });
   };
@@ -92,8 +103,16 @@ export function CheckoutPage() {
           errors={errors}
           onFieldChange={updateField}
           onSubmit={handleSubmit}
+          isSubmitting={isSubmitting}
         />
-        <OrderSummary items={items} subtotal={subtotal} formatCurrency={formatCurrency} />
+        <OrderSummary
+          items={items}
+          subtotal={subtotal}
+          discount={discount}
+          total={total}
+          promoCode={promoCode}
+          formatCurrency={formatCurrency}
+        />
       </div>
     </main>
   );

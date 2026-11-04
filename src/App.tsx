@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { BrowserRouter, Link, Outlet, Route, Routes, useLocation } from "react-router";
+import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router";
 import { Footer } from "./components/Footer/Footer";
 import { Header } from "./components/Header/Header";
 import { AuthProvider } from "./context/AuthContext";
@@ -40,6 +40,9 @@ import {
   WorkWithUsPage,
 } from "./pages/FooterPages/FooterPages";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { ErrorBoundary } from "./components/ErrorBoundary/ErrorBoundary";
+import { ScrollToTop } from "./components/ScrollToTop/ScrollToTop";
+import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
 
 // საერთო ჩარჩო ყველა მარშრუტისთვის Header-ს, Footer-სა და დესკტოპის ვიჯეტებს აწყობს.
 function AppLayout() {
@@ -66,19 +69,6 @@ function AppLayout() {
   );
 }
 
-// უცნობი URL მომხმარებელს კატალოგში დაბრუნების გზას სთავაზობს.
-function NotFoundPage() {
-  return (
-    <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="font-display text-3xl text-market-ink">Page not found</h1>
-      <p className="mt-3 text-market-muted">The page you are looking for does not exist.</p>
-      <Link to="/" className="mt-6 inline-block text-sm text-market-ink underline">
-        Go to catalog
-      </Link>
-    </main>
-  );
-}
-
 export function App() {
   return (
     <BrowserRouter>
@@ -91,6 +81,8 @@ export function App() {
           <CartProvider>
           <FloatingWidgetProvider>
             {/* მარშრუტები საერთო Layout-ს იყენებს; ანგარიშისა და checkout-ის გვერდები დაცულია. */}
+            <ErrorBoundary>
+            <ScrollToTop />
             <Routes>
             <Route element={<AppLayout />}>
               <Route path="/" element={<CatalogPage />} />
@@ -98,11 +90,12 @@ export function App() {
               <Route element={<ProtectedRoute />}>
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/orders/:id" element={<OrdersPage />} />
                 <Route path="/order-success" element={<OrderSuccessPage />} />
+                <Route path="/wishlist" element={<WishlistPage />} />
               </Route>
               <Route path="/products/:id" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
-              <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/help-center" element={<HelpCenterPage />} />
               <Route path="/help/shop-online" element={<ShopOnlinePage />} />
               <Route path="/help/payments" element={<PaymentsPage />} />
@@ -124,6 +117,7 @@ export function App() {
               <Route path="*" element={<NotFoundPage />} />
             </Route>
             </Routes>
+            </ErrorBoundary>
           </FloatingWidgetProvider>
           </CartProvider>
           </InventoryProvider>

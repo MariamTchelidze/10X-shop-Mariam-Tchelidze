@@ -10,7 +10,7 @@ Complete the required CORE storefront flow first, then implement FULL and BONUS 
 | --- | --- | --- | --- |
 | 1 | Oct 17–23, 2026 | Configure Vite, React 19, strict TypeScript, Tailwind CSS v4, and routing; define shared types; build the shared layout, login, and initial catalog. | Complete |
 | 2 | Oct 24–30, 2026 | Implement product details, shared cart state, cart quantity/removal/totals, controlled checkout, and local order confirmation. | Complete |
-| 3 | Oct 31–Nov 6, 2026 | Finish responsive states and error/empty flows; verify typecheck and production build; finalize project docs; prepare hosting with SPA route fallback. | Build and typecheck complete; deployment pending |
+| 3 | Oct 31–Nov 6, 2026 | Finish responsive states and error/empty flows; verify typecheck and production build; finalize project docs; prepare hosting with SPA route fallback. | Code checks and docs complete; verify the published URL and direct-route fallback externally |
 
 ## CORE definition of done
 
@@ -26,6 +26,6 @@ Complete the required CORE storefront flow first, then implement FULL and BONUS 
 
 After CORE completion, the project added URL-synced catalog filtering, wishlist, reviews, related products, promo codes, profile and order history, theme and realm selection, stock alerts, quick view, support widgets, and footer/help pages. See [REPORT.md](./REPORT.md) for the complete feature summary.
 
-## Remaining release task
+## Remaining release check
 
-Publish the production build to a hosting provider, configure SPA fallback for direct route refreshes, then add the public URL to the README. No live deployment URL is currently configured in this repository.
+The README contains the Vercel demo URL. Confirm that the deployment is reachable and that refreshing a nested route returns the SPA entry point; live hosting behavior cannot be established by the local build alone.

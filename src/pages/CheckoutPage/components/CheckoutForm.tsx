@@ -7,6 +7,7 @@ interface CheckoutFormProps {
   errors: CheckoutErrors;
   onFieldChange: (field: keyof CheckoutValues, value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  isSubmitting: boolean;
 }
 
 interface CheckoutFieldProps {
@@ -52,7 +53,7 @@ function CheckoutField({
   );
 }
 
-export function CheckoutForm({ values, errors, onFieldChange, onSubmit }: CheckoutFormProps) {
+export function CheckoutForm({ values, errors, onFieldChange, onSubmit, isSubmitting }: CheckoutFormProps) {
   // საერთო props-ის შემქმნელი თითოეული ველის მონაცემებს ფორმის მდგომარეობას უკავშირებს.
   const fieldProps = (id: keyof CheckoutValues, label: string, autoComplete: string, type?: "text" | "email") => ({
     id,
@@ -70,11 +71,13 @@ export function CheckoutForm({ values, errors, onFieldChange, onSubmit }: Checko
       <CheckoutField {...fieldProps("email", "Email", "email", "email")} />
       <CheckoutField {...fieldProps("address", "Address", "street-address")} />
       <CheckoutField {...fieldProps("city", "City", "address-level2")} />
+      {errors.submit && <p role="alert" className="text-sm text-error">{errors.submit}</p>}
       <button
         type="submit"
-        className="min-h-12 w-full bg-market-ink px-5 text-xs font-medium uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:w-auto sm:min-w-64"
+        disabled={isSubmitting}
+        className="min-h-12 w-full bg-market-ink px-5 text-xs font-medium uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink disabled:cursor-wait disabled:opacity-60 sm:w-auto sm:min-w-64"
       >
-        Place order
+        {isSubmitting ? "Placing order…" : "Place order"}
       </button>
     </form>
   );

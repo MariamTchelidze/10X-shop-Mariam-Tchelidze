@@ -11,10 +11,14 @@ import { PurchasesSection } from "./components/PurchasesSection";
 import { RefundsSection } from "./components/RefundsSection";
 import type { ProfileSectionId } from "../../types/profile";
 import { useProfileManagement } from "./useProfileManagement";
+import { useCart } from "../../context/CartContext";
+import { clearOrders } from "../../utils/orders";
+import { clearSavedReviews } from "../../utils/reviews";
 
 export function ProfilePage() {
   const { user, logout, updateProfile } = useAuth();
   const { formatCurrency } = useRealm();
+  const { clearCart } = useCart();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<ProfileSectionId>("general");
   const profile = useProfileManagement({ user, updateProfile });
@@ -29,6 +33,20 @@ export function ProfilePage() {
     // სექციის შეცვლისას წინა მოქმედების სტატუსს ვასუფთავებთ.
     setActiveSection(section);
     profile.clearNotice();
+  };
+
+  const handleClearLocalData = (): void => {
+    // დადასტურების შემდეგ კალათას, შეკვეთებსა და ლოკალურ შეფასებებს ვშლით.
+    if (!window.confirm("Clear the saved cart, orders, and product reviews? This cannot be undone.")) return;
+    clearCart();
+    const ordersCleared = clearOrders();
+    const reviewsCleared = clearSavedReviews();
+    profile.clearNotice();
+    if (ordersCleared && reviewsCleared) {
+      profile.setNotice("Saved cart, orders, and reviews have been cleared. Your account and theme remain.");
+    } else {
+      profile.setNotice("Some saved data could not be cleared from browser storage.");
+    }
   };
 
   return (
@@ -51,6 +69,7 @@ export function ProfilePage() {
               onNameChange={profile.setName}
               onEmailChange={profile.setEmail}
               onSave={profile.saveProfile}
+              onClearLocalData={handleClearLocalData}
             />
           )}
           {activeSection === "addresses" && (

@@ -31,13 +31,49 @@ const emptyCard: CardFormValues = {
   expiry: "",
 };
 
-function readSaved<T>(key: string): T[] {
+function readSaved<T>(key: string, isValid: (value: unknown) => value is T): T[] {
   // მომხმარებლის პროფილის სიებს localStorage-დან ვკითხულობთ, დაზიანებულ JSON-ზე კი ცარიელს ვაბრუნებთ.
   try {
     const value: unknown = JSON.parse(localStorage.getItem(key) ?? "[]");
-    return Array.isArray(value) ? (value as T[]) : [];
+    return Array.isArray(value) ? value.filter(isValid) : [];
   } catch {
     return [];
+  }
+}
+
+function isProfileAddress(value: unknown): value is ProfileAddress {
+  if (typeof value !== "object" || value === null) return false;
+  return "id" in value && typeof value.id === "string" &&
+    "country" in value && typeof value.country === "string" &&
+    "city" in value && typeof value.city === "string" &&
+    "street" in value && typeof value.street === "string" &&
+    "postalCode" in value && typeof value.postalCode === "string";
+}
+
+function isRefundRequest(value: unknown): value is RefundRequest {
+  if (typeof value !== "object" || value === null) return false;
+  return "id" in value && typeof value.id === "string" &&
+    "bankName" in value && typeof value.bankName === "string" &&
+    "accountHolder" in value && typeof value.accountHolder === "string" &&
+    "iban" in value && typeof value.iban === "string" &&
+    "submittedAt" in value && typeof value.submittedAt === "string" &&
+    "status" in value && value.status === "Submitted";
+}
+
+function isSavedCard(value: unknown): value is SavedCard {
+  if (typeof value !== "object" || value === null) return false;
+  return "id" in value && typeof value.id === "string" &&
+    "holder" in value && typeof value.holder === "string" &&
+    "lastFour" in value && typeof value.lastFour === "string" && /^\d{4}$/.test(value.lastFour) &&
+    "expiry" in value && typeof value.expiry === "string";
+}
+
+function persistList<T>(key: string, value: readonly T[]): boolean {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -53,13 +89,13 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
   const [name, setName] = useState(user.fullName || user.username);
   const [email, setEmail] = useState(user.email);
   const [addresses, setAddresses] = useState<ProfileAddress[]>(() =>
-    readSaved<ProfileAddress>(`${storagePrefix}-addresses`),
+    readSaved(`${storagePrefix}-addresses`, isProfileAddress),
   );
   const [refundRequests, setRefundRequests] = useState<RefundRequest[]>(() =>
-    readSaved<RefundRequest>(`${storagePrefix}-refunds`),
+    readSaved(`${storagePrefix}-refunds`, isRefundRequest),
   );
   const [cards, setCards] = useState<SavedCard[]>(() =>
-    readSaved<SavedCard>(`${storagePrefix}-cards`),
+    readSaved(`${storagePrefix}-cards`, isSavedCard),
   );
   const [orders] = useState<Order[]>(() =>
     readOrders().filter((order) => order.username === user.username),
@@ -72,17 +108,17 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
 
   const saveAddresses = (next: ProfileAddress[]) => {
     setAddresses(next);
-    localStorage.setItem(`${storagePrefix}-addresses`, JSON.stringify(next));
+    return persistList(`${storagePrefix}-addresses`, next);
   };
 
   const saveRefundRequests = (next: RefundRequest[]) => {
     setRefundRequests(next);
-    localStorage.setItem(`${storagePrefix}-refunds`, JSON.stringify(next));
+    return persistList(`${storagePrefix}-refunds`, next);
   };
 
   const saveCards = (next: SavedCard[]) => {
     setCards(next);
-    localStorage.setItem(`${storagePrefix}-cards`, JSON.stringify(next));
+    return persistList(`${storagePrefix}-cards`, next);
   };
 
   const saveProfile = () => {
@@ -107,10 +143,10 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
           address.id === editingAddressId ? { ...address, ...addressForm } : address,
         )
       : [...addresses, { id: `address-${Date.now()}`, ...addressForm }];
-    saveAddresses(next);
+    const saved = saveAddresses(next);
     setAddressForm(emptyAddress);
     setEditingAddressId(null);
-    setNotice(wasEditing ? "Address updated." : "Address added.");
+    setNotice(saved ? (wasEditing ? "Address updated." : "Address added.") : "Address changed for this session but could not be saved.");
   };
 
   const editAddress = (address: ProfileAddress) => {
@@ -125,8 +161,8 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
   };
 
   const removeAddress = (id: string) => {
-    saveAddresses(addresses.filter((address) => address.id !== id));
-    setNotice("Address removed.");
+    const saved = saveAddresses(addresses.filter((address) => address.id !== id));
+    setNotice(saved ? "Address removed." : "Address removed for this session but could not be saved.");
   };
 
   const cancelAddressEdit = () => {
@@ -145,9 +181,9 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
       submittedAt: new Date().toISOString(),
       status: "Submitted",
     };
-    saveRefundRequests([request, ...refundRequests]);
+    const saved = saveRefundRequests([request, ...refundRequests]);
     setRefundForm(emptyRefund);
-    setNotice("Refund request submitted.");
+    setNotice(saved ? "Refund request submitted." : "Request submitted for this session but could not be saved.");
   };
 
   const updateCardField = (field: keyof CardFormValues, value: string) => {
@@ -168,14 +204,14 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
       lastFour: digits.slice(-4),
       expiry: cardForm.expiry,
     };
-    saveCards([card, ...cards]);
+    const saved = saveCards([card, ...cards]);
     setCardForm(emptyCard);
-    setNotice("Masked card reference saved.");
+    setNotice(saved ? "Masked card reference saved." : "Card reference saved for this session but could not be saved.");
   };
 
   const removeCard = (id: string) => {
-    saveCards(cards.filter((card) => card.id !== id));
-    setNotice("Card reference removed.");
+    const saved = saveCards(cards.filter((card) => card.id !== id));
+    setNotice(saved ? "Card reference removed." : "Card removed for this session but could not be saved.");
   };
 
   return {
@@ -203,6 +239,7 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
     saveCard,
     removeCard,
     notice,
+    setNotice,
     clearNotice: () => setNotice(""),
   };
 }
