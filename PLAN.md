@@ -1,4 +1,4 @@
-# LOTR Shop Project Plan
+# 10X Shop — Treasures of Middle-earth Project Plan
 
 ## Goal and scope
 

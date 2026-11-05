@@ -1,8 +1,8 @@
-# LOTR Shop Project Report
+# 10X Shop — Treasures of Middle-earth Project Report
 
 ## Project overview
 
-LOTR Shop (Middle-earth Market) is a responsive single-page storefront built with React 19, TypeScript, Vite, Tailwind CSS v4, React Router, and DummyJSON product data. The visual system uses Cinzel and Lora typography, a Middle-earth inspired palette, and persistent light/dark themes.
+10X Shop — Treasures of Middle-earth is a responsive single-page storefront built with React 19, TypeScript, Vite, Tailwind CSS v4, React Router, and DummyJSON product data. The visual system uses Cinzel and Lora typography, a Middle-earth inspired palette, and persistent light/dark themes.
 
 ## CORE requirements
 
@@ -24,6 +24,7 @@ LOTR Shop (Middle-earth Market) is a responsive single-page storefront built wit
 - **Release check:** The `vercel.json` SPA rewrite is present on `main` and was pushed. The current Vercel URL redirects anonymous requests for both `/` and `/products/93` to Vercel SSO, so the app shell and nested-route behavior remain unverified; see [COMPATIBILITY.md](./COMPATIBILITY.md).
 - **Browser check:** Chrome responsive emulation was checked at 375px for catalog, product details, cart, checkout, and profile, and at 1025px for the header/widget layout. Login validation and invalid-route handling were also checked in Chrome. Firefox, physical-device checks, and compatibility screenshots remain outstanding; see [COMPATIBILITY.md](./COMPATIBILITY.md).
 - **Mobile and image follow-up:** The reported 375px hero overlap was addressed, auth prompt links now close the prompt while navigating, and image errors have an accessible fallback. Hero image delivery was reduced from about 14.4 MB of PNGs to about 2.0 MB of JPEGs; the displayed header logo was reduced from 2.2 MB to 164 KB. Post-change Firefox screenshots and remote CDN behavior are not yet verified.
+- **Lighthouse evidence:** A Chrome Lighthouse 13.5.0 Mobile navigation audit was recorded on the local production preview before and after preloading the first hero image. Performance changed from 65 to 67; LCP from 7.4s to 7.1s; Speed Index from 5.3s to 2.5s; TBT regressed from 250ms to 330ms. Full reports and the methodology are in [`docs/lighthouse/`](./docs/lighthouse/README.md). This does not verify the deployed Vercel site; see the limitations in that report.
 
 ## FULL features implemented
 
@@ -39,9 +40,8 @@ LOTR Shop (Middle-earth Market) is a responsive single-page storefront built wit
 - Order history and profile sections for personal information, addresses, purchases, refunds, and saved card references.
 - Product reviews stored locally per product and related products on product pages.
 - Inventory updates after checkout, out-of-stock Mithril alerts, and product quick view with variant selection.
-- Realm-based currency conversion and the Mithril Vault calculator.
+- Realm-based currency conversion.
 - Light/dark theme toggle with saved preference.
-- Global Eagle Post newsletter and Council support widgets.
 - Help center, individual footer information routes, and Middle-earth editorial branding.
 
 ## Routes

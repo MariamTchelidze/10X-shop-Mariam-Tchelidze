@@ -19,7 +19,7 @@ const helpLinks = [
 
 // ბმულების ჩამონათვალი მონაცემად ინახება, რათა სვეტები ერთნაირად აიგოს.
 const companyLinks = [
-  ["ABOUT MIDDLE MARKET", "/about/about-us"],
+  ["ABOUT 10X SHOP", "/about/about-us"],
   ["WORK WITH US", "/about/work-with-us"],
   ["OUR STORES", "/about/our-stores"],
 ] as const;
@@ -87,7 +87,7 @@ export function Footer() {
           <FooterColumn title="HELP">
             <ul className="space-y-1">{helpLinks.map(([label, href]) => <li key={href}><Link to={href} className={linkClass}>{label}</Link></li>)}</ul>
           </FooterColumn>
-          <FooterColumn title="WE ARE MIDDLE MARKET">
+          <FooterColumn title="WE ARE 10X SHOP">
             <ul className="space-y-1">{companyLinks.map(([label, href]) => <li key={href}><Link to={href} className={linkClass}>{label}</Link></li>)}</ul>
           </FooterColumn>
           <FooterColumn title="YOU MIGHT BE INTERESTED IN">
@@ -102,7 +102,7 @@ export function Footer() {
         </div>
         <div className="mt-10 flex flex-col gap-3 border-t border-market-border pt-6 text-[10px] uppercase tracking-[0.12em] text-market-muted sm:flex-row sm:items-center sm:justify-between">
           <span>GEORGIA <span aria-hidden="true">|</span> GEORGIAN</span>
-          <span>© 2026 MIDDLE MARKET</span>
+          <span>© 2026 10X SHOP</span>
         </div>
       </div>
     </footer>

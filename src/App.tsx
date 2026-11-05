@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import { Footer } from "./components/Footer/Footer";
 import { Header } from "./components/Header/Header";
 import { AuthProvider } from "./context/AuthContext";
@@ -18,11 +17,6 @@ import { OrderSuccessPage } from "./pages/OrderSuccessPage/OrderSuccessPage";
 import { HelpCenterPage } from "./pages/HelpCenterPage/HelpCenterPage";
 import { RealmProvider } from "./context/RealmContext";
 import { InventoryProvider } from "./context/InventoryContext";
-import { FloatingWidgetProvider } from "./context/FloatingWidgetContext";
-import { useFloatingWidgets } from "./context/FloatingWidgetContext";
-import { useMediaQuery } from "./hooks/useMediaQuery";
-import { MithrilVaultCalculator } from "./components/MithrilVaultCalculator/MithrilVaultCalculator";
-import { FloatingWidgets } from "./components/FloatingWidgets/FloatingWidgets";
 import {
   AboutUsPage,
   CancelSubscriptionPage,
@@ -44,18 +38,8 @@ import { ErrorBoundary } from "./components/ErrorBoundary/ErrorBoundary";
 import { ScrollToTop } from "./components/ScrollToTop/ScrollToTop";
 import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
 
-// საერთო ჩარჩო ყველა მარშრუტისთვის Header-ს, Footer-სა და დესკტოპის ვიჯეტებს აწყობს.
+// ყველა მარშრუტისთვის საერთო Header-სა და Footer-ს აწყობს.
 function AppLayout() {
-  const { pathname } = useLocation();
-  const showEaglePost = pathname !== "/login" && !pathname.startsWith("/login/");
-  const isDesktopViewport = useMediaQuery("(min-width: 1280px)");
-  const { setActiveWidget } = useFloatingWidgets();
-
-  useEffect(() => {
-    // მობილურზე და შესვლის გვერდზე მცურავ ვიჯეტებს ვხურავთ, რომ ეკრანს არ დაეფაროს.
-    if (!isDesktopViewport || !showEaglePost) setActiveWidget(null);
-  }, [isDesktopViewport, setActiveWidget, showEaglePost]);
-
   return (
     <div className="flex min-h-screen flex-col bg-market-paper">
       <Header />
@@ -63,8 +47,6 @@ function AppLayout() {
         <Outlet />
       </div>
       <Footer />
-      {showEaglePost && isDesktopViewport && <FloatingWidgets />}
-      {showEaglePost && isDesktopViewport && <MithrilVaultCalculator />}
     </div>
   );
 }
@@ -79,7 +61,6 @@ export function App() {
           <WishlistProvider>
           <InventoryProvider>
           <CartProvider>
-          <FloatingWidgetProvider>
             {/* მარშრუტები საერთო Layout-ს იყენებს; ანგარიშისა და checkout-ის გვერდები დაცულია. */}
             <ErrorBoundary>
             <ScrollToTop />
@@ -118,7 +99,6 @@ export function App() {
             </Route>
             </Routes>
             </ErrorBoundary>
-          </FloatingWidgetProvider>
           </CartProvider>
           </InventoryProvider>
           </WishlistProvider>

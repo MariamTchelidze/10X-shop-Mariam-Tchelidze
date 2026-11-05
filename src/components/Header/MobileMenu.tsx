@@ -2,28 +2,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import type { FloatingWidgetId } from "../../types/floatingWidget";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import { RealmSelector } from "./RealmSelector";
-import { MobileWidgetPanel } from "./MobileWidgetPanel";
-
-const widgetActions: { id: FloatingWidgetId; label: string }[] = [
-  { id: "eagle-post", label: "Eagle Post" },
-  { id: "mithril-vault", label: "Mithril Vault Calculator" },
-  { id: "council", label: "Ask The Council" },
-];
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedWidget, setSelectedWidget] = useState<FloatingWidgetId | null>(null);
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
-  // მისამართი იცვლება და გვერდით მენიუსთან ერთად ღია ვიჯეტსაც ვხურავთ.
+  // მისამართის შეცვლისას მობილურ მენიუს ვხურავთ.
   const closeMenu = useCallback(() => {
     setIsOpen(false);
-    setSelectedWidget(null);
   }, []);
 
   useEffect(() => {
@@ -48,12 +38,7 @@ export function MobileMenu() {
     };
   }, [closeMenu, isOpen]);
 
-  const toggleWidget = (widget: FloatingWidgetId) => {
-    // იმავე ვიჯეტზე დაჭერა ხურავს მას, სხვა ვიჯეტზე დაჭერა კი მას ხსნის.
-    setSelectedWidget((current) => current === widget ? null : widget);
-  };
-
-  // Մենյուից դուրս գալուց հետո guest-ին կատալոգ ենք տանում՝ պահպանելով զամբյուղը։
+  // მენიუდან გასვლისას მომხმარებელი კატალოგზე გადაგვყავს და კალათას ვინარჩუნებთ.
   const handleLogout = (): void => {
     logout();
     closeMenu();
@@ -84,7 +69,7 @@ export function MobileMenu() {
           className="fixed inset-0 z-[60] h-[100dvh] w-screen max-w-none overflow-y-auto overscroll-contain bg-market-paper px-5 pb-7 pt-[max(1rem,env(safe-area-inset-top))] text-market-ink sm:px-6"
         >
           <div className="mx-auto flex min-h-12 max-w-2xl items-center justify-between border-b border-market-border pb-3">
-            <span className="font-display text-xs uppercase tracking-[0.16em]">Middle-earth Market</span>
+            <span className="font-display text-xs font-semibold uppercase tracking-[0.16em]">10X SHOP</span>
             <button type="button" aria-label="Close navigation menu" onClick={closeMenu} className="inline-flex h-11 w-11 items-center justify-center text-2xl text-market-ink focus-visible:outline-2 focus-visible:outline-gold">×</button>
           </div>
           <div className="mx-auto max-w-2xl">
@@ -126,22 +111,6 @@ export function MobileMenu() {
 
             <section className="mt-5" aria-label="Theme controller">
               <ThemeToggle showLabel />
-            </section>
-
-            <section className="mt-5 grid gap-2" aria-label="Middle-earth widgets">
-              {widgetActions.map((action) => (
-                <button
-                  key={action.id}
-                  type="button"
-                  aria-expanded={selectedWidget === action.id}
-                  aria-controls="mobile-widget-panel"
-                  onClick={() => toggleWidget(action.id)}
-                  className="flex min-h-11 items-center justify-between border border-market-border px-3 text-left text-[10px] uppercase tracking-[0.14em] transition-colors hover:border-gold hover:bg-market-surface focus-visible:outline-2 focus-visible:outline-gold"
-                >
-                  {action.label}<span aria-hidden="true">{selectedWidget === action.id ? "−" : "+"}</span>
-                </button>
-              ))}
-              <MobileWidgetPanel widget={selectedWidget} onClose={() => setSelectedWidget(null)} />
             </section>
 
             <section className="mt-5 border-t border-market-border pt-4" aria-label="Realm and currency selector">

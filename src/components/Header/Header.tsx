@@ -118,8 +118,9 @@ export function Header() {
         <div className="flex min-w-0 items-center gap-1">
 
           {/* მთავარ გვერდზე გადამსვლელი ლოგო მობილურისთვის. */}
-          <Link to="/" aria-label="Middle-earth Market home" className="shrink-0 rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink">
-            <img src="/images/Logo-optimized.png" alt="Middle-earth Market" width={256} height={256} decoding="async" className="h-10 w-10 object-contain sm:h-11 sm:w-11" />
+          <Link to="/" aria-label="10X Shop home" className="inline-flex shrink-0 items-center gap-2 rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink">
+            <img src="/images/Logo-optimized.png" alt="" width={256} height={256} decoding="async" className="h-10 w-10 object-contain sm:h-11 sm:w-11" />
+            <span className="whitespace-nowrap font-display text-[10px] font-semibold tracking-[0.14em] text-market-ink sm:text-xs">10X SHOP</span>
           </Link>
           {/* კალათის გვერდზე გადასვლის ღილაკი რაოდენობის მაჩვენებლით. */}
           <Link
@@ -171,17 +172,18 @@ export function Header() {
     {/* შუა ნაწილში განთავსებული მთავარი ლოგო. */}
         <Link
           to="/"
-          aria-label="Middle-earth Market home"
-          className="justify-self-center rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
+          aria-label="10X Shop home"
+          className="inline-flex items-center justify-self-center gap-2 whitespace-nowrap rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
         >
           <img
             src="/images/Logo-optimized.png"
-            alt="Middle-earth Market"
+            alt=""
             width={256}
             height={256}
             decoding="async"
             className="h-11 w-11 object-contain sm:h-12 sm:w-12 lg:h-14 lg:w-14"
           />
+          <span className="font-display text-xs font-semibold tracking-[0.16em] text-market-ink lg:text-sm">10X SHOP</span>
         </Link>
 
 {/* მარჯვენა მხარეს განთავსებული ძიების, ავტორიზაციის და კალათის მართვის ელემენტები. */}

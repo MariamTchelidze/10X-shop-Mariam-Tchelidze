@@ -14,7 +14,6 @@ This matrix records the status of the Appendix A CORE checks. The Chrome checks 
 | Profile (`/profile`) | Not run | Pass (375px) | Not run | Not run | Profile view and horizontally scrollable section navigation stayed within the emulated viewport. |
 | Not found (`*`) | Pass (wildcard and invalid product ID) | Not run | Not run | Not run | Unknown routes and a non-numeric product ID rendered the not-found view; invalid ID did not initiate a product lookup. |
 
-The header was also inspected at 1025px: it uses the compact logo, bag, wishlist and menu layout; the floating widgets are hidden at that width.
 
 ## Deployment checks
 

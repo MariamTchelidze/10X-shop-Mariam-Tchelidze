@@ -12,7 +12,7 @@ export function SectionPanel({ title, intro, children }: SectionPanelProps) {
   return (
     <section className="w-full min-w-0 max-w-full" aria-labelledby="profile-section-title">
       <p className="text-[10px] uppercase tracking-[0.18em] text-gold">
-        Middle-earth Market · Account
+        10X Shop · Account
       </p>
       <h2
         id="profile-section-title"

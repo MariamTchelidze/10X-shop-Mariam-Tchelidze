@@ -1,6 +1,6 @@
 
 
-# Treasures of Middle-earth
+# 10X Shop — Treasures of Middle-earth
 
 ### A Market Beyond the Shire
 
@@ -13,7 +13,7 @@ An editorial fantasy storefront for curious travelers, artifact collectors, and 
 
 ## About the project
 
-**10X Shop — Treasures of Middle-earth** is a responsive single-page shopping experience built as an individual graduation project. It pairs a Middle-earth inspired visual identity with a modern product catalog, shopping flow, and account area.
+**10X Shop — Treasures of Middle-earth** is a responsive single-page shopping experience built as an individual graduation project. It pairs the required 10X Shop brand with a Middle-earth inspired visual identity, product catalog, shopping flow, and account area.
 
 Product catalog data comes from the [DummyJSON Products API](https://dummyjson.com/). This is a front-end demo: account state and many saved features live in browser storage, and checkout does not collect payment or arrange real delivery.
 
@@ -33,8 +33,6 @@ Product catalog data comes from the [DummyJSON Products API](https://dummyjson.c
 - **The Shire** light theme and **Mordor** dark theme, with a saved theme preference.
 - Cinzel display typography and Lora-inspired editorial styling.
 - Realm and currency selector with realm-specific conversion rates.
-- **The Mithril Vault** currency calculator.
-- **Eagle Post** newsletter widget and **Ask the Council** help assistant.
 - Responsive floating tools on desktop, with their actions available from the mobile menu.
 
 ### Accounts and saved items
