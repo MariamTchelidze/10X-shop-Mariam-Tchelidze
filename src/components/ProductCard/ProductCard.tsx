@@ -7,6 +7,7 @@ import { useRealm } from "../../context/RealmContext";
 import { useInventory } from "../../context/InventoryContext";
 import { QuickViewModal } from "../QuickViewModal/QuickViewModal";
 import { StockAlertModal } from "../StockAlert/StockAlertModal";
+import { ProductImage } from "../ProductImage/ProductImage";
 import type { Product } from "../../types/product";
 import { discountedPrice, getStockStatus } from "../../utils/product";
 
@@ -70,7 +71,7 @@ export function ProductCard({ product }: ProductCardProps) {
         className="absolute inset-0 z-10 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
       />
       <div className="relative overflow-hidden bg-market-surface">
-        <img
+        <ProductImage
           src={product.thumbnail}
           alt={product.title}
           loading="lazy"

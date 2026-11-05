@@ -40,10 +40,10 @@ export function ShoppingAccessPrompt({ destination, onClose }: ShoppingAccessPro
         <h2 id="shopping-access-title" className="mt-3 pr-8 font-display text-2xl">Sign in to continue</h2>
         <p className="mt-4 text-sm leading-6 text-market-muted">To check your bag or wishlist, please sign in or register first.</p>
         <div className="mt-7 grid gap-3 sm:grid-cols-2">
-          <Link to="/login" state={returnState} className="inline-flex min-h-12 items-center justify-center bg-market-ink px-5 text-center text-xs font-medium uppercase tracking-[0.12em] text-market-paper transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
+          <Link to="/login" state={returnState} onClick={onClose} className="inline-flex min-h-12 items-center justify-center bg-market-ink px-5 text-center text-xs font-medium uppercase tracking-[0.12em] text-market-paper transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
             Sign in
           </Link>
-          <Link to="/login?mode=register" state={returnState} className="inline-flex min-h-12 items-center justify-center border border-market-border px-5 text-center text-xs font-medium uppercase tracking-[0.12em] text-market-ink transition-colors hover:border-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
+          <Link to="/login?mode=register" state={returnState} onClick={onClose} className="inline-flex min-h-12 items-center justify-center border border-market-border px-5 text-center text-xs font-medium uppercase tracking-[0.12em] text-market-ink transition-colors hover:border-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
             Register
           </Link>
         </div>

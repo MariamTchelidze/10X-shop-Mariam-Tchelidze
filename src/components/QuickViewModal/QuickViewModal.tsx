@@ -6,6 +6,7 @@ import { useInventory } from "../../context/InventoryContext";
 import type { Product } from "../../types/product";
 import { discountedPrice, getStockStatus } from "../../utils/product";
 import { StockAlertModal } from "../StockAlert/StockAlertModal";
+import { ProductImage } from "../ProductImage/ProductImage";
 
 interface QuickViewModalProps {
   product: Product;
@@ -81,7 +82,7 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
         </button>
 
         <div className="max-h-[38vh] min-h-52 bg-market-surface sm:max-h-none sm:min-h-[32rem]">
-          <img src={image} alt={product.title} width={900} height={1100} className="h-full max-h-[38vh] w-full object-cover sm:max-h-full" />
+          <ProductImage src={image} alt={product.title} width={900} height={1100} loading="eager" className="h-full max-h-[38vh] w-full object-cover sm:max-h-full" />
         </div>
 
         <div className="flex min-w-0 flex-col p-5 sm:p-8 lg:p-10">

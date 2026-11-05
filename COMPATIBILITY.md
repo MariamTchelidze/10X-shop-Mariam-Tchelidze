@@ -26,3 +26,9 @@ The header was also inspected at 1025px: it uses the compact logo, bag, wishlist
 | Compatibility screenshots under `docs/compat/` | Not present. |
 
 Firefox verification, physical-device checks, and compatibility screenshots remain outstanding. The Firefox window was present, but the Windows browser-control policy stopped further UI inspection because it could not enforce the current browser URL policy. The user-facing Vercel deployment is protected by SSO, so its SPA rewrite must be retested from an allowed public URL or after its access configuration is made testable. No credentials or security controls were bypassed.
+
+## Latest 375px screenshot audit
+
+The user-provided Firefox screenshot showed the mobile hero slider controls and featured links competing for the same lower area, and the sign-in prompt remaining visible after selecting Register. The hero control row and featured links have since been separated, the mobile hero height has been reduced, and both authentication links now close the prompt while navigating. These source changes pass typecheck, lint, and build, but a post-change browser screenshot is still needed for visual confirmation.
+
+The five hero PNGs (about 14.4 MB combined) were converted to JPEGs, totaling about 2.0 MB. The header/favicon logo was resized from about 2.2 MB to 164 KB. The original PNGs are retained in `assets/source-images/`, outside Vite's published `public/` folder. Catalog, product, cart, order, and quick-view images now decode asynchronously and show an accessible placeholder if an image request fails. Live network image behavior still needs a browser check.

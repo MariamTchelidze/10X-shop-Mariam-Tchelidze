@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { ProductImage } from "../../components/ProductImage/ProductImage";
 import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
 import type { Order } from "../../types/order";
@@ -76,7 +77,7 @@ export function OrderSuccessPage() {
               const unitPrice = discountedPrice(item.price, item.discountPercentage);
               return (
                 <li key={`${item.productId}-${item.size ?? ""}-${item.color ?? ""}`} className="flex gap-4 py-5 sm:gap-6">
-                  <img src={item.thumbnail} alt={item.title} loading="lazy" width={180} height={220} className="aspect-[3/4] w-20 shrink-0 bg-market-surface object-cover sm:w-24" />
+                  <ProductImage src={item.thumbnail} alt={item.title} loading="lazy" width={180} height={220} className="aspect-[3/4] w-20 shrink-0 bg-market-surface object-cover sm:w-24" />
                   <div className="flex min-w-0 flex-1 flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0"><h3 className="font-display text-sm text-market-ink">{item.title}</h3><p className="mt-2 text-xs text-market-muted">Quantity: {item.quantity}</p>{(item.size || item.color) && <p className="mt-1 text-xs text-market-muted">{[item.size && `Size: ${item.size}`, item.color && `Color: ${item.color}`].filter(Boolean).join(" · ")}</p>}</div>
                     <p className="shrink-0 text-sm text-market-ink">{formatCurrency(unitPrice * item.quantity)}</p>

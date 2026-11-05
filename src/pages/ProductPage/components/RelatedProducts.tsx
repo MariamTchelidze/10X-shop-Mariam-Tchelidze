@@ -5,6 +5,7 @@ import { fetchProducts } from "../../../api/products";
 import { useRealm } from "../../../context/RealmContext";
 import type { Product } from "../../../types/product";
 import { discountedPrice } from "../../../utils/product";
+import { ProductImage } from "../../../components/ProductImage/ProductImage";
 
 interface RelatedProductsProps {
   product: Product;
@@ -46,7 +47,7 @@ export function RelatedProducts({ product }: RelatedProductsProps) {
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5">
         {products.map((related) => (
           <Link key={related.id} to={`/products/${related.id}`} className="group min-w-0">
-            <img src={related.thumbnail} alt={related.title} loading="lazy" width={600} height={800} className="aspect-[3/4] w-full bg-market-surface object-cover" />
+            <ProductImage src={related.thumbnail} alt={related.title} loading="lazy" width={600} height={800} className="aspect-[3/4] w-full bg-market-surface object-cover" />
             <h3 className="mt-3 truncate text-xs text-market-ink group-hover:underline">{related.title}</h3>
             <p className="mt-1 text-xs text-market-muted">
               {formatCurrency(discountedPrice(related.price, related.discountPercentage))}

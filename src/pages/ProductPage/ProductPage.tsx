@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { fetchProductById } from "../../api/products";
 import { ProductReviewsContainer } from "../../components/ProductReviews/ProductReviewsContainer";
+import { ProductImage } from "../../components/ProductImage/ProductImage";
 import type { Product } from "../../types/product";
 import { ProductInfoPanel } from "./components/ProductInfoPanel";
 import { RelatedProducts } from "./components/RelatedProducts";
@@ -88,11 +89,12 @@ export function ProductPage() {
       </Link>
       <div className="grid gap-8 md:grid-cols-2 md:gap-12">
         <div className="bg-market-surface">
-          <img
+          <ProductImage
             src={product.thumbnail}
             alt={product.title}
             width={900}
             height={1100}
+            loading="eager"
             className="aspect-[4/5] w-full object-cover"
           />
         </div>

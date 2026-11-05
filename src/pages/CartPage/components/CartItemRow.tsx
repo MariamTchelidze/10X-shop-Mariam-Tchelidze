@@ -2,6 +2,7 @@
 import { Link } from "react-router";
 import type { CartItem } from "../../../types/cart";
 import { discountedPrice, lineTotal } from "../../../utils/product";
+import { ProductImage } from "../../../components/ProductImage/ProductImage";
 
 // Props აღწერს მონაცემებსა და მოქმედებებს, რომლებსაც მშობელი კომპონენტი გადასცემს.
 interface CartItemRowProps {
@@ -25,7 +26,7 @@ export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQua
     <li className="flex gap-4 py-5 sm:gap-6">
       {/* სურათზე დაჭერით პროდუქტის დეტალების გვერდზე გადავალთ. */}
       <Link to={`/products/${item.productId}`} className="w-24 shrink-0 bg-market-surface sm:w-32">
-        <img
+        <ProductImage
           src={item.thumbnail}
           alt={item.title}
           loading="lazy"

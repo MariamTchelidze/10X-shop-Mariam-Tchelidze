@@ -23,6 +23,7 @@ LOTR Shop (Middle-earth Market) is a responsive single-page storefront built wit
 - **Evidence:** `npm run typecheck`, `npm run lint`, and `npm run build` pass; known debugging examples are recorded in [DEBUG-LOG.md](./DEBUG-LOG.md).
 - **Release check:** The `vercel.json` SPA rewrite is present on `main` and was pushed. The current Vercel URL redirects anonymous requests for both `/` and `/products/93` to Vercel SSO, so the app shell and nested-route behavior remain unverified; see [COMPATIBILITY.md](./COMPATIBILITY.md).
 - **Browser check:** Chrome responsive emulation was checked at 375px for catalog, product details, cart, checkout, and profile, and at 1025px for the header/widget layout. Login validation and invalid-route handling were also checked in Chrome. Firefox, physical-device checks, and compatibility screenshots remain outstanding; see [COMPATIBILITY.md](./COMPATIBILITY.md).
+- **Mobile and image follow-up:** The reported 375px hero overlap was addressed, auth prompt links now close the prompt while navigating, and image errors have an accessible fallback. Hero image delivery was reduced from about 14.4 MB of PNGs to about 2.0 MB of JPEGs; the displayed header logo was reduced from 2.2 MB to 164 KB. Post-change Firefox screenshots and remote CDN behavior are not yet verified.
 
 ## FULL features implemented
 

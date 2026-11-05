@@ -119,7 +119,7 @@ export function Header() {
 
           {/* მთავარ გვერდზე გადამსვლელი ლოგო მობილურისთვის. */}
           <Link to="/" aria-label="Middle-earth Market home" className="shrink-0 rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink">
-            <img src="/images/Logo.png" alt="Middle-earth Market" width={1254} height={1254} className="h-10 w-10 object-contain sm:h-11 sm:w-11" />
+            <img src="/images/Logo-optimized.png" alt="Middle-earth Market" width={256} height={256} decoding="async" className="h-10 w-10 object-contain sm:h-11 sm:w-11" />
           </Link>
           {/* კალათის გვერდზე გადასვლის ღილაკი რაოდენობის მაჩვენებლით. */}
           <Link
@@ -175,10 +175,11 @@ export function Header() {
           className="justify-self-center rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
         >
           <img
-            src="/images/Logo.png"
+            src="/images/Logo-optimized.png"
             alt="Middle-earth Market"
-            width={1254}
-            height={1254}
+            width={256}
+            height={256}
+            decoding="async"
             className="h-11 w-11 object-contain sm:h-12 sm:w-12 lg:h-14 lg:w-14"
           />
         </Link>
