@@ -1,6 +1,6 @@
 // პროდუქტის დეტალებს იტვირთავს და შეფასებებთან ერთად აჩვენებს.
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useLocation, useParams } from "react-router";
 import { fetchProductById } from "../../api/products";
 import { ProductReviewsContainer } from "../../components/ProductReviews/ProductReviewsContainer";
 import { ProductImage } from "../../components/ProductImage/ProductImage";
@@ -9,8 +9,20 @@ import { ProductInfoPanel } from "./components/ProductInfoPanel";
 import { RelatedProducts } from "./components/RelatedProducts";
 import { NotFoundPage } from "../NotFoundPage/NotFoundPage";
 
+function getCatalogReturnTo(state: unknown): string {
+  if (typeof state !== "object" || state === null || !("from" in state)) return "/";
+
+  const destination = state.from;
+  // Վերադարձի համար ընդունում ենք միայն կատալոգի ներքին հասցեն ու դրա query պարամետրերը։
+  return typeof destination === "string" && (destination === "/" || destination.startsWith("/?"))
+    ? destination
+    : "/";
+}
+
 export function ProductPage() {
   const { id } = useParams();
+  const location = useLocation();
+  const catalogReturnTo = getCatalogReturnTo(location.state);
   const productId = Number(id);
   const isValidId = Number.isInteger(productId) && productId > 0;
   const [product, setProduct] = useState<Product | null>(null);
@@ -84,7 +96,7 @@ export function ProductPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-      <Link to="/" className="mb-6 inline-flex min-h-11 items-center text-xs uppercase tracking-[0.14em] text-market-muted hover:text-market-ink">
+      <Link to={catalogReturnTo} className="mb-6 inline-flex min-h-11 items-center text-xs uppercase tracking-[0.14em] text-market-muted hover:text-market-ink">
         ← Back to catalog
       </Link>
       <div className="grid gap-8 md:grid-cols-2 md:gap-12">
@@ -101,7 +113,7 @@ export function ProductPage() {
         <ProductInfoPanel product={product} />
       </div>
       <ProductReviewsContainer product={product} />
-      <RelatedProducts product={product} />
+      <RelatedProducts product={product} catalogReturnTo={catalogReturnTo} />
     </main>
   );
 }

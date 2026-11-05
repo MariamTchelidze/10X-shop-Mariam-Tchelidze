@@ -9,9 +9,10 @@ import { ProductImage } from "../../../components/ProductImage/ProductImage";
 
 interface RelatedProductsProps {
   product: Product;
+  catalogReturnTo: string;
 }
 
-export function RelatedProducts({ product }: RelatedProductsProps) {
+export function RelatedProducts({ product, catalogReturnTo }: RelatedProductsProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const { formatCurrency } = useRealm();
 
@@ -46,7 +47,7 @@ export function RelatedProducts({ product }: RelatedProductsProps) {
       <h2 id="related-heading" className="font-display text-2xl text-market-ink">You may also like</h2>
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5">
         {products.map((related) => (
-          <Link key={related.id} to={`/products/${related.id}`} className="group min-w-0">
+          <Link key={related.id} to={`/products/${related.id}`} state={{ from: catalogReturnTo }} className="group min-w-0">
             <ProductImage src={related.thumbnail} alt={related.title} loading="lazy" width={600} height={800} className="aspect-[3/4] w-full bg-market-surface object-cover" />
             <h3 className="mt-3 truncate text-xs text-market-ink group-hover:underline">{related.title}</h3>
             <p className="mt-1 text-xs text-market-muted">

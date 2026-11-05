@@ -1,6 +1,6 @@
 // კატალოგის პროდუქტის ბარათს, სწრაფ დამატებასა და დამხმარე ფანჯრებს მართავს.
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useRealm } from "../../context/RealmContext";
@@ -16,6 +16,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const location = useLocation();
   const { addItem } = useCart();
   const { formatCurrency } = useRealm();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -67,6 +68,7 @@ export function ProductCard({ product }: ProductCardProps) {
     <article className={`group relative min-w-0 ${isQuickViewOpen || isStockAlertOpen ? "z-[60]" : ""}`}>
       <Link
         to={`/products/${product.id}`}
+        state={{ from: location.pathname === "/" ? `${location.pathname}${location.search}` : "/" }}
         aria-label={`View ${product.title} details`}
         className="absolute inset-0 z-10 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
       />
