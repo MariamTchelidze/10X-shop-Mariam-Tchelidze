@@ -19,12 +19,13 @@ This matrix records the status of the Appendix A CORE checks. The Chrome checks 
 
 | Check | Result |
 | --- | --- |
-| Vercel URL listed in README | Present. After pushing the current `main` commit, both the root and nested route redirected to Vercel SSO login instead of returning the app shell. |
-| Direct `/products/93` navigation | Inconclusive: Vercel returned its login page, so the SPA response and the `vercel.json` rewrite could not be inspected anonymously. |
-| Refresh on a deployed nested route | Inconclusive for the same Vercel SSO redirect; repeated direct requests returned the login page. |
+| Deployment URL supplied in chat | [Open deployment](https://treasures-of-middle-earth-bsu8k7jch-mariam-tchelidze-s-projects.vercel.app/?page=1). Checked on 2026-11-05. |
+| Direct `/` request | Returned HTTP 200 with the page title `Login – Vercel`; the application shell was not returned. |
+| Direct `/products/93` request | Returned HTTP 200 with the page title `Login – Vercel`; the application shell and SPA rewrite could not be inspected. |
+| Refresh on a deployed route | Not verifiable: the Vercel login gate appears before either application route is served. |
 | Compatibility screenshots under `docs/compat/` | Not present. |
 
-Firefox verification, physical-device checks, and compatibility screenshots remain outstanding. The Firefox window was present, but the Windows browser-control policy stopped further UI inspection because it could not enforce the current browser URL policy. The user-facing Vercel deployment is protected by SSO, so its SPA rewrite must be retested from an allowed public URL or after its access configuration is made testable. No credentials or security controls were bypassed.
+Firefox verification, physical-device checks, and compatibility screenshots remain outstanding. The Firefox window was present, but the Windows browser-control policy stopped further UI inspection because it could not enforce the current browser URL policy. The supplied Vercel deployment is protected by a login gate, so its SPA rewrite must be retested after the deployment is publicly accessible. No credentials or security controls were bypassed.
 
 ## Latest 375px screenshot audit
 
