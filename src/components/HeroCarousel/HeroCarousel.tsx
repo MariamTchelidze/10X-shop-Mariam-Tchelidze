@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { ProductImage } from "../ProductImage/ProductImage";
 
 const slides = [
-  { src: "/images/Dark-side-warriors-at-the-bazaar.jpg", alt: "Dark-side warriors among the Middle-earth bazaar stalls", position: "center 42%" },
-  { src: "/images/dwarves-at-the-bazaar.jpg", alt: "Dwarves exploring a bazaar of handcrafted wares", position: "center 45%" },
-  { src: "/images/Wizards-at-the-bazaar.jpg", alt: "Wizards at a lantern-lit bazaar", position: "center 40%" },
-  { src: "/images/Hoobits-at-bazaar.jpg", alt: "Hobbits browsing a lively village bazaar", position: "center 45%" },
-  { src: "/images/men-at-the-bazaar.jpg", alt: "Travelers at a Middle-earth bazaar", position: "center 45%" },
+  { src: "/images/Dark-side-warriors-at-the-bazaar.jpg", webp: "Dark-side-warriors-at-the-bazaar.webp", alt: "Dark-side warriors among the Middle-earth bazaar stalls", position: "center 42%" },
+  { src: "/images/dwarves-at-the-bazaar.jpg", webp: "dwarves-at-the-bazaar.webp", alt: "Dwarves exploring a bazaar of handcrafted wares", position: "center 45%" },
+  { src: "/images/Wizards-at-the-bazaar.jpg", webp: "Wizards-at-the-bazaar.webp", alt: "Wizards at a lantern-lit bazaar", position: "center 40%" },
+  { src: "/images/Hoobits-at-bazaar.jpg", webp: "Hoobits-at-bazaar.webp", alt: "Hobbits browsing a lively village bazaar", position: "center 45%" },
+  { src: "/images/men-at-the-bazaar.jpg", webp: "men-at-the-bazaar.webp", alt: "Travelers at a Middle-earth bazaar", position: "center 45%" },
 ] as const;
 
 const treasures = [
@@ -75,9 +75,11 @@ export function HeroCarousel() {
           <ProductImage
             key={slide.src}
             src={slide.src}
+            webpSrcSet={`/images/hero-700/${slide.webp} 700w, /images/hero-1400/${slide.webp} 1400w`}
+            sizes="100vw"
             alt={slide.alt}
-            width={1672}
-            height={941}
+            width={1400}
+            height={788}
             loading={index === activeIndex ? "eager" : "lazy"}
             fetchPriority={index === activeIndex ? "high" : "auto"}
             ariaHidden={index !== activeIndex}

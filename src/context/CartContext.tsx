@@ -5,7 +5,7 @@ import type { CartItem, CartState, CartVariants } from "../types/cart";
 import { useToast } from "./ToastContext";
 import { useInventory } from "./InventoryContext";
 import { readCartState, saveCartState } from "../utils/cartStorage";
-import { lineTotal } from "../utils/product";
+import { calculateCartTotals, normalizePromoCode } from "../utils/cart";
 
 interface CartContextValue {
   items: CartItem[];
@@ -125,8 +125,9 @@ export function CartProvider({ children }: CartProviderProps) {
   };
 
   const applyPromoCode = (code: string): boolean => {
-    if (code.trim().toUpperCase() !== "10X10") return false;
-    setCart((current) => ({ ...current, promoCode: "10X10" }));
+    const normalizedCode = normalizePromoCode(code);
+    if (!normalizedCode) return false;
+    setCart((current) => ({ ...current, promoCode: normalizedCode }));
     return true;
   };
 
@@ -143,12 +144,7 @@ export function CartProvider({ children }: CartProviderProps) {
 
   // Header-ის badge და შეჯამება კალათის მიმდინარე მონაცემებიდან გამოითვლება.
   const itemCount = items.reduce((count, item) => count + item.quantity, 0);
-  const subtotal = items.reduce(
-    (sum, item) => sum + lineTotal(item.price, item.discountPercentage, item.quantity),
-    0,
-  );
-  const discount = promoCode === "10X10" ? Number((subtotal * 0.1).toFixed(2)) : 0;
-  const total = Math.max(0, subtotal - discount);
+  const { subtotal, discount, total } = calculateCartTotals(items, promoCode);
   const value: CartContextValue = {
     items,
     promoCode,

@@ -1,6 +1,6 @@
 import { WidgetPopover } from "../FloatingWidgets/WidgetPopover";
-import { VaultCalculatorPanel } from "./VaultCalculatorPanel";
+import { VaultCalculatorPanel, WidgetPanelLoader } from "../FloatingWidgets/WidgetPanelLoader";
 
 export function MithrilVaultCalculator() {
-  return <WidgetPopover id="mithril-vault" label="Mithril Vault" icon="◉" align="left"><VaultCalculatorPanel /></WidgetPopover>;
+  return <WidgetPopover id="mithril-vault" label="Mithril Vault" icon="◉" align="left"><WidgetPanelLoader><VaultCalculatorPanel /></WidgetPanelLoader></WidgetPopover>;
 }

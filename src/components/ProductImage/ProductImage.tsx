@@ -2,6 +2,8 @@ import { useEffect, useState, type CSSProperties, type ImgHTMLAttributes } from 
 
 interface ProductImageProps {
   src: string;
+  webpSrcSet?: string;
+  sizes?: string;
   alt: string;
   width: number;
   height: number;
@@ -13,7 +15,7 @@ interface ProductImageProps {
 }
 
 // სურათის ჩატვირთვას მართავს და შეცდომისას გატეხილი ხატის ნაცვლად placeholder-ს აჩვენებს.
-export function ProductImage({ src, alt, width, height, className, loading = "lazy", fetchPriority = "auto", style, ariaHidden }: ProductImageProps) {
+export function ProductImage({ src, webpSrcSet, sizes, alt, width, height, className, loading = "lazy", fetchPriority = "auto", style, ariaHidden }: ProductImageProps) {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => setHasError(false), [src]);
@@ -32,7 +34,7 @@ export function ProductImage({ src, alt, width, height, className, loading = "la
     );
   }
 
-  return (
+  const image = (
     <img
       src={src}
       alt={alt}
@@ -47,4 +49,11 @@ export function ProductImage({ src, alt, width, height, className, loading = "la
       style={style}
     />
   );
+
+  return webpSrcSet ? (
+    <picture className="contents">
+      <source type="image/webp" srcSet={webpSrcSet} sizes={sizes} />
+      {image}
+    </picture>
+  ) : image;
 }

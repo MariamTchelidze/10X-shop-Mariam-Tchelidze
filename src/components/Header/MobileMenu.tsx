@@ -5,9 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useWidgets, type WidgetId } from "../../context/WidgetContext";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import { RealmSelector } from "./RealmSelector";
-import { EaglePostPanel } from "../EaglePostWidget/EaglePostPanel";
-import { CouncilPanel } from "../CouncilSupport/CouncilPanel";
-import { VaultCalculatorPanel } from "../MithrilVaultCalculator/VaultCalculatorPanel";
+import { CouncilPanel, EaglePostPanel, VaultCalculatorPanel, WidgetPanelLoader } from "../FloatingWidgets/WidgetPanelLoader";
 
 const widgetActions: { id: WidgetId; label: string; icon: string }[] = [
   { id: "eagle-post", label: "Eagle Post", icon: "⌁" },
@@ -152,9 +150,11 @@ export function MobileMenu() {
                       <span className="text-[10px] uppercase tracking-[0.14em] text-market-muted">Widget panel</span>
                       <button type="button" onClick={closeWidget} className="inline-flex h-10 w-10 items-center justify-center text-xl text-market-muted hover:text-market-ink focus-visible:outline-2 focus-visible:outline-gold" aria-label="Close widget panel">×</button>
                     </div>
-                    {activeWidget === "eagle-post" && <EaglePostPanel />}
-                    {activeWidget === "council" && <CouncilPanel />}
-                    {activeWidget === "mithril-vault" && <VaultCalculatorPanel />}
+                    <WidgetPanelLoader>
+                      {activeWidget === "eagle-post" && <EaglePostPanel />}
+                      {activeWidget === "council" && <CouncilPanel />}
+                      {activeWidget === "mithril-vault" && <VaultCalculatorPanel />}
+                    </WidgetPanelLoader>
                   </div>
                 )}
               </section>

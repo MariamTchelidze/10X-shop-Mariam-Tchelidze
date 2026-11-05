@@ -58,7 +58,7 @@ Product catalog data comes from the [DummyJSON Products API](https://dummyjson.c
 
 ### Prerequisites
 
-- Node.js 20 or newer
+- Node.js 20 or newer for the Vite app (Node.js 22.15 or newer for `npm test`, which uses Node's built-in TypeScript loader)
 - npm
 - Git
 
@@ -77,6 +77,7 @@ Open the local URL printed by Vite in your terminal.
 
 ```bash
 npm run typecheck
+npm test
 npm run build
 ```
 
@@ -92,6 +93,7 @@ npm run preview
 | --- | --- |
 | `npm run dev` | Start the Vite development server. |
 | `npm run typecheck` | Run the strict TypeScript project check. |
+| `npm test` | Run the built-in Node tests for catalog requests, promo totals, stock labels, and order status. |
 | `npm run build` | Type-check and generate the production bundle. |
 | `npm run preview` | Preview the generated production bundle. |
 | `npm run lint` | Run ESLint. |

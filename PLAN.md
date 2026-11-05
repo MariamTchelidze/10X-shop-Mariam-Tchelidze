@@ -40,8 +40,8 @@ Complete the required CORE storefront flow first, then implement FULL and BONUS 
 
 ## Additional scope
 
-After CORE completion, the project added URL-synced catalog filtering, wishlist, reviews, related products, promo codes, profile and order history, theme and realm selection, stock alerts, quick view, and footer/help pages. Floating support widgets were removed; see [REPORT.md](./REPORT.md) for the current feature summary.
+After CORE completion, the project added URL-synced catalog filtering, wishlist, reviews, related products, promo codes, profile and order history, theme and realm selection, stock alerts, quick view, footer/help pages, and responsive support widgets. See [REPORT.md](./REPORT.md) for the current feature summary and the FULL regression/performance work.
 
 ## Remaining release check
 
-The README contains the Vercel demo URL. Confirm that the deployment is reachable and that refreshing a nested route returns the SPA entry point; live hosting behavior cannot be established by the local build alone.
+The README contains the Vercel demo URL. Confirm that the deployment is reachable and that refreshing a nested route returns the SPA entry point; live hosting behavior cannot be established by the local build alone. The current local Lighthouse run scores 89 Performance (target: 85) and is archived under `docs/lighthouse/`; repeat the audit against the deployed URL before claiming the production performance target.

@@ -1,15 +1,17 @@
 // კატალოგის პროდუქტის ბარათს, სწრაფ დამატებასა და დამხმარე ფანჯრებს მართავს.
-import { useState, type FormEvent } from "react";
+import { lazy, Suspense, useState, type FormEvent } from "react";
 import { Link, useLocation } from "react-router";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useRealm } from "../../context/RealmContext";
 import { useInventory } from "../../context/InventoryContext";
-import { QuickViewModal } from "../QuickViewModal/QuickViewModal";
-import { StockAlertModal } from "../StockAlert/StockAlertModal";
 import { ProductImage } from "../ProductImage/ProductImage";
 import type { Product } from "../../types/product";
 import { discountedPrice, getStockStatus } from "../../utils/product";
+
+// ეს იშვიათად გახსნადი ფანჯრები ცალკე chunk-ებად იტვირთება და საწყის bundle-ს ამცირებს.
+const QuickViewModal = lazy(() => import("../QuickViewModal/QuickViewModal").then((module) => ({ default: module.QuickViewModal })));
+const StockAlertModal = lazy(() => import("../StockAlert/StockAlertModal").then((module) => ({ default: module.StockAlertModal })));
 
 interface ProductCardProps {
   product: Product;
@@ -161,8 +163,16 @@ export function ProductCard({ product }: ProductCardProps) {
         </p>
         <button type="button" onClick={() => setIsQuickViewOpen(true)} className="relative z-20 inline-flex min-h-11 items-center pt-1 text-[10px] uppercase tracking-[0.14em] text-market-muted underline underline-offset-4 transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Scry Artifact</button>
       </div>
-      {isQuickViewOpen && <QuickViewModal product={product} onClose={() => setIsQuickViewOpen(false)} />}
-      {isStockAlertOpen && <StockAlertModal product={product} onClose={() => setIsStockAlertOpen(false)} />}
+      {isQuickViewOpen && (
+        <Suspense fallback={null}>
+          <QuickViewModal product={product} onClose={() => setIsQuickViewOpen(false)} />
+        </Suspense>
+      )}
+      {isStockAlertOpen && (
+        <Suspense fallback={null}>
+          <StockAlertModal product={product} onClose={() => setIsStockAlertOpen(false)} />
+        </Suspense>
+      )}
     </article>
   );
 }

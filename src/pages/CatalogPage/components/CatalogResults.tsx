@@ -2,6 +2,7 @@
 import type { Product } from "../../../types/product";
 import { Pagination } from "../../../components/Pagination/Pagination";
 import { ProductGrid } from "../../../components/ProductGrid/ProductGrid";
+import { ProductGridSkeleton } from "../../../components/ProductGrid/ProductGridSkeleton";
 
 interface CatalogResultsProps {
   products: Product[];
@@ -28,11 +29,7 @@ export function CatalogResults({
 }: CatalogResultsProps) {
   // ჩატვირთვის, შეცდომისა და ცარიელი შედეგის UI ერთ კომპონენტში განისაზღვრება.
   if (isLoading) {
-    return (
-      <p className="py-16 text-center text-sm text-market-muted" role="status">
-        Loading products…
-      </p>
-    );
+    return <ProductGridSkeleton />;
   }
 
   if (error) {

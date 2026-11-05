@@ -1,12 +1,14 @@
 // პროდუქტის მოკლე დეტალებს მოდალურ ფანჯარაში აჩვენებს.
-import { useEffect, useRef, useState, type FormEvent, type MouseEvent } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { useCart } from "../../context/CartContext";
 import { useRealm } from "../../context/RealmContext";
 import { useInventory } from "../../context/InventoryContext";
 import type { Product } from "../../types/product";
 import { discountedPrice, getStockStatus } from "../../utils/product";
-import { StockAlertModal } from "../StockAlert/StockAlertModal";
 import { ProductImage } from "../ProductImage/ProductImage";
+
+// მარაგის შეტყობინების ფორმას მხოლოდ out-of-stock სცენარში ვტვირთავთ.
+const StockAlertModal = lazy(() => import("../StockAlert/StockAlertModal").then((module) => ({ default: module.StockAlertModal })));
 
 interface QuickViewModalProps {
   product: Product;
@@ -131,7 +133,11 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
           </form>
         </div>
       </section>
-      {isStockAlertOpen && <StockAlertModal product={product} onClose={() => setIsStockAlertOpen(false)} />}
+      {isStockAlertOpen && (
+        <Suspense fallback={null}>
+          <StockAlertModal product={product} onClose={() => setIsStockAlertOpen(false)} />
+        </Suspense>
+      )}
     </div>
   );
 }

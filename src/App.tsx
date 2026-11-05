@@ -13,8 +13,8 @@ import { ErrorBoundary } from "./components/ErrorBoundary/ErrorBoundary";
 import { ScrollToTop } from "./components/ScrollToTop/ScrollToTop";
 import { FloatingWidgetDock } from "./components/FloatingWidgets/FloatingWidgetDock";
 import { WidgetProvider } from "./context/WidgetContext";
+import { CatalogPage } from "./pages/CatalogPage/CatalogPage";
 
-const CatalogPage = lazy(() => import("./pages/CatalogPage/CatalogPage").then((module) => ({ default: module.CatalogPage })));
 const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage").then((module) => ({ default: module.LoginPage })));
 const ProductPage = lazy(() => import("./pages/ProductPage/ProductPage").then((module) => ({ default: module.ProductPage })));
 const CartPage = lazy(() => import("./pages/CartPage/CartPage").then((module) => ({ default: module.CartPage })));
