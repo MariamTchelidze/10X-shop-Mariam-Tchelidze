@@ -69,7 +69,7 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
         <span className="text-market-ink" aria-label={`Rated ${product.rating} out of 5`}>
-          ★ {product.rating.toFixed(1)}
+          ★ {product.rating.toFixed(1)} · {product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"}
         </span>
         <span className={stockStatus.className}>{stockStatus.message}</span>
       </div>

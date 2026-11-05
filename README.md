@@ -33,7 +33,6 @@ Product catalog data comes from the [DummyJSON Products API](https://dummyjson.c
 - **The Shire** light theme and **Mordor** dark theme, with a saved theme preference.
 - Cinzel display typography and Lora-inspired editorial styling.
 - Realm and currency selector with realm-specific conversion rates.
-- Responsive floating tools on desktop, with their actions available from the mobile menu.
 
 ### Accounts and saved items
 

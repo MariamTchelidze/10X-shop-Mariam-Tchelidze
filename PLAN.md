@@ -40,7 +40,7 @@ Complete the required CORE storefront flow first, then implement FULL and BONUS 
 
 ## Additional scope
 
-After CORE completion, the project added URL-synced catalog filtering, wishlist, reviews, related products, promo codes, profile and order history, theme and realm selection, stock alerts, quick view, support widgets, and footer/help pages. See [REPORT.md](./REPORT.md) for the complete feature summary.
+After CORE completion, the project added URL-synced catalog filtering, wishlist, reviews, related products, promo codes, profile and order history, theme and realm selection, stock alerts, quick view, and footer/help pages. Floating support widgets were removed; see [REPORT.md](./REPORT.md) for the current feature summary.
 
 ## Remaining release check
 

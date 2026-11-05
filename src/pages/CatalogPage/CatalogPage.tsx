@@ -140,7 +140,7 @@ export function CatalogPage() {
     <main className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 sm:pb-14 lg:px-8">
       <HeroCarousel />
       <header className="mb-7 flex items-end justify-between gap-4 border-b border-market-border pb-5 sm:mb-8">
-        <h2 className="font-display text-3xl text-market-ink sm:text-4xl">Browse the realm</h2>
+        <h2 className="font-display text-3xl text-market-ink sm:text-4xl">Catalog</h2>
         {!isLoading && !error && (
           <p className="text-right text-[10px] uppercase tracking-[0.12em] text-market-muted sm:text-xs">
             {total === 0 ? "0 items" : `Showing ${firstResult}–${lastResult} of ${total}`}
