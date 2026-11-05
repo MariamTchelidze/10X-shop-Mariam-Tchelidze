@@ -42,13 +42,21 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
 
   return (
     <section className="flex flex-col items-start py-2 md:py-8">
-      <Link
-        to={`/?category=${encodeURIComponent(product.category)}&page=1`}
-        aria-label={`Browse products in ${product.category}`}
-        className="inline-flex min-h-11 items-center text-xs uppercase tracking-[0.16em] text-market-muted underline underline-offset-4 transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
-      >
-        {product.category}
-      </Link>
+      <div className="flex min-h-11 flex-wrap items-center gap-x-3 text-xs uppercase tracking-[0.16em] text-market-muted">
+        <Link
+          to={`/?category=${encodeURIComponent(product.category)}&page=1`}
+          aria-label={`Browse products in ${product.category}`}
+          className="inline-flex min-h-11 items-center underline underline-offset-4 transition-colors hover:text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+        >
+          {product.category}
+        </Link>
+        {product.brand && (
+          <span className="inline-flex min-h-11 items-center" aria-label={`Brand: ${product.brand}`}>
+            <span aria-hidden="true" className="mr-3 text-market-border">·</span>
+            {product.brand}
+          </span>
+        )}
+      </div>
       <h1 className="mt-3 font-display text-3xl text-market-ink sm:text-4xl">{product.title}</h1>
       <div className="mt-5 flex flex-wrap items-center gap-3">
         <p className="text-base text-market-ink">{formatCurrency(price)}</p>
