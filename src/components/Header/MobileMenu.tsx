@@ -2,19 +2,31 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useWidgets, type WidgetId } from "../../context/WidgetContext";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import { RealmSelector } from "./RealmSelector";
+import { EaglePostPanel } from "../EaglePostWidget/EaglePostPanel";
+import { CouncilPanel } from "../CouncilSupport/CouncilPanel";
+import { VaultCalculatorPanel } from "../MithrilVaultCalculator/VaultCalculatorPanel";
+
+const widgetActions: { id: WidgetId; label: string; icon: string }[] = [
+  { id: "eagle-post", label: "Eagle Post", icon: "⌁" },
+  { id: "mithril-vault", label: "Mithril Vault", icon: "◉" },
+  { id: "council", label: "Ask the Council", icon: "❧" },
+];
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { activeWidget, toggleWidget, closeWidget } = useWidgets();
 
   // მისამართის შეცვლისას მობილურ მენიუს ვხურავთ.
   const closeMenu = useCallback(() => {
     setIsOpen(false);
-  }, []);
+    closeWidget();
+  }, [closeWidget]);
 
   useEffect(() => {
     closeMenu();
@@ -116,6 +128,37 @@ export function MobileMenu() {
             <section className="mt-5 border-t border-market-border pt-4" aria-label="Realm and currency selector">
               <RealmSelector showLabel />
             </section>
+
+            {location.pathname !== "/login" && (
+              <section className="mt-5 border-t border-market-border pt-4" aria-label="Realm tools">
+                <h2 className="mb-3 font-display text-xs uppercase tracking-[0.16em] text-gold">Realm tools</h2>
+                <div className="grid gap-2 sm:grid-cols-3">
+                  {widgetActions.map((widget) => (
+                    <button
+                      key={widget.id}
+                      type="button"
+                      aria-expanded={activeWidget === widget.id}
+                      onClick={() => toggleWidget(widget.id)}
+                      className={`flex min-h-12 items-center gap-3 border px-3 text-left text-xs uppercase tracking-[0.1em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${activeWidget === widget.id ? "border-gold bg-market-surface text-market-ink" : "border-market-border text-market-muted hover:text-market-ink"}`}
+                    >
+                      <span aria-hidden="true" className="text-base text-gold">{widget.icon}</span>
+                      {widget.label}
+                    </button>
+                  ))}
+                </div>
+                {activeWidget && (
+                  <div className="mt-4 border border-market-border bg-market-paper p-4 shadow-sm">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <span className="text-[10px] uppercase tracking-[0.14em] text-market-muted">Widget panel</span>
+                      <button type="button" onClick={closeWidget} className="inline-flex h-10 w-10 items-center justify-center text-xl text-market-muted hover:text-market-ink focus-visible:outline-2 focus-visible:outline-gold" aria-label="Close widget panel">×</button>
+                    </div>
+                    {activeWidget === "eagle-post" && <EaglePostPanel />}
+                    {activeWidget === "council" && <CouncilPanel />}
+                    {activeWidget === "mithril-vault" && <VaultCalculatorPanel />}
+                  </div>
+                )}
+              </section>
+            )}
           </div>
         </aside>
       )}

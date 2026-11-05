@@ -11,6 +11,8 @@ import { InventoryProvider } from "./context/InventoryContext";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import { ErrorBoundary } from "./components/ErrorBoundary/ErrorBoundary";
 import { ScrollToTop } from "./components/ScrollToTop/ScrollToTop";
+import { FloatingWidgetDock } from "./components/FloatingWidgets/FloatingWidgetDock";
+import { WidgetProvider } from "./context/WidgetContext";
 
 const CatalogPage = lazy(() => import("./pages/CatalogPage/CatalogPage").then((module) => ({ default: module.CatalogPage })));
 const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage").then((module) => ({ default: module.LoginPage })));
@@ -41,15 +43,18 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage").then
 // ყველა მარშრუტისთვის საერთო Header-სა და Footer-ს აწყობს.
 function AppLayout() {
   return (
-    <div className="flex min-h-screen flex-col bg-market-paper">
-      <Header />
-      <div className="flex-1">
-        <Suspense fallback={<main className="mx-auto w-full max-w-7xl px-4 py-16 text-center text-sm text-market-muted" role="status" aria-live="polite">Loading page…</main>}>
-          <Outlet />
-        </Suspense>
+    <>
+      <div className="flex min-h-screen flex-col bg-market-paper">
+        <Header />
+        <div className="flex-1">
+          <Suspense fallback={<main className="mx-auto w-full max-w-7xl px-4 py-16 text-center text-sm text-market-muted" role="status" aria-live="polite">Loading page…</main>}>
+            <Outlet />
+          </Suspense>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+      <FloatingWidgetDock />
+    </>
   );
 }
 
@@ -60,6 +65,7 @@ export function App() {
       <AuthProvider>
         <ToastProvider>
           <RealmProvider>
+          <WidgetProvider>
           <WishlistProvider>
           <InventoryProvider>
           <CartProvider>
@@ -104,6 +110,7 @@ export function App() {
           </CartProvider>
           </InventoryProvider>
           </WishlistProvider>
+          </WidgetProvider>
           </RealmProvider>
         </ToastProvider>
       </AuthProvider>
