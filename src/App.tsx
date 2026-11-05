@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import { Footer } from "./components/Footer/Footer";
 import { Header } from "./components/Header/Header";
@@ -5,38 +6,37 @@ import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { ToastProvider } from "./context/ToastContext";
 import { WishlistProvider } from "./context/WishlistContext";
-import { CartPage } from "./pages/CartPage/CartPage";
-import { CatalogPage } from "./pages/CatalogPage/CatalogPage";
-import { CheckoutPage } from "./pages/CheckoutPage/CheckoutPage";
-import { LoginPage } from "./pages/LoginPage/LoginPage";
-import { ProductPage } from "./pages/ProductPage/ProductPage";
-import { OrdersPage } from "./pages/OrdersPage/OrdersPage";
-import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
-import { WishlistPage } from "./pages/WishlistPage/WishlistPage";
-import { OrderSuccessPage } from "./pages/OrderSuccessPage/OrderSuccessPage";
-import { HelpCenterPage } from "./pages/HelpCenterPage/HelpCenterPage";
 import { RealmProvider } from "./context/RealmContext";
 import { InventoryProvider } from "./context/InventoryContext";
-import {
-  AboutUsPage,
-  CancelSubscriptionPage,
-  DeliveriesPage,
-  GiftCardPage,
-  GiftTicketPage,
-  GuestPurchasePage,
-  OurStoresPage,
-  PaymentsPage,
-  ReturnGuestPage,
-  ReturnsPage,
-  SearchReceiptPage,
-  ShopOnlinePage,
-  WifiConnectionPage,
-  WorkWithUsPage,
-} from "./pages/FooterPages/FooterPages";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import { ErrorBoundary } from "./components/ErrorBoundary/ErrorBoundary";
 import { ScrollToTop } from "./components/ScrollToTop/ScrollToTop";
-import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
+
+const CatalogPage = lazy(() => import("./pages/CatalogPage/CatalogPage").then((module) => ({ default: module.CatalogPage })));
+const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage").then((module) => ({ default: module.LoginPage })));
+const ProductPage = lazy(() => import("./pages/ProductPage/ProductPage").then((module) => ({ default: module.ProductPage })));
+const CartPage = lazy(() => import("./pages/CartPage/CartPage").then((module) => ({ default: module.CartPage })));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage/CheckoutPage").then((module) => ({ default: module.CheckoutPage })));
+const OrdersPage = lazy(() => import("./pages/OrdersPage/OrdersPage").then((module) => ({ default: module.OrdersPage })));
+const ProfilePage = lazy(() => import("./pages/ProfilePage/ProfilePage").then((module) => ({ default: module.ProfilePage })));
+const WishlistPage = lazy(() => import("./pages/WishlistPage/WishlistPage").then((module) => ({ default: module.WishlistPage })));
+const OrderSuccessPage = lazy(() => import("./pages/OrderSuccessPage/OrderSuccessPage").then((module) => ({ default: module.OrderSuccessPage })));
+const HelpCenterPage = lazy(() => import("./pages/HelpCenterPage/HelpCenterPage").then((module) => ({ default: module.HelpCenterPage })));
+const ShopOnlinePage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.ShopOnlinePage })));
+const PaymentsPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.PaymentsPage })));
+const DeliveriesPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.DeliveriesPage })));
+const ReturnsPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.ReturnsPage })));
+const ReturnGuestPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.ReturnGuestPage })));
+const GiftCardPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.GiftCardPage })));
+const SearchReceiptPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.SearchReceiptPage })));
+const GuestPurchasePage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.GuestPurchasePage })));
+const GiftTicketPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.GiftTicketPage })));
+const WifiConnectionPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.WifiConnectionPage })));
+const CancelSubscriptionPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.CancelSubscriptionPage })));
+const AboutUsPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.AboutUsPage })));
+const WorkWithUsPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.WorkWithUsPage })));
+const OurStoresPage = lazy(() => import("./pages/FooterPages/FooterPages").then((module) => ({ default: module.OurStoresPage })));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage").then((module) => ({ default: module.NotFoundPage })));
 
 // ყველა მარშრუტისთვის საერთო Header-სა და Footer-ს აწყობს.
 function AppLayout() {
@@ -44,7 +44,9 @@ function AppLayout() {
     <div className="flex min-h-screen flex-col bg-market-paper">
       <Header />
       <div className="flex-1">
-        <Outlet />
+        <Suspense fallback={<main className="mx-auto w-full max-w-7xl px-4 py-16 text-center text-sm text-market-muted" role="status" aria-live="polite">Loading page…</main>}>
+          <Outlet />
+        </Suspense>
       </div>
       <Footer />
     </div>

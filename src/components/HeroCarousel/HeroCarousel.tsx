@@ -78,7 +78,7 @@ export function HeroCarousel() {
             alt={slide.alt}
             width={1672}
             height={941}
-            loading={index === activeIndex || index === nextIndex ? "eager" : "lazy"}
+            loading={index === activeIndex ? "eager" : "lazy"}
             fetchPriority={index === activeIndex ? "high" : "auto"}
             ariaHidden={index !== activeIndex}
             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[800ms] motion-reduce:transition-none ${index === activeIndex ? "opacity-100" : "opacity-0"}`}

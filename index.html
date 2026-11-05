@@ -8,7 +8,8 @@
     <link rel="preload" as="image" href="/images/Dark-side-warriors-at-the-bazaar.jpg" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" /></noscript>
     <script>
       (() => {
         try {
@@ -22,6 +23,12 @@
         }
       })();
     </script>
+    <style>
+      html { background: #f7f3e9; color: #1a1a1a; }
+      html.dark { background: #0b0b0b; color: #f3eee3; }
+      body { min-width: 320px; min-height: 100vh; margin: 0; background: inherit; }
+      #root { min-height: 100vh; }
+    </style>
     <title>10X Shop | Treasures of Middle-earth</title>
   </head>
   <body>

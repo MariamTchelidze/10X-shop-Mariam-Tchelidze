@@ -28,7 +28,7 @@
 
 ## Verification metrics
 
-The Lighthouse runs used the local production preview at `http://127.0.0.1:4173/?page=1`, not Vercel. The production build below was generated locally on 2026-11-05.
+The Lighthouse runs used the local production preview at `http://127.0.0.1:4173/?page=1`, not Vercel, and predate the route-splitting and font-loading changes described in this update. The production build below was generated locally on 2026-11-05; rerun Lighthouse before attributing a score change to these changes.
 
 | Metric | Before | After / current | Change or note |
 | --- | ---: | ---: | --- |
@@ -41,7 +41,7 @@ The Lighthouse runs used the local production preview at `http://127.0.0.1:4173/
 | Speed Index | 5.3 s | 2.5 s | 2.8 s faster |
 | Total Blocking Time | 250 ms | 330 ms | 80 ms slower |
 | Cumulative Layout Shift | 0.010 | 0.009 | 0.001 lower |
-| Main JavaScript bundle | — | 416.06 kB raw / 121.24 kB gzip | Local Vite production build |
+| Main JavaScript entry chunk | 416.06 kB raw / 121.24 kB gzip (before route splitting) | 311.27 kB raw / 96.74 kB gzip | Local Vite production build; route-specific chunks load on demand |
 | Git commits | — | 61 | `git rev-list --count HEAD` on 2026-11-05 |
 | Pull requests / issues | — | Not measured | Not collected from the remote project board |
 | Development hours | — | Not tracked | No verified time log in the repository |
