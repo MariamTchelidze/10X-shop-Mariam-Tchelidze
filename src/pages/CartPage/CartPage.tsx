@@ -31,7 +31,7 @@ export function CartPage() {
     // ცარიელი კალათისთვის პროდუქტების დათვალიერების ბმულს ვაჩვენებთ.
     return (
       <main className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8">
-        <h1 className="font-display text-3xl text-market-ink">Your cart is empty.</h1>
+        <h1 className="font-display text-3xl text-market-ink">Your cart is empty</h1>
         {redirectMessage && <p role="status" className="mt-3 text-sm text-market-muted">{redirectMessage}</p>}
         <Link
           to="/"
