@@ -121,7 +121,7 @@ export function MobileMenu({ triggerVariant = "menu" }: MobileMenuProps) {
                 aria-current={location.pathname === "/cart" ? "page" : undefined}
                 className={`border-t border-market-border py-4 text-xs font-medium uppercase tracking-[0.16em] ${location.pathname === "/cart" ? "text-market-ink underline decoration-gold underline-offset-8" : "text-market-muted"}`}
               >
-                Cart
+                BAG
               </Link>
             </nav>
 

@@ -55,7 +55,7 @@ export function BottomNav() {
 
       <Link
         to="/cart"
-        aria-label={itemCount > 0 ? `Cart, ${itemCount} items` : "Cart"}
+        aria-label={itemCount > 0 ? `Bag, ${itemCount} items` : "Bag"}
         aria-current={location.pathname === "/cart" ? "page" : undefined}
         className={`relative flex min-h-12 flex-col items-center justify-center gap-1 focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-gold ${location.pathname === "/cart" ? "text-market-ink" : "text-market-muted"}`}
       >
@@ -66,7 +66,7 @@ export function BottomNav() {
           </svg>
           {itemCount > 0 && <span aria-hidden="true" className="absolute -right-2 -top-1 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-market-ink px-1 text-[9px] leading-none text-market-paper">{itemCount}</span>}
         </span>
-        <span className="text-[9px] uppercase tracking-[0.1em]">Cart</span>
+        <span className="text-[9px] uppercase tracking-[0.1em]">BAG</span>
       </Link>
 
       <MobileMenu triggerVariant="account" />

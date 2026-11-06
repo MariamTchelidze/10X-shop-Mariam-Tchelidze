@@ -234,14 +234,12 @@ export function Header() {
           </Link>
           <Link
             to="/cart"
-            aria-label={itemCount > 0 ? `Cart, ${itemCount} items` : "Cart"}
+            aria-label={itemCount > 0 ? `Bag, ${itemCount} items` : "Bag"}
             aria-current={location.pathname === "/cart" ? "page" : undefined}
             className={`inline-flex min-h-11 items-center gap-1.5 border-b-2 text-[10px] font-medium tracking-[0.12em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink sm:text-xs ${location.pathname === "/cart" ? "border-market-ink text-market-ink" : "border-transparent text-market-muted"}`}
           >
-            Cart
-            <span className="inline-flex min-w-4 justify-center text-market-ink">
-              {itemCount > 0 ? itemCount : ""}
-            </span>
+            BAG
+            {itemCount > 0 && <span className="inline-flex min-w-4 justify-center text-market-ink">{itemCount}</span>}
           </Link>
           <ThemeToggle />
         </div>
