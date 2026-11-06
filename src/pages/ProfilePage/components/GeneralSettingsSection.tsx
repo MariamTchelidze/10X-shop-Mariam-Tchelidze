@@ -1,5 +1,6 @@
 // პროფილის სახელისა და ელფოსტის შესაცვლელ ნაწილს აჩვენებს.
 import type { FormEvent } from "react";
+import { ThemeToggle } from "../../../components/ThemeToggle/ThemeToggle";
 import { SectionPanel } from "./SectionPanel";
 import { ProfileField } from "./ProfileField";
 
@@ -79,6 +80,13 @@ export function GeneralSettingsSection({
           error={errors.phone}
           onChange={onPhoneChange}
         />
+        <div className="flex min-w-0 flex-wrap items-center justify-between gap-4 border-y border-market-border py-3">
+          <div>
+            <h3 className="font-display text-sm text-market-ink">Appearance</h3>
+            <p className="mt-1 text-xs text-market-muted">Choose the light of the Shire or the dark of Mordor.</p>
+          </div>
+          <ThemeToggle showLabel />
+        </div>
         <button
           type="submit"
           className="min-h-12 bg-market-ink px-7 text-xs uppercase tracking-[0.14em] text-market-paper transition-opacity hover:opacity-80 sm:w-fit"
