@@ -1,6 +1,6 @@
 # Browser compatibility evidence
 
-Save screenshots captured during manual CORE checks in this folder. The screenshots are evidence only after the named browser and viewport have actually been checked.
+The Playwright CORE smoke suite saves viewport screenshots from real browser runs here. The captured image is evidence for the named browser, viewport, and local/deployed target recorded in `COMPATIBILITY.md`.
 
 ## File names
 
@@ -13,10 +13,12 @@ Examples:
 - `firefox-desktop-cart.png`
 - `firefox-mobile-375-checkout.png`
 
-Use short route names: `catalog`, `login`, `product`, `cart`, `checkout`, and `not-found`.
+Use short route names: `catalog`, `login`, `product`, `cart`, `checkout`, `profile`, and `not-found`.
 
-## Capture CORE screenshots
+## Automated capture
 
-For each browser, capture the CORE routes listed in the root `COMPATIBILITY.md` at desktop width and at **375 × 812** mobile emulation. In Chrome, open DevTools and enable the Device Toolbar (`Ctrl+Shift+M`), then enter the viewport dimensions. In Firefox, open Responsive Design Mode (`Ctrl+Shift+M`) and enter the same dimensions. Capture the page with the browser screenshot tool or the operating system's screenshot utility and save the PNG here using the file-name pattern above.
+Install the browser dependencies once, then run `npm run test:e2e`. The suite uses the local production preview and writes desktop and 375 × 812 screenshots for the tested routes. Use `PLAYWRIGHT_BASE_URL` to check a deployed build. Details and the current Firefox runtime limitation are documented in [`docs/testing/playwright.md`](../testing/playwright.md).
 
-Check the visible layout, horizontal overflow, route content, and any relevant interaction (for example, checkout validation). Record the browser version, viewport, result, and any issue/fix in `COMPATIBILITY.md`. Do not mark a check as passed until it has been observed in that browser.
+The latest successful automated evidence in this folder is from Chrome desktop and Chrome 375 × 812. Existing Firefox captures predate this Playwright run and are not current automated evidence. When `PLAYWRIGHT_BASE_URL` is set, captures go to `docs/compat/deployed/` so they do not overwrite local-build screenshots.
+
+The tests also check route content, mobile horizontal overflow, direct product navigation/refresh, the public cart, guest checkout redirection, and the desktop-only QR prompt. Record the browser version, target URL, viewport, result, and any remaining issues in `COMPATIBILITY.md`. A screenshot alone does not establish a behavior that the test did not check.

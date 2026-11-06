@@ -77,7 +77,9 @@ Open the local URL printed by Vite in your terminal.
 
 ```bash
 npm run typecheck
+npm run typecheck:e2e
 npm test
+npm run test:e2e
 npm run build
 ```
 
@@ -94,6 +96,12 @@ npm run preview
 | `npm run dev` | Start the Vite development server. |
 | `npm run typecheck` | Run the strict TypeScript project check. |
 | `npm test` | Run the built-in Node tests for catalog requests, promo totals, stock labels, and order status. |
+| `npm run typecheck:e2e` | Strictly type-check the Playwright config and browser test files. |
+| `npm run test:e2e` | Build and serve the production app, then run Chrome and Firefox desktop/375px browser checks. |
+| `npm run test:e2e:chrome` | Run the desktop and 375px checks in installed Chrome only. |
+| `npm run test:e2e:firefox` | Run the desktop and 375px checks in Playwright Firefox only. |
+| `npm run test:e2e:ui` | Open Playwright's interactive test runner. |
+| `npm run test:e2e:report` | Open the latest HTML browser-test report. |
 | `npm run build` | Type-check and generate the production bundle. |
 | `npm run preview` | Preview the generated production bundle. |
 | `npm run lint` | Run ESLint. |
@@ -133,3 +141,24 @@ The live Vercel deployment is available here:
 **[treasures-of-middle-earth — Live demo](https://treasures-of-middle-earth.vercel.app/)**
 
 The application uses `BrowserRouter`; deployments should serve `index.html` as the fallback for client-side routes.
+
+## Browser testing with Playwright
+
+Install the project dependencies, then install Playwright's Firefox runtime once:
+
+```bash
+npm install
+npx playwright install firefox
+```
+
+Chrome must also be installed on the computer because the Chrome projects use the installed Chrome channel. Run `npm run typecheck:e2e` to check the test code and `npm run test:e2e` to build the production app, serve it locally, and check routes in Chrome and Firefox at desktop and **375 × 812** viewports. Separate `test:e2e:chrome` and `test:e2e:firefox` commands are available to isolate an engine. The suite saves viewport screenshots under `docs/compat/` and an HTML report under `playwright-report/`.
+
+To run the same browser checks against a deployed URL instead of the local build, set `PLAYWRIGHT_BASE_URL` before starting the tests. For example, in PowerShell:
+
+```powershell
+$env:PLAYWRIGHT_BASE_URL = "https://your-deployment.vercel.app"
+npm run test:e2e -- --project=chrome-desktop
+Remove-Item Env:PLAYWRIGHT_BASE_URL
+```
+
+See [`docs/testing/playwright.md`](docs/testing/playwright.md) for the browser setup notes and current environment limitations. A successful local run verifies the checked-in build and SPA fallback locally; it does not prove the Vercel deployment is current.

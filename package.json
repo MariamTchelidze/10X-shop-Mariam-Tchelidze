@@ -9,7 +9,13 @@
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint .",
-    "test": "node --import ./tests/register-ts-imports.mjs --test tests/*.test.mjs"
+    "test": "node --import ./tests/register-ts-imports.mjs --test tests/*.test.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:chrome": "playwright test --project=chrome-desktop --project=chrome-mobile-375",
+    "test:e2e:firefox": "playwright test --project=firefox-desktop --project=firefox-mobile-375",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report",
+    "typecheck:e2e": "tsc -p tsconfig.e2e.json --noEmit"
   },
   "dependencies": {
     "qrcode.react": "^4.2.0",
@@ -20,7 +26,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
+    "@playwright/test": "^1.65.0",
     "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^5.0.0",
