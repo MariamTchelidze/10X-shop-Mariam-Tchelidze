@@ -30,6 +30,7 @@ export function LoginPage() {
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values, helpers) => {
+      if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: Login form submit handler reached.");
       const identifier = values.email.trim();
       const fullName = values.fullName.trim();
 

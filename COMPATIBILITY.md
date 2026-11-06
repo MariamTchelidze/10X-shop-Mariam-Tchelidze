@@ -1,5 +1,16 @@
 # Browser and Deployment Compatibility
 
+## Current Playwright mobile audit (2026-11-06)
+
+`e2e/mobile-compat.spec.ts` checks a 375 × 812 viewport in the configured Playwright `chromium` and `firefox` projects. It visits Catalog, Product 93, Cart, Checkout, Profile, Login, and Not Found; checks horizontal overflow; and verifies that the Account/Settings drawer fills the viewport and disables background scrolling. The catalog test also checks that its filters are not covered by the fixed bottom navigation. DummyJSON responses and local demo account/cart state are seeded, so this is a repeatable local layout check rather than a live API or deployment test.
+
+| Browser project | Result | Evidence |
+| --- | --- | --- |
+| Chromium (Playwright 1.65.0) | **8 passed** after the mobile layout adjustment | Current 375 × 812 captures: `chrome-mobile-375-{catalog,product,cart,checkout,profile,login,not-found,account-menu}.png` in this folder. |
+| Firefox (Playwright 1.65.0) | **Could not launch** | All 8 tests stop before page navigation with `browserType.launch: spawn UNKNOWN`; the Playwright Firefox executable fails with a Windows side-by-side configuration error. A forced reinstall of the pinned Firefox build did not resolve it. |
+
+Firefox images already in this folder are historical captures from 2026-11-05; they are not evidence for the current source. Current-source Firefox layout remains unverified until the browser can launch or a manual Firefox run is recorded.
+
 ## Recorded local CORE checks
 
 On 2026-11-06, a Playwright smoke run against a local production build (`vite build` + `vite preview`) passed in Chrome at desktop (1440 × 900) and mobile viewport emulation (375 × 812):
@@ -22,7 +33,7 @@ On 2026-11-06, the current source was rendered in headless Chrome against the lo
 
 ### Firefox status
 
-The earlier Playwright Firefox 159.0 executable could not start in the Windows environment (`side-by-side configuration is incorrect`, surfaced as `spawn UNKNOWN`), so that automated Firefox run did not complete. The Firefox screenshots in `docs/compat/` are visual evidence only; they do not prove every route or interaction. Complete and record manual Firefox checks for the current source before claiming cross-browser coverage.
+The current Playwright Firefox project is configured, but its pinned Windows executable cannot start (`side-by-side configuration is incorrect`, surfaced as `spawn UNKNOWN`). The current-source Firefox suite therefore did not reach the app. Existing Firefox screenshots are historical visual evidence only; complete and record a current Firefox run before claiming cross-browser coverage.
 
 ## Deployment checks
 

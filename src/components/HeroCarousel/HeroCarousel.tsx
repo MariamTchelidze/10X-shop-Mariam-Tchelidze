@@ -61,7 +61,7 @@ export function HeroCarousel() {
     <section
       aria-label="Treasures of Middle-earth featured collection"
       aria-roledescription="carousel"
-      className="relative mb-9 h-[470px] overflow-hidden bg-market-ink sm:mb-12 sm:h-[560px] lg:h-[620px]"
+      className="relative mb-9 h-[390px] overflow-hidden bg-market-ink sm:mb-12 sm:h-[560px] lg:h-[620px]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}

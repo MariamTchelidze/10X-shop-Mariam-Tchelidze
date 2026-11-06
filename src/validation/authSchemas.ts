@@ -2,7 +2,6 @@ import * as Yup from "yup";
 
 // Login-ისთვის username-ს ვიღებთ, რეგისტრაციისას კი ელფოსტას ვამოწმებთ.
 export const loginSchema = Yup.object({
-  fullName: Yup.string().defined(),
   email: Yup.string()
     .trim()
     .min(3, "Username must be at least 3 characters.")
@@ -11,7 +10,6 @@ export const loginSchema = Yup.object({
   password: Yup.string()
     .required("Password is required.")
     .min(6, "Password must be at least 6 characters."),
-  confirmPassword: Yup.string().defined(),
 });
 
 // რეგისტრაციის ველები უფრო მკაცრად მოწმდება ანგარიშის შექმნამდე.

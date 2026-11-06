@@ -4,7 +4,9 @@ This folder stores screenshots from browser checks. Each image is evidence for t
 
 ## Latest Chrome mobile capture
 
-On 2026-11-06, the current source was opened in headless Chrome against the local Vite server with a 375 × 812 viewport. Overflow checks covered 24 app routes, including all core pages and help/corporate routes. Updated captures are available for the catalog, product 93, cart, checkout, profile, and login; `chrome-mobile-375-account-menu.png` shows the open account/settings drawer. Both document and body widths measured 375px on every checked route. The drawer measured 375 × 812 and set body scrolling to `hidden` while open. Profile and cart views used seeded local demo state. These captures document the local source and are not deployment evidence.
+On 2026-11-06, Playwright 1.65.0 checked the current source in Chromium at 375 × 812 against the local Vite server. DummyJSON responses and local account/cart data were seeded. Eight checks passed across Catalog, Product 93, Cart, Checkout, Profile, Login, Not Found, and the open Account/Settings drawer. The suite checked document/body overflow on each page, that catalog filters clear the fixed bottom navigation, and that the drawer measures 375 × 812 while locking background scrolling. The current viewport captures use the `chrome-mobile-375-*.png` names. They document local layout, not deployment behavior.
+
+The same suite is configured for Firefox, but the Playwright Firefox executable could not start in this Windows environment (`spawn UNKNOWN` / side-by-side configuration error), so the existing Firefox captures are historical and do not verify the current source.
 
 ## File names
 

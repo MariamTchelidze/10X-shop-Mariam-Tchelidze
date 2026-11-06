@@ -75,7 +75,7 @@ export function CatalogToolbar({
 
   // 5. ვიზუალური რენდერი (JSX UI Layout)
   return (
-    <div className="mb-8 grid grid-cols-1 gap-5 sm:mb-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+    <div className="mb-8 grid grid-cols-2 gap-x-4 gap-y-5 sm:mb-10 sm:gap-5 lg:grid-cols-3 lg:gap-8">
       {/* ბლოკი 1: პროდუქტების ძიების ინპუტი */}
       <div>
         <label htmlFor="catalog-search" className="mb-1.5 block text-[10px] uppercase tracking-[0.14em] text-market-muted">
@@ -115,7 +115,7 @@ export function CatalogToolbar({
       </div>
 
       {/* ბლოკი 3: დახარისხების (Sort) ჩამოსაშლელი სია */}
-      <div>
+      <div className="col-span-2 lg:col-span-1">
         <label htmlFor="catalog-sort" className="mb-1.5 block text-[10px] uppercase tracking-[0.14em] text-market-muted">
           Sort by
         </label>
