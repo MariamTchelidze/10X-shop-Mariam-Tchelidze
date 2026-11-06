@@ -95,6 +95,7 @@ export async function fetchProducts(
     : query.category
       ? `/products/category/${encodeURIComponent(query.category)}`
       : "/products";
+  if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: Fetching catalog products.", { endpoint, page });
   const response = await fetch(`${API_BASE}${endpoint}?${searchParams.toString()}`, { signal });
 
   // თუ სერვერმა შეცდომა დააბრუნა, ვათავისუფლებთ გასაგებ შეტყობინებას
@@ -105,6 +106,7 @@ export async function fetchProducts(
   const payload = await readJson(response);
   if (!isProductsResponse(payload)) throw new Error("The product service returned an invalid response.");
   const data = payload;
+  if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: Catalog response validated.", { productCount: data.products.length, total: data.total });
   // ვაბრუნებთ მონაცემებს და დამატებით ვზრუნავთ კლიენტის მხარეს დახარისხებაზეც (სანდოობისთვის)
   return { ...data, products: sortProducts(data.products, query.sort) };
 }

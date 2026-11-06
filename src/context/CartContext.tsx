@@ -83,11 +83,13 @@ export function CartProvider({ children }: CartProviderProps) {
     const result = manager.addItem(product, quantity, stock, variants);
     if (!result.success) {
       if (result.reason === "stock-limit") {
+        if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: Cart add blocked by available stock.");
         addToast("Cannot add more than available stock.", "error");
       }
       return false;
     }
     dispatch({ type: "ADD_ITEM", product, quantity, stock, variants });
+    if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: Item added to cart.", { productId: product.id, quantity });
     if (result.limited) addToast("Cannot add more than available stock.", "error");
     addToast("Added to cart.", "success");
 
@@ -98,6 +100,7 @@ export function CartProvider({ children }: CartProviderProps) {
     const manager = new CartManager(cart);
     if (!manager.removeItem(productId, variants)) return;
     dispatch({ type: "REMOVE_ITEM", productId, variants });
+    if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: Item removed from cart.", { productId });
     addToast("ITEM REMOVED", "info");
   };
 
@@ -116,6 +119,7 @@ export function CartProvider({ children }: CartProviderProps) {
       return;
     }
     dispatch({ type: "UPDATE_QUANTITY", productId, quantity, stock, variants });
+    if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: Cart quantity updated.", { productId, quantity });
     if (result.limited) addToast("Cannot add more than available stock.", "error");
   };
 
@@ -123,6 +127,7 @@ export function CartProvider({ children }: CartProviderProps) {
     const manager = new CartManager(cart);
     if (!manager.applyPromoCode(code)) return false;
     dispatch({ type: "APPLY_PROMO", code });
+    if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: Promo code accepted.");
     return true;
   };
 
@@ -136,6 +141,7 @@ export function CartProvider({ children }: CartProviderProps) {
     const manager = new CartManager(cart);
     if (!manager.clearCart()) return;
     dispatch({ type: "CLEAR_CART" });
+    if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: Cart cleared.");
     if (hadItems) addToast("CART CLEARED", "info");
   };
 

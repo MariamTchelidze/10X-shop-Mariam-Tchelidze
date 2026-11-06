@@ -154,6 +154,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
     persistUser(nextUser);
     setUser(nextUser);
+    if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: Authentication succeeded.");
     return { status: "success", user: nextUser };
   };
 
@@ -254,6 +255,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // გვერდის მიმდინარე მდგომარეობას მაინც guest-ად ვცვლით.
     }
     setUser(guestUser);
+    if (import.meta.env.DEV) console.log("[DEBUG 10X SHOP]: User signed out.");
   };
 
   return <AuthContext.Provider value={{ user, login, register, updateProfile, logout }}>{children}</AuthContext.Provider>;
