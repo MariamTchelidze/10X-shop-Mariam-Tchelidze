@@ -8,6 +8,7 @@ interface PasswordFieldProps {
   invalid: boolean;
   error?: string;
   onChange: (value: string) => void;
+  onBlur: () => void;
   onToggleVisibility: () => void;
 }
 
@@ -20,6 +21,7 @@ export function PasswordField({
   invalid,
   error,
   onChange,
+  onBlur,
   onToggleVisibility,
 }: PasswordFieldProps) {
   // ხილვადობის ღილაკი მხოლოდ input-ის type-ს ცვლის და მიმდინარე მნიშვნელობას ინარჩუნებს.
@@ -35,6 +37,7 @@ export function PasswordField({
           value={value}
           aria-invalid={invalid}
           onChange={(event) => onChange(event.target.value)}
+          onBlur={onBlur}
           className={`min-h-12 w-full border-b bg-transparent px-1 pr-12 text-sm text-market-ink outline-none transition-colors placeholder:text-market-muted focus:border-market-ink ${invalid ? "border-red-500 ring-1 ring-red-500" : "border-market-border"}`}
         />
         <button

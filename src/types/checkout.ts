@@ -1,9 +1,9 @@
-// შეკვეთის ფორმის ველებისა და ვალიდაციის შეცდომების ტიპებს განსაზღვრავს.
+// შეკვეთის ფორმაში გამოყენებულ ველებსა და demo გადახდის ვარიანტებს განსაზღვრავს.
 export interface CheckoutValues {
   fullName: string;
   email: string;
   address: string;
   city: string;
+  postalCode: string;
+  paymentMethod: "mithril-card" | "shire-gate";
 }
-
-export type CheckoutErrors = Partial<Record<keyof CheckoutValues, string>> & { submit?: string };

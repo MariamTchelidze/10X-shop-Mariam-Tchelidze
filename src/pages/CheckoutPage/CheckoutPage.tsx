@@ -1,21 +1,25 @@
-// შეკვეთის ფორმას ამოწმებს, შეკვეთას ინახავს და მარაგს ამცირებს.
-import { useRef, useState, type FormEvent } from "react";
+// შეკვეთის ფორმას ვალიდაციას უკეთებს, შეკვეთას ინახავს და მარაგს ამცირებს.
+import { useRef, useState } from "react";
+import { useFormik } from "formik";
 import { Navigate, useNavigate } from "react-router";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 import { useRealm } from "../../context/RealmContext";
 import { useInventory } from "../../context/InventoryContext";
+import type { CheckoutValues } from "../../types/checkout";
 import type { Order } from "../../types/order";
 import { createOrderId, saveOrder } from "../../utils/orders";
+import { checkoutSchema } from "../../validation/checkoutSchema";
 import { CheckoutForm } from "./components/CheckoutForm";
 import { OrderSummary } from "./components/OrderSummary";
-import type { CheckoutErrors, CheckoutValues } from "../../types/checkout";
 
 const emptyValues: CheckoutValues = {
   fullName: "",
   email: "",
   address: "",
   city: "",
+  postalCode: "",
+  paymentMethod: "mithril-card",
 };
 
 export function CheckoutPage() {
@@ -24,73 +28,59 @@ export function CheckoutPage() {
   const { decrementStock } = useInventory();
   const { formatPrice } = useRealm();
   const navigate = useNavigate();
-  const [values, setValues] = useState<CheckoutValues>(emptyValues);
-  const [errors, setErrors] = useState<CheckoutErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string>();
   const submissionLock = useRef(false);
+
+  const formik = useFormik<CheckoutValues>({
+    initialValues: emptyValues,
+    validationSchema: checkoutSchema,
+    validateOnBlur: true,
+    validateOnChange: true,
+    onSubmit: async (values, helpers) => {
+      if (submissionLock.current) return;
+      submissionLock.current = true;
+      setSubmitError(undefined);
+
+      // შეკვეთის ჯამში CartContext-ის promo ფასდაკლებაც შედის.
+      const order: Order = {
+        id: createOrderId(),
+        username: user.username,
+        date: new Date().toISOString(),
+        items: items.map((item) => ({ ...item })),
+        total,
+        subtotal,
+        discount,
+        promoCode,
+        shipping: 0,
+        taxes: 0,
+        shippingAddress: {
+          fullName: values.fullName.trim(),
+          email: values.email.trim(),
+          address: values.address.trim(),
+          city: values.city.trim(),
+          postalCode: values.postalCode.trim(),
+        },
+        paymentMethod: values.paymentMethod === "mithril-card"
+          ? "Mithril card (demo) — no payment collected"
+          : "Pay at the Shire gate (demo) — no payment collected",
+      };
+
+      if (!saveOrder(order)) {
+        submissionLock.current = false;
+        setSubmitError("Unable to save your order in browser storage. Please try again.");
+        helpers.setSubmitting(false);
+        return;
+      }
+
+      decrementStock(items);
+      navigate("/order-success", { replace: true, state: { order } });
+    },
+  });
 
   if (items.length === 0) {
     // უშინაარსო შეკვეთის თავიდან ასაცილებლად ცარიელი კალათა უკან გადადის.
     return <Navigate to="/cart" replace state={{ message: "Your cart is empty." }} />;
   }
-
-  const updateField = (field: keyof CheckoutValues, value: string): void => {
-    setValues((current) => ({ ...current, [field]: value }));
-    setErrors((current) => ({ ...current, [field]: undefined, submit: undefined }));
-  };
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-    if (submissionLock.current) return;
-    // ყველა ველი იწმინდება კიდეებზე არსებული გამოტოვებებისგან და შემდეგ მოწმდება.
-    const fullName = values.fullName.trim();
-    const email = values.email.trim();
-    const address = values.address.trim();
-    const city = values.city.trim();
-    const nextErrors: CheckoutErrors = {};
-
-    if (fullName.length < 3) {
-      nextErrors.fullName = "Full name must be at least 3 characters";
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      nextErrors.email = "Please enter a valid email address";
-    }
-    if (address.length < 5) {
-      nextErrors.address = "Address must be at least 5 characters";
-    }
-    if (!city) {
-      nextErrors.city = "City is required";
-    }
-
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
-
-    submissionLock.current = true;
-    setIsSubmitting(true);
-    // შეკვეთის ჯამში CartContext-ის promo ფასდაკლებაც შედის.
-    const order: Order = {
-      id: createOrderId(),
-      username: user.username,
-      date: new Date().toISOString(),
-      items: items.map((item) => ({ ...item })),
-      total,
-      subtotal,
-      discount,
-      promoCode,
-      shipping: 0,
-      taxes: 0,
-      shippingAddress: { fullName, email, address, city },
-      paymentMethod: "Demo checkout — no payment collected",
-    };
-    if (!saveOrder(order)) {
-      submissionLock.current = false;
-      setIsSubmitting(false);
-      setErrors({ submit: "Unable to save your order in browser storage. Please try again." });
-      return;
-    }
-    decrementStock(items);
-    navigate("/order-success", { replace: true, state: { order } });
-  };
 
   return (
     <main className="mx-auto w-full min-w-0 max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
@@ -98,13 +88,7 @@ export function CheckoutPage() {
         Checkout
       </h1>
       <div className="grid min-w-0 gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14">
-        <CheckoutForm
-          values={values}
-          errors={errors}
-          onFieldChange={updateField}
-          onSubmit={handleSubmit}
-          isSubmitting={isSubmitting}
-        />
+        <CheckoutForm formik={formik} submitError={submitError} />
         <OrderSummary
           items={items}
           subtotal={subtotal}

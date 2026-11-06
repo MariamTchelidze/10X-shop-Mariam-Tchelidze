@@ -12,11 +12,13 @@
     "test": "node --import ./tests/register-ts-imports.mjs --test tests/*.test.mjs"
   },
   "dependencies": {
+    "formik": "^2.4.9",
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^7.0.0",
-    "react-router-dom": "^7.18.4"
+    "react-router-dom": "^7.18.4",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

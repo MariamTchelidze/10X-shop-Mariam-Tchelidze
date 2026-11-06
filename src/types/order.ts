@@ -6,6 +6,7 @@ export interface ShippingAddress {
   email: string;
   address: string;
   city: string;
+  postalCode?: string;
 }
 
 export interface Order {
