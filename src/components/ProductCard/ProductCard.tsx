@@ -67,14 +67,14 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <article className={`group relative min-w-0 ${isQuickViewOpen || isStockAlertOpen ? "z-[60]" : ""}`}>
+    <article className={`group relative flex min-w-0 flex-col border border-gold/35 bg-market-paper p-1.5 shadow-sm transition duration-300 hover:border-gold/80 hover:shadow-[0_0_24px_rgba(201,169,106,0.14)] ${isQuickViewOpen || isStockAlertOpen ? "z-[60]" : ""}`}>
       <Link
         to={`/products/${product.id}`}
         state={{ from: location.pathname === "/" ? `${location.pathname}${location.search}` : "/" }}
         aria-label={`View ${product.title} details`}
-        className="absolute inset-0 z-10 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+        className="absolute inset-0 z-10 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
       />
-      <div className="relative overflow-hidden bg-market-surface">
+      <div className="relative overflow-hidden border border-gold/20 bg-market-surface">
         <ProductImage
           src={product.thumbnail}
           alt={product.title}
@@ -83,6 +83,18 @@ export function ProductCard({ product }: ProductCardProps) {
           height={800}
           className="aspect-[3/4] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
         />
+
+        <span
+          className={`absolute left-3 top-3 z-30 inline-flex max-w-[calc(100%-4.5rem)] items-center border px-2 py-1 text-[9px] font-medium uppercase leading-tight tracking-[0.12em] shadow-sm backdrop-blur-sm ${
+            stock <= 0
+              ? "border-blood/50 bg-blood/90 text-white"
+              : stock <= 5
+                ? "border-gold/50 bg-market-paper/95 text-market-ink"
+                : "border-forest/40 bg-market-paper/95 text-forest"
+          }`}
+        >
+          {stockStatus.message}
+        </span>
 
         <button
           type="button"
@@ -137,31 +149,28 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </div>
 
-      <div className="space-y-2 pt-4">
-        <div className="flex items-start justify-between gap-3">
-          <h2 className="min-w-0 font-display text-sm font-medium uppercase tracking-wide text-market-ink">
+      <div className="flex min-h-[190px] flex-1 flex-col space-y-2 px-2 pb-1 pt-4 sm:px-3">
+        <h2 className="line-clamp-2 min-h-10 font-display text-xs font-medium uppercase leading-5 tracking-[0.12em] text-market-ink sm:text-sm">
             {product.title}
-          </h2>
-          <span className={`max-w-[44%] shrink text-right text-[9px] leading-3 sm:text-[10px] ${stockStatus.className}`}>{stockStatus.message}</span>
-        </div>
-        <p className="text-xs capitalize tracking-wide text-market-muted">
-          {product.category}{product.brand ? ` · ${product.brand}` : ""}
+        </h2>
+        <p className="min-h-4 text-[10px] capitalize tracking-wide text-market-muted sm:text-xs">
+          {product.category}{product.brand ? <><span aria-hidden="true" className="mx-1.5">•</span>{product.brand}</> : ""}
         </p>
-        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-          <p className="text-sm font-medium text-market-ink">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-1">
+          <p className="text-sm font-semibold text-market-ink sm:text-base">
             {formatCurrency(discountedPrice(product.price, product.discountPercentage))}
           </p>
           {product.discountPercentage >= 1 && (
             <>
-              <p className="text-xs text-market-muted line-through">{formatCurrency(product.price)}</p>
-              <span className="text-[10px] font-medium text-forest">−{Math.round(product.discountPercentage)}%</span>
+              <p className="text-[10px] text-market-muted line-through sm:text-xs">{formatCurrency(product.price)}</p>
+              <span className="border border-blood/30 bg-blood/5 px-1.5 py-0.5 text-[9px] font-medium tracking-wide text-blood">−{Math.round(product.discountPercentage)}%</span>
             </>
           )}
         </div>
-        <p className="pointer-events-none relative z-20 text-xs text-market-ink" aria-label={`Rated ${product.rating.toFixed(1)} out of 5`}>
-          <span aria-hidden="true">★</span> {product.rating.toFixed(1)}
+        <p className="pointer-events-none relative z-20 flex items-center gap-1.5 text-xs text-market-muted" aria-label={`Rated ${product.rating.toFixed(1)} out of 5`}>
+          <span aria-hidden="true" className="text-gold">★</span> {product.rating.toFixed(1)}
         </p>
-        <button type="button" onClick={() => setIsQuickViewOpen(true)} className="relative z-20 inline-flex min-h-11 items-center pt-1 text-[10px] uppercase tracking-[0.14em] text-market-muted underline underline-offset-4 transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Scry Artifact</button>
+        <button type="button" onClick={() => setIsQuickViewOpen(true)} className="relative z-20 mt-auto inline-flex min-h-11 w-full items-center border-t border-market-border pt-2 text-[10px] uppercase tracking-[0.14em] text-market-muted transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Scry Artifact</button>
       </div>
       {isQuickViewOpen && (
         <Suspense fallback={null}>
