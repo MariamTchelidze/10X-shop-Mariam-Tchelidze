@@ -2,11 +2,11 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router";
 import { fetchProductById } from "../../api/products";
-import { ProductReviewsContainer } from "../../components/ProductReviews/ProductReviewsContainer";
 import { ProductImage } from "../../components/ProductImage/ProductImage";
 import type { Product } from "../../types/product";
 import { ProductInfoPanel } from "./components/ProductInfoPanel";
 import { RelatedProducts } from "./components/RelatedProducts";
+import { ProductDetailsTabs } from "./components/ProductDetailsTabs/ProductDetailsTabs";
 import { NotFoundPage } from "../NotFoundPage/NotFoundPage";
 
 function getCatalogReturnTo(state: unknown): string {
@@ -112,7 +112,7 @@ export function ProductPage() {
         </div>
         <ProductInfoPanel product={product} />
       </div>
-      <ProductReviewsContainer product={product} />
+      <ProductDetailsTabs product={product} />
       <RelatedProducts product={product} catalogReturnTo={catalogReturnTo} />
     </main>
   );

@@ -72,8 +72,6 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
         </span>
         <span className={stockStatus.className}>{stockStatus.message}</span>
       </div>
-      <p className="mt-6 max-w-prose text-sm leading-6 text-market-muted">{product.description}</p>
-
       <div className="mt-8 flex min-h-12 items-center border border-market-border">
         <button
           type="button"
