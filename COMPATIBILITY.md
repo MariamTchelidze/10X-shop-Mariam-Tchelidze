@@ -14,7 +14,11 @@ On 2026-11-06, a Playwright smoke run against a local production build (`vite bu
 | Invalid product ID renders not-found | Pass | Pass |
 | Desktop QR prompt opens; mobile viewport does not mount it | Pass | Pass |
 
-The historical Chrome run completed with 4 tests passed. Its captures remain in [`docs/compat/`](docs/compat/README.md). Playwright has since been removed from the project; this records the earlier run only and is not a repeatable test command in the current repository. These are local build captures, not proof of the deployed version.
+The historical Chrome run completed with 4 tests passed. Its captures remain in [`docs/compat/`](docs/compat/README.md). These are local build captures, not proof of the deployed version.
+
+## Latest Chrome mobile layout audit
+
+On 2026-11-06, the current source was rendered in headless Chrome against the local Vite server at 375 × 812. All 24 application routes checked—including Catalog, `/products/93`, Cart, Checkout, Profile, Orders, Wishlist, Help Center, help/corporate pages, Login, and Not Found—measured `documentElement.scrollWidth === 375` and `body.scrollWidth === 375`; no horizontal overflow was observed. The Account/Settings drawer measured 375 × 812 and set `document.body.style.overflow` to `hidden`. The refreshed screenshots, including the open drawer, are listed in [`docs/compat/README.md`](docs/compat/README.md). Profile and cart were opened with seeded local demo state. This was a local viewport/layout check, not a full interaction regression suite or a deployed-site check.
 
 ### Firefox status
 
