@@ -50,12 +50,12 @@ export function CartProvider({ children }: CartProviderProps) {
     const quantityAlreadyInCart = items
       .filter((item) => item.productId === product.id)
       .reduce((total, item) => total + item.quantity, 0);
-    const quantityToAdd = Math.min(quantity, stock - quantityAlreadyInCart);
-    const nextQuantity = (currentItem?.quantity ?? 0) + quantityToAdd;
-
-    if (quantityToAdd < 1) {
+    const availableStock = Math.max(0, stock - quantityAlreadyInCart);
+    if (quantity > availableStock) {
+      addToast(availableStock > 0 ? `Only ${availableStock} left!` : "No more stock is available.", "info");
       return false;
     }
+    const nextQuantity = (currentItem?.quantity ?? 0) + quantity;
 
     const cartItem: CartItem = {
       productId: product.id,
@@ -111,16 +111,18 @@ export function CartProvider({ children }: CartProviderProps) {
       .reduce((total, item) => total + item.quantity, 0);
     // სხვა ზომისა თუ ფერის რაოდენობაც იმავე პროდუქტის საერთო მარაგში ითვლება.
     const maxQuantity = Math.max(0, stock - quantityInOtherVariants);
+    if (quantity > maxQuantity) {
+      addToast(maxQuantity > 0 ? `Only ${maxQuantity} left!` : "No more stock is available.", "info");
+      return;
+    }
 
     setCart((current) => ({
       ...current,
-      items: maxQuantity === 0
-        ? current.items.filter((item) => !(item.productId === productId && item.size === variants.size && item.color === variants.color))
-        : current.items.map((item) =>
-            item.productId === productId && item.size === variants.size && item.color === variants.color
-              ? { ...item, stock, quantity: Math.min(quantity, maxQuantity) }
-              : item,
-          ),
+      items: current.items.map((item) =>
+        item.productId === productId && item.size === variants.size && item.color === variants.color
+          ? { ...item, stock, quantity }
+          : item,
+      ),
     }));
   };
 

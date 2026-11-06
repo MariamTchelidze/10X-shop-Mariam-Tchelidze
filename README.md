@@ -19,29 +19,23 @@ Product catalog data comes from the [DummyJSON Products API](https://dummyjson.c
 
 ## Key features
 
-### Shopping experience
+### CORE requirements
 
-- Mobile-first layout with a fixed bottom navigation bar and a full-height account/settings drawer for theme, realm, and account controls.
-- Desktop-only QR welcome modal for opening the shop on a phone.
-- Catalog search, category filters, sorting, and pagination synchronized with the URL.
-- Product details with stock status, variant selection, related items, and local reviews.
-- Product quick view and quick-add actions.
-- Persistent bag with quantity controls, order totals, and the `10X10` promo code.
-- Checkout form and local order confirmation flow.
+- Product catalog loaded from DummyJSON with loading, error, and empty states.
+- Product details with price, brand/category, rating, stock status, quantity controls, and add-to-cart action.
+- Public cart with quantity updates, removal, subtotal, and total.
+- Controlled login and checkout forms; checkout is protected and ends in a local order confirmation.
+- Shared responsive layout and mobile-first product grid.
 
-### Middle-earth interface
+### FULL requirements implemented
 
-- **The Shire** light theme and **Mordor** dark theme, with a saved theme preference.
-- Cinzel display typography and Lora-inspired editorial styling.
-- Realm and currency selector with realm-specific conversion rates.
-- Eagle Post, Ask the Council, and Mithril Vault tools, available from desktop controls and the mobile account drawer.
+- URL-synchronized catalog search, category filters, sorting, and pagination.
+- Profile and order-history sections, persistent wishlist, and product reviews/related products.
+- Cart promo code (`10X10`) and local inventory updates after checkout.
+- Light/dark themes with saved preference and realm-based currency exchange calculator.
+- Quick view, stock-alert flow, desktop QR prompt, and responsive account/settings drawer with Eagle Post and Council tools.
 
-### Accounts and saved items
-
-- Login and registration forms with required-field validation.
-- Password confirmation during registration and show/hide controls for password fields.
-- Profile sections for personal settings, addresses, purchases, refunds, and saved card references.
-- Persistent wishlist, order history, cart, and selected preferences.
+These FULL items are the implemented subset; the project does not claim every Appendix A FULL item is complete. The **Mithril Vault** is an exchange calculator; storefront product and order prices remain standard USD.
 
 > **Demo security note:** Authentication and profile data are simulated in the browser with `localStorage`. This is not production-secure authentication or a backend account system. Do not enter real passwords, payment details, or sensitive personal information. Checkout is simulated and no payment is processed.
 

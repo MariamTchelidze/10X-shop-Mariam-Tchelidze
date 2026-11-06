@@ -3,15 +3,15 @@ import { useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
+import type { LoginFormValues } from "../../types/user";
 import { PasswordField } from "./components/PasswordField";
 
-interface FormValues { fullName: string; email: string; password: string; confirmPassword: string }
-type FormErrors = Partial<Record<keyof FormValues, string>>;
+type FormErrors = Partial<Record<keyof LoginFormValues, string>>;
 
 export function LoginPage() {
   const location = useLocation();
   const [isRegistering, setIsRegistering] = useState(() => new URLSearchParams(location.search).get("mode") === "register");
-  const [values, setValues] = useState<FormValues>({ fullName: "", email: "", password: "", confirmPassword: "" });
+  const [values, setValues] = useState<LoginFormValues>({ fullName: "", email: "", password: "", confirmPassword: "" });
   const [errors, setErrors] = useState<FormErrors>({});
   const [credentialsInvalid, setCredentialsInvalid] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -81,7 +81,7 @@ export function LoginPage() {
     }
   };
 
-  const inputClass = (field: keyof FormValues): string =>
+  const inputClass = (field: keyof LoginFormValues): string =>
     `min-h-12 w-full border-b bg-transparent px-1 text-sm text-market-ink outline-none transition-colors placeholder:text-market-muted focus:border-market-ink ${errors[field] || (credentialsInvalid && !isRegistering) ? "border-red-500 ring-1 ring-red-500" : "border-market-border"}`;
 
   return (

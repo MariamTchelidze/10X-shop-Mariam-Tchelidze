@@ -16,10 +16,14 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
   const [quantity, setQuantity] = useState(1);
   const [cartMessage, setCartMessage] = useState<string | null>(null);
   const [isStockAlertOpen, setIsStockAlertOpen] = useState(false);
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
   const { formatPrice } = useRealm();
   const { getStock } = useInventory();
   const stock = getStock(product.id, product.stock);
+  const quantityInCart = items
+    .filter((item) => item.productId === product.id)
+    .reduce((total, item) => total + item.quantity, 0);
+  const remainingStock = Math.max(0, stock - quantityInCart);
   const price = discountedPrice(product.price, product.discountPercentage);
   const stockStatus = getStockStatus(stock);
 
@@ -28,11 +32,6 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
     setQuantity(1);
     setCartMessage(null);
   }, [product.id]);
-
-  useEffect(() => {
-    // მარაგის შემცირებისას არჩეულ რაოდენობას ხელმისაწვდომ ზღვრამდე ვამცირებთ.
-    setQuantity((current) => Math.min(current, Math.max(1, stock)));
-  }, [stock]);
 
   const handleAddToCart = (): void => {
     // კალათის კონტექსტი საერთო მარაგის ზღვარს ამოწმებს.
@@ -89,22 +88,23 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
         <button
           type="button"
           aria-label="Increase quantity"
-          disabled={quantity >= stock || stock === 0}
-          onClick={() => setQuantity((current) => Math.min(stock, current + 1))}
+          disabled={quantity >= remainingStock || remainingStock === 0}
+          onClick={() => setQuantity((current) => current + 1)}
           className="min-h-12 min-w-12 text-lg text-market-ink disabled:text-market-border"
         >
           +
         </button>
       </div>
-      {stock > 0 ? (
+      {remainingStock > 0 ? (
         <button
           type="button"
           onClick={handleAddToCart}
-          className="mt-4 min-h-12 w-full max-w-sm bg-market-ink px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink"
+          disabled={quantity > remainingStock}
+          className="mt-4 min-h-12 w-full max-w-sm bg-market-ink px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-paper transition-colors hover:bg-market-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-market-ink disabled:cursor-not-allowed disabled:opacity-50"
         >
           Add to cart
         </button>
-      ) : (
+      ) : stock === 0 ? (
         <div className="mt-4 grid w-full max-w-sm gap-2">
           <button type="button" disabled className="min-h-12 cursor-not-allowed bg-market-surface px-6 text-xs font-medium uppercase tracking-[0.14em] text-market-muted">
             Out of stock
@@ -117,7 +117,7 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
             Request Mithril stock alert
           </button>
         </div>
-      )}
+      ) : <p className="mt-4 text-sm text-market-muted" role="status">All available stock is already in your cart.</p>}
       {cartMessage && <p className="mt-3 text-sm text-market-muted" role="status">{cartMessage}</p>}
       {isStockAlertOpen && (
         <StockAlertModal product={product} onClose={() => setIsStockAlertOpen(false)} />

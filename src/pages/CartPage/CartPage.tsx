@@ -24,7 +24,7 @@ export function CartPage() {
     const otherVariantQuantity = items
       .filter((entry) => entry.productId === item.productId && !(entry.size === item.size && entry.color === item.color))
       .reduce((total, entry) => total + entry.quantity, 0);
-    return Math.max(1, getStock(item.productId, item.stock) - otherVariantQuantity);
+    return Math.max(0, getStock(item.productId, item.stock) - otherVariantQuantity);
   };
 
   if (items.length === 0) {
