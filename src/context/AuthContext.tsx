@@ -7,13 +7,13 @@ interface AuthContextValue {
   user: AuthUser;
   login: (identifier: string, password: string) => Promise<LoginResult>;
   register: (fullName: string, email: string, password: string) => Promise<RegisterResult>;
-  updateProfile: (details: Pick<AuthUser, "fullName" | "email" | "address">) => void;
+  updateProfile: (details: Pick<AuthUser, "fullName" | "firstName" | "lastName" | "email" | "address" | "phone">) => void;
   logout: () => void;
 }
 
 const USERS_KEY = "10x-shop-users";
 const CURRENT_USER_KEY = "10x-shop-current-user";
-const guestUser: AuthUser = { username: "", fullName: "", email: "", address: "", isLoggedIn: false };
+const guestUser: AuthUser = { username: "", fullName: "", firstName: "", lastName: "", email: "", address: "", phone: "", isLoggedIn: false };
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 function isRegisteredUser(value: unknown): value is RegisteredUser {
@@ -22,7 +22,10 @@ function isRegisteredUser(value: unknown): value is RegisteredUser {
     "email" in value && typeof value.email === "string" &&
     "passwordHash" in value && typeof value.passwordHash === "string" &&
     "passwordSalt" in value && typeof value.passwordSalt === "string" &&
-    "address" in value && typeof value.address === "string";
+    "address" in value && typeof value.address === "string" &&
+    (! ("firstName" in value) || typeof value.firstName === "string") &&
+    (! ("lastName" in value) || typeof value.lastName === "string") &&
+    (! ("phone" in value) || typeof value.phone === "string");
 }
 
 function readRegisteredUsers(): RegisteredUser[] {
@@ -51,7 +54,20 @@ function readCurrentUser(): AuthUser {
       "email" in value && typeof value.email === "string" &&
       "address" in value && typeof value.address === "string"
     ) {
-      return { username: value.username, fullName: value.fullName, email: value.email, address: value.address, isLoggedIn: true };
+      const nameParts = value.fullName.trim().split(/\s+/).filter(Boolean);
+      const firstName = "firstName" in value && typeof value.firstName === "string" ? value.firstName : (nameParts[0] ?? "");
+      const lastName = "lastName" in value && typeof value.lastName === "string" ? value.lastName : nameParts.slice(1).join(" ");
+      const phone = "phone" in value && typeof value.phone === "string" ? value.phone : "";
+      return {
+        username: value.username,
+        fullName: value.fullName,
+        firstName,
+        lastName,
+        email: value.email,
+        address: value.address,
+        phone,
+        isLoggedIn: true,
+      };
     }
   } catch {
     // დაზიანებულ სესიას ქვემოთ guest მდგომარეობით ვანაცვლებთ.
@@ -129,8 +145,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const nextUser: AuthUser = {
       username: normalizedIdentifier,
       fullName: registered?.fullName ?? normalizedIdentifier,
+      firstName: registered?.firstName ?? (registered?.fullName ?? normalizedIdentifier).trim().split(/\s+/)[0] ?? "",
+      lastName: registered?.lastName ?? (registered?.fullName ?? normalizedIdentifier).trim().split(/\s+/).slice(1).join(" "),
       email: registered?.email ?? (normalizedIdentifier.includes("@") ? normalizedIdentifier : ""),
       address: registered?.address ?? "",
+      phone: registered?.phone ?? "",
       isLoggedIn: true,
     };
     persistUser(nextUser);
@@ -145,6 +164,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   ): Promise<RegisterResult> => {
     const users = readRegisteredUsers();
     const normalizedEmail = email.trim().toLowerCase();
+    const nameParts = fullName.trim().split(/\s+/).filter(Boolean);
     if (users.some((entry) => entry.email.toLowerCase() === normalizedEmail)) {
       return {
         status: "error",
@@ -167,10 +187,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     const registered: RegisteredUser = {
       fullName: fullName.trim(),
+      firstName: nameParts[0] ?? "",
+      lastName: nameParts.slice(1).join(" "),
       email: normalizedEmail,
       passwordSalt: salt,
       passwordHash,
       address: "",
+      phone: "",
     };
     try {
       localStorage.setItem(USERS_KEY, JSON.stringify([...users, registered]));
@@ -185,8 +208,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const nextUser: AuthUser = {
       username: normalizedEmail,
       fullName: registered.fullName,
+      firstName: registered.firstName ?? "",
+      lastName: registered.lastName ?? "",
       email: normalizedEmail,
       address: "",
+      phone: "",
       isLoggedIn: true,
     };
     persistUser(nextUser);
@@ -203,7 +229,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         localStorage.setItem(USERS_KEY, JSON.stringify(users.map((entry) =>
           entry.email.toLowerCase() === current.email.toLowerCase()
-            ? { ...entry, fullName: details.fullName, email: details.email, address: details.address }
+          ? {
+              ...entry,
+              fullName: details.fullName,
+              firstName: details.firstName,
+              lastName: details.lastName,
+              email: details.email,
+              address: details.address,
+              phone: details.phone,
+            }
             : entry,
         )));
       } catch {

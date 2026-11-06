@@ -64,10 +64,15 @@ export function ProfilePage() {
         <div className="min-w-0">
           {activeSection === "general" && (
             <GeneralSettingsSection
-              name={profile.name}
+              firstName={profile.firstName}
+              lastName={profile.lastName}
               email={profile.email}
-              onNameChange={profile.setName}
+              phone={profile.phone}
+              errors={profile.identityErrors}
+              onFirstNameChange={profile.setFirstName}
+              onLastNameChange={profile.setLastName}
               onEmailChange={profile.setEmail}
+              onPhoneChange={profile.setPhone}
               onSave={profile.saveProfile}
               onClearLocalData={handleClearLocalData}
             />

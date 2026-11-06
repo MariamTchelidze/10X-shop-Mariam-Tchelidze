@@ -79,15 +79,21 @@ function persistList<T>(key: string, value: readonly T[]): boolean {
 
 interface UseProfileManagementOptions {
   user: AuthUser;
-  updateProfile: (details: Pick<AuthUser, "fullName" | "email" | "address">) => void;
+  updateProfile: (details: Pick<AuthUser, "fullName" | "firstName" | "lastName" | "email" | "address" | "phone">) => void;
 }
+
+type IdentityField = "firstName" | "lastName" | "email" | "phone";
+type IdentityErrors = Partial<Record<IdentityField, string>>;
 
 export function useProfileManagement({ user, updateProfile }: UseProfileManagementOptions) {
   // მომხმარებლის მიხედვით ცალკე გასაღები ინახავს მისამართებს, ბარათებსა და მოთხოვნებს.
   const storagePrefixRef = useRef(`middle-market-${user.username || user.email}`);
   const storagePrefix = storagePrefixRef.current;
-  const [name, setName] = useState(user.fullName || user.username);
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
   const [email, setEmail] = useState(user.email);
+  const [phone, setPhone] = useState(user.phone);
+  const [identityErrors, setIdentityErrors] = useState<IdentityErrors>({});
   const [addresses, setAddresses] = useState<ProfileAddress[]>(() =>
     readSaved(`${storagePrefix}-addresses`, isProfileAddress),
   );
@@ -106,6 +112,17 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
   const [cardForm, setCardForm] = useState<CardFormValues>(emptyCard);
   const [notice, setNotice] = useState("");
 
+  const changeIdentityField = (field: IdentityField, value: string): void => {
+    const setters: Record<IdentityField, (nextValue: string) => void> = {
+      firstName: setFirstName,
+      lastName: setLastName,
+      email: setEmail,
+      phone: setPhone,
+    };
+    setters[field](value);
+    setIdentityErrors((current) => ({ ...current, [field]: undefined }));
+  };
+
   const saveAddresses = (next: ProfileAddress[]) => {
     setAddresses(next);
     return persistList(`${storagePrefix}-addresses`, next);
@@ -122,11 +139,28 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
   };
 
   const saveProfile = () => {
-    // AuthContext-ის განახლება Header-საც აჩვენებს ახალ სახელსა და ელფოსტას.
+    // სახელის თითოეულ ნაწილსა და ტელეფონს შენახვამდე ცალკე ვამოწმებთ.
+    const nextErrors: IdentityErrors = {};
+    if (firstName.trim().length < 2) nextErrors.firstName = "First name must be at least 2 characters.";
+    if (lastName.trim().length < 2) nextErrors.lastName = "Last name must be at least 2 characters.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) nextErrors.email = "Enter a valid email address.";
+    if (!phone.trim()) nextErrors.phone = "Phone number is required.";
+    setIdentityErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) {
+      setNotice("Please correct the highlighted fields before saving.");
+      return;
+    }
+
+    const normalizedFirstName = firstName.trim();
+    const normalizedLastName = lastName.trim();
+    // AuthContext-ის განახლება Header-საც აჩვენებს ახალ სრულ სახელსა და ელფოსტას.
     updateProfile({
-      fullName: name.trim(),
+      firstName: normalizedFirstName,
+      lastName: normalizedLastName,
+      fullName: `${normalizedFirstName} ${normalizedLastName}`,
       email: email.trim(),
       address: user.address,
+      phone: phone.trim(),
     });
     setNotice("Your profile has been saved.");
   };
@@ -215,10 +249,15 @@ export function useProfileManagement({ user, updateProfile }: UseProfileManageme
   };
 
   return {
-    name,
-    setName,
+    firstName,
+    setFirstName: (value: string) => changeIdentityField("firstName", value),
+    lastName,
+    setLastName: (value: string) => changeIdentityField("lastName", value),
     email,
-    setEmail,
+    setEmail: (value: string) => changeIdentityField("email", value),
+    phone,
+    setPhone: (value: string) => changeIdentityField("phone", value),
+    identityErrors,
     saveProfile,
     addresses,
     addressForm,
