@@ -20,7 +20,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const location = useLocation();
   const { addItem } = useCart();
-  const { formatCurrency } = useRealm();
+  const { formatPrice } = useRealm();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { getStock } = useInventory();
   const [isVariantPickerOpen, setIsVariantPickerOpen] = useState(false);
@@ -158,11 +158,11 @@ export function ProductCard({ product }: ProductCardProps) {
         </p>
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-1">
           <p className="text-sm font-semibold text-market-ink sm:text-base">
-            {formatCurrency(discountedPrice(product.price, product.discountPercentage))}
+            {formatPrice(discountedPrice(product.price, product.discountPercentage))}
           </p>
           {product.discountPercentage >= 1 && (
             <>
-              <p className="text-[10px] text-market-muted line-through sm:text-xs">{formatCurrency(product.price)}</p>
+              <p className="text-[10px] text-market-muted line-through sm:text-xs">{formatPrice(product.price)}</p>
               <span className="border border-blood/30 bg-blood/5 px-1.5 py-0.5 text-[9px] font-medium tracking-wide text-blood">−{Math.round(product.discountPercentage)}%</span>
             </>
           )}

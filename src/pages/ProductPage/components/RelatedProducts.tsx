@@ -14,7 +14,7 @@ interface RelatedProductsProps {
 
 export function RelatedProducts({ product, catalogReturnTo }: RelatedProductsProps) {
   const [products, setProducts] = useState<Product[]>([]);
-  const { formatCurrency } = useRealm();
+  const { formatPrice } = useRealm();
 
   useEffect(() => {
         // კატეგორიის შეცვლისას ძველ შედეგებს ვშლით და წინა მოთხოვნას ვაუქმებთ.
@@ -51,7 +51,7 @@ export function RelatedProducts({ product, catalogReturnTo }: RelatedProductsPro
             <ProductImage src={related.thumbnail} alt={related.title} loading="lazy" width={600} height={800} className="aspect-[3/4] w-full bg-market-surface object-cover" />
             <h3 className="mt-3 truncate text-xs text-market-ink group-hover:underline">{related.title}</h3>
             <p className="mt-1 text-xs text-market-muted">
-              {formatCurrency(discountedPrice(related.price, related.discountPercentage))}
+              {formatPrice(discountedPrice(related.price, related.discountPercentage))}
             </p>
           </Link>
         ))}

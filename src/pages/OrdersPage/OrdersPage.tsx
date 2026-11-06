@@ -16,7 +16,7 @@ export function OrdersPage() {
   const { id } = useParams();
   const { user } = useAuth();
   const { addItem } = useCart();
-  const { formatCurrency } = useRealm();
+  const { formatPrice } = useRealm();
   const { addToast } = useToast();
   const navigate = useNavigate();
   const [now, setNow] = useState(Date.now());
@@ -67,7 +67,7 @@ export function OrdersPage() {
       <OrderDetail
         order={selectedOrder}
         status={getOrderStatus(selectedOrder, now)}
-        formatCurrency={formatCurrency}
+        formatPrice={formatPrice}
         onReorder={() => void handleReorder(selectedOrder)}
       />
     );
@@ -90,7 +90,7 @@ export function OrdersPage() {
                 <span className="mt-2 block text-sm text-market-ink">{formatDate(order.date)} · {order.items.reduce((total, item) => total + item.quantity, 0)} items</span>
               </span>
               <span className="w-fit rounded-full border border-market-border px-3 py-1 text-[10px] uppercase tracking-widest">{getOrderStatus(order, now)}</span>
-              <span className="text-sm font-medium">{formatCurrency(order.total)}</span>
+              <span className="text-sm font-medium">{formatPrice(order.total)}</span>
             </Link>
           ))}
         </div>

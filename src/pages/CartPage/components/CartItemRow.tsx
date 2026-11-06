@@ -8,12 +8,12 @@ import { ProductImage } from "../../../components/ProductImage/ProductImage";
 interface CartItemRowProps {
   item: CartItem;
   maxQuantity: number;
-  formatCurrency: (amount: number) => string;
+  formatPrice: (amount: number) => string;
   onRemove: (item: CartItem) => void;
   onQuantityChange: (item: CartItem, quantity: number) => void;
 }
 
-export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQuantityChange }: CartItemRowProps) {
+export function CartItemRow({ item, maxQuantity, formatPrice, onRemove, onQuantityChange }: CartItemRowProps) {
   // ერთეულის ფასი ფასდაკლების შემდეგ გამოითვლება.
   const unitPrice = discountedPrice(item.price, item.discountPercentage);
   // ვაჩვენებთ მხოლოდ იმ ზომასა და ფერს, რომლებიც მომხმარებელმა აირჩია.
@@ -44,7 +44,7 @@ export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQua
           {variants.length > 0 && (
             <p className="mt-1 text-xs text-market-muted">{variants.join(" · ")}</p>
           )}
-          <p className="mt-2 text-sm text-market-muted">{formatCurrency(unitPrice)} each</p>
+          <p className="mt-2 text-sm text-market-muted">{formatPrice(unitPrice)} each</p>
           <button
             type="button"
             onClick={() => onRemove(item)}
@@ -78,7 +78,7 @@ export function CartItemRow({ item, maxQuantity, formatCurrency, onRemove, onQua
           </div>
 
           <p className="text-sm font-medium text-market-ink">
-            {formatCurrency(lineTotal(item.price, item.discountPercentage, item.quantity))}
+            {formatPrice(lineTotal(item.price, item.discountPercentage, item.quantity))}
           </p>
         </div>
       </div>

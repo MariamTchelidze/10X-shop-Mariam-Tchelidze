@@ -22,7 +22,7 @@ export function CheckoutPage() {
   const { items, subtotal, discount, total, promoCode } = useCart();
   const { user } = useAuth();
   const { decrementStock } = useInventory();
-  const { formatCurrency } = useRealm();
+  const { formatPrice } = useRealm();
   const navigate = useNavigate();
   const [values, setValues] = useState<CheckoutValues>(emptyValues);
   const [errors, setErrors] = useState<CheckoutErrors>({});
@@ -111,7 +111,7 @@ export function CheckoutPage() {
           discount={discount}
           total={total}
           promoCode={promoCode}
-          formatCurrency={formatCurrency}
+          formatPrice={formatPrice}
         />
       </div>
     </main>

@@ -8,10 +8,10 @@ interface OrderSummaryProps {
   discount: number;
   total: number;
   promoCode: string | null;
-  formatCurrency: (amount: number) => string;
+  formatPrice: (amount: number) => string;
 }
 
-export function OrderSummary({ items, subtotal, discount, total, promoCode, formatCurrency }: OrderSummaryProps) {
+export function OrderSummary({ items, subtotal, discount, total, promoCode, formatPrice }: OrderSummaryProps) {
   // თითოეული ხაზის ფასდაკლებული ჯამი და მთელი კალათის ჯამი ცალ-ცალკე ჩანს.
   return (
     <aside className="h-fit border border-market-border p-5 sm:p-6">
@@ -21,19 +21,19 @@ export function OrderSummary({ items, subtotal, discount, total, promoCode, form
           <li key={item.productId} className="flex justify-between gap-4 text-sm">
             <span className="text-market-muted">{item.title} × {item.quantity}</span>
             <span className="shrink-0 text-market-ink">
-              {formatCurrency(lineTotal(item.price, item.discountPercentage, item.quantity))}
+              {formatPrice(lineTotal(item.price, item.discountPercentage, item.quantity))}
             </span>
           </li>
         ))}
       </ul>
       <div className="mt-4 flex justify-between gap-4 text-sm text-market-muted">
         <span>Subtotal</span>
-        <span>{formatCurrency(subtotal)}</span>
+        <span>{formatPrice(subtotal)}</span>
       </div>
       {promoCode && (
         <div className="mt-3 flex justify-between gap-4 text-sm text-market-muted">
           <span>Discount ({promoCode} −10%)</span>
-          <span>−{formatCurrency(discount)}</span>
+          <span>−{formatPrice(discount)}</span>
         </div>
       )}
       <div className="mt-3 flex justify-between gap-4 text-sm text-market-muted">
@@ -42,7 +42,7 @@ export function OrderSummary({ items, subtotal, discount, total, promoCode, form
       </div>
       <div className="mt-4 flex justify-between gap-4 border-t border-market-border pt-4 text-sm font-medium text-market-ink">
         <span>Total</span>
-        <span>{formatCurrency(total)}</span>
+        <span>{formatPrice(total)}</span>
       </div>
     </aside>
   );

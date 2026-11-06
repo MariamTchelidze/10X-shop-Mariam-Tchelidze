@@ -83,8 +83,8 @@ test("promo codes normalize safely and cart totals include the expected discount
 
 test("stock labels cover available, low, and empty inventory", () => {
   assert.equal(getStockStatus(8).message, "In stock");
-  assert.equal(getStockStatus(3).message, "Only 3 left in stock!");
-  assert.match(getStockStatus(0).message, /Out of Stock/);
+  assert.equal(getStockStatus(3).message, "Only 3 left!");
+  assert.equal(getStockStatus(0).message, "Out of stock");
 });
 
 test("order timeline transitions are deterministic at each documented interval", () => {

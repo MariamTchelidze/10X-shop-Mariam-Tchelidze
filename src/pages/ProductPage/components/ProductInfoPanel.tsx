@@ -17,7 +17,7 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
   const [cartMessage, setCartMessage] = useState<string | null>(null);
   const [isStockAlertOpen, setIsStockAlertOpen] = useState(false);
   const { addItem } = useCart();
-  const { formatCurrency } = useRealm();
+  const { formatPrice } = useRealm();
   const { getStock } = useInventory();
   const stock = getStock(product.id, product.stock);
   const price = discountedPrice(product.price, product.discountPercentage);
@@ -59,10 +59,10 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
       </div>
       <h1 className="mt-3 font-display text-3xl text-market-ink sm:text-4xl">{product.title}</h1>
       <div className="mt-5 flex flex-wrap items-center gap-3">
-        <p className="text-base text-market-ink">{formatCurrency(price)}</p>
+        <p className="text-base text-market-ink">{formatPrice(price)}</p>
         {product.discountPercentage > 0 && (
           <>
-            <p className="text-sm text-market-muted line-through">{formatCurrency(product.price)}</p>
+            <p className="text-sm text-market-muted line-through">{formatPrice(product.price)}</p>
             <span className="text-xs text-market-muted">−{Math.round(product.discountPercentage)}%</span>
           </>
         )}

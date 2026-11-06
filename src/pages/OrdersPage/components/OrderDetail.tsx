@@ -7,13 +7,13 @@ import { lineTotal } from "../../../utils/product";
 interface OrderDetailProps {
   order: Order;
   status: OrderStatus;
-  formatCurrency: (amount: number) => string;
+  formatPrice: (amount: number) => string;
   onReorder: () => void;
 }
 
 const statusSteps: OrderStatus[] = ["Processing", "Shipped", "Delivered"];
 
-export function OrderDetail({ order, status, formatCurrency, onReorder }: OrderDetailProps) {
+export function OrderDetail({ order, status, formatPrice, onReorder }: OrderDetailProps) {
   const activeStep = statusSteps.indexOf(status);
 
   return (
@@ -43,7 +43,7 @@ export function OrderDetail({ order, status, formatCurrency, onReorder }: OrderD
             {order.items.map((item) => (
               <li key={`${item.productId}-${item.size ?? ""}-${item.color ?? ""}`} className="flex min-w-0 flex-wrap justify-between gap-3 py-4 text-sm">
                 <span className="min-w-0 text-market-muted">{item.title} × {item.quantity}</span>
-                <span className="shrink-0 text-market-ink">{formatCurrency(lineTotal(item.price, item.discountPercentage, item.quantity))}</span>
+                <span className="shrink-0 text-market-ink">{formatPrice(lineTotal(item.price, item.discountPercentage, item.quantity))}</span>
               </li>
             ))}
           </ul>
@@ -59,9 +59,9 @@ export function OrderDetail({ order, status, formatCurrency, onReorder }: OrderD
         <aside className="h-fit border border-market-border p-5">
           <h2 className="font-display text-xl text-market-ink">Order total</h2>
           <dl className="mt-5 space-y-3 text-sm">
-            <div className="flex justify-between gap-3 text-market-muted"><dt>Subtotal</dt><dd>{formatCurrency(order.subtotal ?? order.total)}</dd></div>
-            {(order.discount ?? 0) > 0 && <div className="flex justify-between gap-3 text-market-muted"><dt>Discount</dt><dd>−{formatCurrency(order.discount ?? 0)}</dd></div>}
-            <div className="flex justify-between gap-3 border-t border-market-border pt-3 font-medium text-market-ink"><dt>Total</dt><dd>{formatCurrency(order.total)}</dd></div>
+            <div className="flex justify-between gap-3 text-market-muted"><dt>Subtotal</dt><dd>{formatPrice(order.subtotal ?? order.total)}</dd></div>
+            {(order.discount ?? 0) > 0 && <div className="flex justify-between gap-3 text-market-muted"><dt>Discount</dt><dd>−{formatPrice(order.discount ?? 0)}</dd></div>}
+            <div className="flex justify-between gap-3 border-t border-market-border pt-3 font-medium text-market-ink"><dt>Total</dt><dd>{formatPrice(order.total)}</dd></div>
           </dl>
           <button type="button" onClick={onReorder} className="mt-6 min-h-12 w-full bg-market-ink px-4 text-xs uppercase tracking-widest text-market-paper transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Reorder</button>
         </aside>

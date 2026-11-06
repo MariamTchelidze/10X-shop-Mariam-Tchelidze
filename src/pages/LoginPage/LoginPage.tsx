@@ -136,7 +136,7 @@ export function LoginPage() {
       <button type="button" onClick={() => { setIsRegistering((current) => !current); setErrors({}); setCredentialsInvalid(false); setValues((current) => ({ ...current, confirmPassword: "" })); setIsPasswordVisible(false); setIsConfirmationVisible(false); }} className="mt-6 inline-flex min-h-11 items-center justify-center text-center text-xs uppercase tracking-[0.14em] text-market-muted underline-offset-4 hover:text-market-ink hover:underline">
         {isRegistering ? "Already have an account? Log in" : "New to 10X Shop? Register"}
       </button>
-      <Link to="/" className="mt-6 inline-flex min-h-11 items-center justify-center text-center text-xs uppercase tracking-[0.14em] text-market-muted underline-offset-4 hover:text-market-ink hover:underline">Back to catalog</Link>
+      <Link to="/" className="mt-6 inline-flex min-h-11 items-center justify-center text-center text-xs uppercase tracking-[0.14em] text-market-muted underline-offset-4 hover:text-market-ink hover:underline">← Back to catalog</Link>
     </main>
   );
 }

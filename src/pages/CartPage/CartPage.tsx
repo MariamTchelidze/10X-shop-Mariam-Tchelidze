@@ -16,7 +16,7 @@ export function CartPage() {
       ? routeState.message
       : "";
   const { items, subtotal, discount, total, promoCode, applyPromoCode, removePromoCode, removeItem, updateQuantity, clearCart } = useCart();
-  const { formatCurrency } = useRealm();
+  const { formatPrice } = useRealm();
   const { getStock } = useInventory();
 
   // სხვა ვარიანტებში არჩეული რაოდენობა საერთო მარაგიდან გამოირიცხება.
@@ -31,7 +31,7 @@ export function CartPage() {
     // ცარიელი კალათისთვის პროდუქტების დათვალიერების ბმულს ვაჩვენებთ.
     return (
       <main className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8">
-        <h1 className="font-display text-3xl text-market-ink">Your cart is empty</h1>
+        <h1 className="font-display text-3xl text-market-ink">Your cart is empty.</h1>
         {redirectMessage && <p role="status" className="mt-3 text-sm text-market-muted">{redirectMessage}</p>}
         <Link
           to="/"
@@ -56,7 +56,7 @@ export function CartPage() {
                 key={`${item.productId}-${item.size ?? ""}-${item.color ?? ""}`}
                 item={item}
                 maxQuantity={getMaxQuantity(item)}
-                formatCurrency={formatCurrency}
+                formatPrice={formatPrice}
                 onRemove={(current) =>
                   removeItem(current.productId, { size: current.size, color: current.color })
                 }
@@ -86,7 +86,7 @@ export function CartPage() {
           promoCode={promoCode}
           onApplyPromoCode={applyPromoCode}
           onRemovePromoCode={removePromoCode}
-          formatCurrency={formatCurrency}
+          formatPrice={formatPrice}
         />
       </div>
     </main>

@@ -7,10 +7,10 @@ import { getOrderStatus } from "../../../utils/orders";
 
 interface PurchasesSectionProps {
   orders: Order[];
-  formatCurrency: (amount: number) => string;
+  formatPrice: (amount: number) => string;
 }
 
-export function PurchasesSection({ orders, formatCurrency }: PurchasesSectionProps) {
+export function PurchasesSection({ orders, formatPrice }: PurchasesSectionProps) {
   // შეკვეთების არარსებობისას ცარიელ მდგომარეობას ვაჩვენებთ, სხვა შემთხვევაში კი მათ სიას.
   return (
     <SectionPanel title="My purchases" intro="Review placed orders and their latest saved status.">
@@ -30,7 +30,7 @@ export function PurchasesSection({ orders, formatCurrency }: PurchasesSectionPro
               </div>
               <div className="flex items-center gap-4">
                 <span className="border border-gold px-3 py-1 text-[10px] uppercase tracking-widest">{getOrderStatus(order)}</span>
-                <span className="text-sm">{formatCurrency(order.total)}</span>
+                <span className="text-sm">{formatPrice(order.total)}</span>
               </div>
             </li>
           ))}

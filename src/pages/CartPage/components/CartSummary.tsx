@@ -10,10 +10,10 @@ interface CartSummaryProps {
   promoCode: string | null;
   onApplyPromoCode: (code: string) => boolean;
   onRemovePromoCode: () => void;
-  formatCurrency: (amount: number) => string;
+  formatPrice: (amount: number) => string;
 }
 
-export function CartSummary({ subtotal, discount, total, promoCode, onApplyPromoCode, onRemovePromoCode, formatCurrency }: CartSummaryProps) {
+export function CartSummary({ subtotal, discount, total, promoCode, onApplyPromoCode, onRemovePromoCode, formatPrice }: CartSummaryProps) {
   const { addToast } = useToast();
   const [promoInput, setPromoInput] = useState(promoCode ?? "");
   const [promoError, setPromoError] = useState("");
@@ -22,8 +22,8 @@ export function CartSummary({ subtotal, discount, total, promoCode, onApplyPromo
     event.preventDefault();
     // მოქმედი კოდი CartContext-ში ინახება და Checkout-შიც იმავე ჯამს იყენებს.
     if (!onApplyPromoCode(promoInput)) {
-      setPromoError("This promo code is not valid.");
-      addToast("INVALID PROMO CODE", "error");
+      setPromoError("Invalid promo code");
+      addToast("Invalid promo code", "error");
       return;
     }
     setPromoError("");
@@ -35,7 +35,7 @@ export function CartSummary({ subtotal, discount, total, promoCode, onApplyPromo
       <h2 className="font-display text-2xl text-market-ink">Order summary</h2>
       <div className="mt-6 flex justify-between gap-4 text-sm text-market-muted">
         <span>Subtotal</span>
-        <span>{formatCurrency(subtotal)}</span>
+        <span>{formatPrice(subtotal)}</span>
       </div>
       <form onSubmit={handleApplyPromoCode} className="mt-6">
         <label htmlFor="promo-code" className="mb-2 block text-xs uppercase tracking-[0.12em] text-market-muted">
@@ -67,7 +67,7 @@ export function CartSummary({ subtotal, discount, total, promoCode, onApplyPromo
       {promoCode && (
         <div className="mt-4 flex justify-between gap-4 text-sm text-market-muted">
           <span>Discount ({promoCode} −10%)</span>
-          <span>−{formatCurrency(discount)}</span>
+          <span>−{formatPrice(discount)}</span>
         </div>
       )}
       <div className="mt-4 flex justify-between gap-4 text-sm text-market-muted">
@@ -76,7 +76,7 @@ export function CartSummary({ subtotal, discount, total, promoCode, onApplyPromo
       </div>
       <div className="mt-4 flex justify-between gap-4 border-t border-market-border pt-4 text-sm font-medium text-market-ink">
         <span>Total</span>
-        <span>{formatCurrency(total)}</span>
+        <span>{formatPrice(total)}</span>
       </div>
       {promoCode && (
         <button

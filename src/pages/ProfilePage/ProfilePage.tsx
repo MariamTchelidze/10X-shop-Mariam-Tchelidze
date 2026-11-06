@@ -17,7 +17,7 @@ import { clearSavedReviews } from "../../utils/reviews";
 
 export function ProfilePage() {
   const { user, logout, updateProfile } = useAuth();
-  const { formatCurrency } = useRealm();
+  const { formatPrice } = useRealm();
   const { clearCart } = useCart();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<ProfileSectionId>("general");
@@ -85,7 +85,7 @@ export function ProfilePage() {
             />
           )}
           {activeSection === "purchases" && (
-            <PurchasesSection orders={profile.orders} formatCurrency={formatCurrency} />
+            <PurchasesSection orders={profile.orders} formatPrice={formatPrice} />
           )}
           {activeSection === "refunds" && (
             <RefundsSection

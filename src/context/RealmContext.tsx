@@ -1,6 +1,7 @@
-// არჩეულ რეგიონსა და ვალუტას გლობალურად აზიარებს და ფასებს აფორმატებს.
+// არჩეულ რეგიონს გლობალურად აზიარებს; მაღაზიის ყველა ფასი USD ფორმატში რჩება.
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 import type { Realm } from "../types/realm";
+import { formatPrice as formatUsdPrice } from "../utils/formatters";
 
 export const REALMS: Realm[] = [
   { id: "shire", name: "The Shire", region: "The Shire", currencyName: "Copper Pennies", currencySymbol: "§", multiplier: 1, marker: "🟢" },
@@ -13,7 +14,7 @@ export const REALMS: Realm[] = [
 interface RealmContextValue {
   realm: Realm;
   setRealm: (realmId: string) => void;
-  formatCurrency: (amount: number) => string;
+  formatPrice: (amount: number) => string;
 }
 
 const REALM_KEY = "middle-market-realm";
@@ -49,17 +50,12 @@ export function RealmProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const formatCurrency = useCallback((amount: number) => {
-    // ფასის გადაყვანა ერთ ადგილზეა, რომ ყველა გვერდზე ერთნაირად გამოისახოს.
-    const convertedAmount = amount * realm.multiplier;
-    const formattedAmount = new Intl.NumberFormat("en", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(convertedAmount);
-    return `${realm.currencySymbol} ${formattedAmount}`;
-  }, [realm]);
+  const formatPrice = useCallback((amount: number) => {
+    // მაღაზიის ფასს ვაჩვენებთ USD-ში; realm-ის კურსი მხოლოდ Vault-ის კალკულატორში გამოიყენება.
+    return formatUsdPrice(amount);
+  }, []);
 
-  return <RealmContext.Provider value={{ realm, setRealm, formatCurrency }}>{children}</RealmContext.Provider>;
+  return <RealmContext.Provider value={{ realm, setRealm, formatPrice }}>{children}</RealmContext.Provider>;
 }
 
 export function useRealm(): RealmContextValue {

@@ -17,7 +17,7 @@ interface QuickViewModalProps {
 
 export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
   const { addItem } = useCart();
-  const { formatCurrency } = useRealm();
+  const { formatPrice } = useRealm();
   const { getStock } = useInventory();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [selectedSize, setSelectedSize] = useState("");
@@ -93,8 +93,8 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
           <p className="mt-2 text-xs uppercase tracking-widest text-market-muted">{product.category}</p>
           <p className={`mt-2 text-xs ${stockStatus.className}`}>{stockStatus.message}</p>
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <p className="text-base text-market-ink">{formatCurrency(price)}</p>
-            {product.discountPercentage > 0 && <p className="text-sm text-market-muted line-through">{formatCurrency(product.price)}</p>}
+            <p className="text-base text-market-ink">{formatPrice(price)}</p>
+            {product.discountPercentage > 0 && <p className="text-sm text-market-muted line-through">{formatPrice(product.price)}</p>}
           </div>
           <p className="mt-5 max-h-28 overflow-y-auto text-sm leading-6 text-market-muted sm:max-h-40">{product.description}</p>
 

@@ -21,10 +21,10 @@ export interface StockStatus {
 export function getStockStatus(stock: number): StockStatus {
   // შეტყობინების ტექსტი და ფერი მარაგის რაოდენობის მიხედვით განისაზღვრება.
   if (stock <= 0) {
-    return { message: "Out of Stock · Mithril Alert", className: "text-blood" };
+    return { message: "Out of stock", className: "text-blood" };
   }
   if (stock <= 5) {
-    return { message: `Only ${stock} left in stock!`, className: "text-gold" };
+    return { message: `Only ${stock} left!`, className: "text-gold" };
   }
   return { message: "In stock", className: "text-market-muted" };
 }
