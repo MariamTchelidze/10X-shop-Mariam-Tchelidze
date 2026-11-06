@@ -84,7 +84,20 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
         >
           −
         </button>
-        <span className="min-w-10 text-center text-sm" aria-live="polite">{quantity}</span>
+        <label className="sr-only" htmlFor="product-quantity">Quantity</label>
+        <input
+          id="product-quantity"
+          type="number"
+          min={1}
+          max={product.stock}
+          step={1}
+          inputMode="numeric"
+          value={quantity}
+          aria-invalid={quantity > remainingStock}
+          aria-describedby={quantity > remainingStock ? "quantity-stock-error" : undefined}
+          onChange={(event) => setQuantity(Number(event.target.value || 1))}
+          className="h-12 w-16 appearance-none bg-transparent text-center text-sm text-market-ink outline-none focus-visible:ring-2 focus-visible:ring-gold"
+        />
         <button
           type="button"
           aria-label="Increase quantity"
@@ -95,6 +108,11 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
           +
         </button>
       </div>
+      {quantity > remainingStock && remainingStock > 0 && (
+        <p id="quantity-stock-error" className="mt-2 text-sm text-error" role="alert">
+          Only {remainingStock} more can be added to your cart.
+        </p>
+      )}
       {remainingStock > 0 ? (
         <button
           type="button"

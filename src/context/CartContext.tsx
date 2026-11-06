@@ -50,13 +50,13 @@ export function CartProvider({ children }: CartProviderProps) {
     const result = cartManager.addItem(product, quantity, stock, variants);
     if (!result.success) {
       if (result.reason === "stock-limit") {
-        addToast(result.availableStock > 0 ? `Only ${result.availableStock} left!` : "No more stock is available.", "info");
+        addToast("Cannot add more than available stock.", "error");
       }
       return false;
     }
     setCart(cartManager.state);
-
-    addToast("ADDED TO BAG", "success");
+    if (result.limited) addToast("Cannot add more than available stock.", "error");
+    addToast("Added to cart.", "success");
 
     return true;
   };
@@ -76,11 +76,12 @@ export function CartProvider({ children }: CartProviderProps) {
     const result = cartManager.updateQuantity(productId, quantity, stock, variants);
     if (!result.success) {
       if (result.reason === "stock-limit") {
-        addToast(result.maxQuantity > 0 ? `Only ${result.maxQuantity} left!` : "No more stock is available.", "info");
+        addToast("Cannot add more than available stock.", "error");
       }
       return;
     }
     setCart(cartManager.state);
+    if (result.limited) addToast("Cannot add more than available stock.", "error");
   };
 
   const applyPromoCode = (code: string): boolean => {

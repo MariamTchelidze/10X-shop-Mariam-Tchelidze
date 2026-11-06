@@ -57,7 +57,7 @@ export function OrdersPage() {
       addToast("No items from this order are currently available.", "info");
       return;
     }
-    addToast("ORDER ITEMS ADDED TO BAG", "success");
+    addToast("Added to cart.", "success");
     navigate("/cart");
   };
 

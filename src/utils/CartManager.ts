@@ -3,11 +3,11 @@ import type { Product } from "../types/product";
 import { calculateCartTotals, normalizePromoCode, type CartTotals } from "./cart";
 
 export type AddCartItemResult =
-  | { success: true }
+  | { success: true; limited: boolean; availableStock: number }
   | { success: false; reason: "invalid-quantity" | "stock-limit"; availableStock: number };
 
 export type UpdateCartQuantityResult =
-  | { success: true }
+  | { success: true; limited: boolean; maxQuantity: number }
   | {
       success: false;
       reason: "invalid-quantity" | "item-not-found" | "stock-limit";
@@ -43,7 +43,7 @@ export class CartManager {
     stock: number,
     variants: CartVariants = {},
   ): AddCartItemResult {
-    if (!Number.isInteger(quantity) || quantity < 1 || stock < 1) {
+    if (!Number.isInteger(quantity) || quantity < 1) {
       return { success: false, reason: "invalid-quantity", availableStock: 0 };
     }
 
@@ -51,9 +51,10 @@ export class CartManager {
       .filter((item) => item.productId === product.id)
       .reduce((total, item) => total + item.quantity, 0);
     const availableStock = Math.max(0, stock - quantityAlreadyInCart);
-    if (quantity > availableStock) {
+    if (availableStock === 0) {
       return { success: false, reason: "stock-limit", availableStock };
     }
+    const acceptedQuantity = Math.min(quantity, availableStock);
 
     const matchingItem = this.cartState.items.find((item) =>
       item.productId === product.id && item.size === variants.size && item.color === variants.color,
@@ -65,7 +66,7 @@ export class CartManager {
       price: product.price,
       discountPercentage: product.discountPercentage,
       stock,
-      quantity: (matchingItem?.quantity ?? 0) + quantity,
+      quantity: (matchingItem?.quantity ?? 0) + acceptedQuantity,
       ...(variants.size ? { size: variants.size } : {}),
       ...(variants.color ? { color: variants.color } : {}),
     };
@@ -81,7 +82,7 @@ export class CartManager {
         : [...this.cartState.items, nextItem],
     };
 
-    return { success: true };
+    return { success: true, limited: quantity > availableStock, availableStock };
   }
 
   removeItem(productId: number, variants: CartVariants = {}): boolean {
@@ -120,17 +121,18 @@ export class CartManager {
       .filter((item) => item.productId === productId && !matchesVariants(item))
       .reduce((total, item) => total + item.quantity, 0);
     const maxQuantity = Math.max(0, stock - quantityInOtherVariants);
-    if (quantity > maxQuantity) {
+    if (maxQuantity === 0) {
       return { success: false, reason: "stock-limit", maxQuantity };
     }
+    const acceptedQuantity = Math.min(quantity, maxQuantity);
 
     this.cartState = {
       ...this.cartState,
       items: this.cartState.items.map((item) =>
-        matchesVariants(item) ? { ...item, stock, quantity } : item,
+        matchesVariants(item) ? { ...item, stock, quantity: acceptedQuantity } : item,
       ),
     };
-    return { success: true };
+    return { success: true, limited: quantity > maxQuantity, maxQuantity };
   }
 
   applyPromoCode(code: string): boolean {
