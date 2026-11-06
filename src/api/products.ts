@@ -2,6 +2,7 @@
 import type { Product, ProductsResponse } from "../types/product";
 import type { CatalogQuery, Category } from "../types/catalog";
 import { CATALOG_PAGE_SIZE } from "../types/catalog";
+import { ApiError } from "./ApiError";
 
 /*isReview() ამოწმებს, აქვს თუ არა მიღებულ მონაცემს პროდუქტის მიმოხილვისთვის (Review) საჭირო სტრუქტურა.  */
 function isReview(value: unknown): boolean {  // value: unknown — ნიშნავს, რომ შემოსული მონაცემის ტიპი წინასწარ არ ვიცით.
@@ -98,7 +99,7 @@ export async function fetchProducts(
 
   // თუ სერვერმა შეცდომა დააბრუნა, ვათავისუფლებთ გასაგებ შეტყობინებას
   if (!response.ok) {
-    throw new Error(`Unable to load products (HTTP ${response.status}).`);
+    throw new ApiError(`Unable to load products (HTTP ${response.status}).`, response.status);
   }
 
   const payload = await readJson(response);
@@ -114,7 +115,7 @@ export async function fetchCategories(signal?: AbortSignal): Promise<Category[]>
   const response = await fetch(`${API_BASE}/products/categories`, { signal });
 
   if (!response.ok) {
-    throw new Error(`Unable to load categories (HTTP ${response.status}).`);
+    throw new ApiError(`Unable to load categories (HTTP ${response.status}).`, response.status);
   }
 
   const payload = await readJson(response);
@@ -139,7 +140,7 @@ export async function fetchProductById(
   }
 
   if (!response.ok) {
-    throw new Error(`Unable to load this product (HTTP ${response.status}).`);
+    throw new ApiError(`Unable to load this product (HTTP ${response.status}).`, response.status);
   }
 
   const payload = await readJson(response);
