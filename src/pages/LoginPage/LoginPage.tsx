@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import type { LoginFormValues } from "../../types/user";
+import { assertNever } from "../../utils/assertNever";
 import { PasswordField } from "./components/PasswordField";
 
 type FormErrors = Partial<Record<keyof LoginFormValues, string>>;
@@ -55,25 +56,49 @@ export function LoginPage() {
     try {
       if (isRegistering) {
         const result = await register(fullName, identifier, values.password);
-        if (result === "exists") {
-          setErrors({ email: "An account with this email already exists." });
-          return;
+        switch (result.status) {
+          case "success":
+            addToast("ACCOUNT CREATED", "success");
+            navigateAfterAuth();
+            return;
+          case "error":
+            switch (result.errorType) {
+              case "EMAIL_EXISTS":
+              case "STORAGE_ERROR":
+                setErrors({ email: result.message });
+                return;
+              case "GENERAL":
+                setErrors({ password: result.message });
+                return;
+              default:
+                return assertNever(result.errorType);
+            }
+          default:
+            return assertNever(result);
         }
-        if (result === "storage-error") {
-          setErrors({ email: "Unable to save this account in browser storage." });
-          return;
-        }
-        addToast("ACCOUNT CREATED", "success");
       } else {
         const result = await login(identifier, values.password);
-        if (result === "invalid") {
-          setCredentialsInvalid(true);
-          setErrors({ email: "Email or password is incorrect.", password: "Email or password is incorrect." });
-          return;
+        switch (result.status) {
+          case "success":
+            addToast("WELCOME BACK", "success");
+            navigateAfterAuth();
+            return;
+          case "error":
+            switch (result.errorType) {
+              case "INVALID_CREDENTIALS":
+                setCredentialsInvalid(true);
+                setErrors({ email: result.message, password: result.message });
+                return;
+              case "GENERAL":
+                setErrors({ password: result.message });
+                return;
+              default:
+                return assertNever(result.errorType);
+            }
+          default:
+            return assertNever(result);
         }
-        addToast("WELCOME BACK", "success");
       }
-      navigateAfterAuth();
     } catch {
       setErrors({ password: "Unable to complete sign in. Please try again." });
     } finally {

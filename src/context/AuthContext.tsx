@@ -1,9 +1,7 @@
 // მომხმარებლის დემო შესვლას, რეგისტრაციას, პროფილის განახლებასა და გამოსვლას მართავს.
 import { createContext, useContext, useState, type ReactNode } from "react";
 import type { AuthUser, RegisteredUser } from "../types/user";
-
-type LoginResult = "success" | "invalid";
-type RegisterResult = "success" | "exists" | "storage-error";
+import type { LoginResult, RegisterResult } from "../types/auth";
 
 interface AuthContextValue {
   user: AuthUser;
@@ -96,13 +94,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (identifier: string, password: string): Promise<LoginResult> => {
     const normalizedIdentifier = identifier.trim().toLowerCase();
-    if (!normalizedIdentifier || password.trim().length < 6) return "invalid";
+    if (!normalizedIdentifier || password.trim().length < 6) {
+      return {
+        status: "error",
+        errorType: "INVALID_CREDENTIALS",
+        message: "Email or password is incorrect.",
+      };
+    }
 
     const registered = readRegisteredUsers().find(
       (entry) => entry.email.toLowerCase() === normalizedIdentifier,
     );
-    if (registered && await hashPassword(password, registered.passwordSalt) !== registered.passwordHash) {
-      return "invalid";
+    if (registered) {
+      let submittedPasswordHash: string;
+      try {
+        submittedPasswordHash = await hashPassword(password, registered.passwordSalt);
+      } catch {
+        return {
+          status: "error",
+          errorType: "GENERAL",
+          message: "Unable to complete sign in. Please try again.",
+        };
+      }
+      if (submittedPasswordHash !== registered.passwordHash) {
+        return {
+          status: "error",
+          errorType: "INVALID_CREDENTIALS",
+          message: "Email or password is incorrect.",
+        };
+      }
     }
 
     // CORE Login არის ლოკალური სასწავლო ფორმა; რეგისტრირებული ანგარიში კი პაროლის ჰეშით მოწმდება.
@@ -115,7 +135,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
     persistUser(nextUser);
     setUser(nextUser);
-    return "success";
+    return { status: "success", user: nextUser };
   };
 
   const register = async (
@@ -125,20 +145,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   ): Promise<RegisterResult> => {
     const users = readRegisteredUsers();
     const normalizedEmail = email.trim().toLowerCase();
-    if (users.some((entry) => entry.email.toLowerCase() === normalizedEmail)) return "exists";
+    if (users.some((entry) => entry.email.toLowerCase() === normalizedEmail)) {
+      return {
+        status: "error",
+        errorType: "EMAIL_EXISTS",
+        message: "An account with this email already exists.",
+      };
+    }
 
-    const salt = bytesToHex(crypto.getRandomValues(new Uint8Array(16)));
+    let salt: string;
+    let passwordHash: string;
+    try {
+      salt = bytesToHex(crypto.getRandomValues(new Uint8Array(16)));
+      passwordHash = await hashPassword(password, salt);
+    } catch {
+      return {
+        status: "error",
+        errorType: "GENERAL",
+        message: "Unable to create this account. Please try again.",
+      };
+    }
     const registered: RegisteredUser = {
       fullName: fullName.trim(),
       email: normalizedEmail,
       passwordSalt: salt,
-      passwordHash: await hashPassword(password, salt),
+      passwordHash,
       address: "",
     };
     try {
       localStorage.setItem(USERS_KEY, JSON.stringify([...users, registered]));
     } catch {
-      return "storage-error";
+      return {
+        status: "error",
+        errorType: "STORAGE_ERROR",
+        message: "Unable to save this account in browser storage.",
+      };
     }
 
     const nextUser: AuthUser = {
@@ -150,7 +191,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
     persistUser(nextUser);
     setUser(nextUser);
-    return "success";
+    return { status: "success", user: nextUser };
   };
 
   const updateProfile: AuthContextValue["updateProfile"] = (details) => {
