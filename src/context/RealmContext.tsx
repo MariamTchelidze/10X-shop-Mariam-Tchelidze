@@ -51,9 +51,9 @@ export function RealmProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const formatPrice = useCallback((amount: number) => {
-    // მაღაზიის ფასს ვაჩვენებთ USD-ში; realm-ის კურსი მხოლოდ Vault-ის კალკულატორში გამოიყენება.
-    return formatUsdPrice(amount);
-  }, []);
+    // არჩეული realm-ის კოეფიციენტს ჯერ რიცხვით ფასზე ვამრავლებთ, შემდეგ კი USD ფორმატში ვაჩვენებთ.
+    return formatUsdPrice(amount * realm.multiplier);
+  }, [realm.multiplier]);
 
   return <RealmContext.Provider value={{ realm, setRealm, formatPrice }}>{children}</RealmContext.Provider>;
 }
