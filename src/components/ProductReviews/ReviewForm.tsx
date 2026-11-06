@@ -1,6 +1,6 @@
 // შესული მომხმარებლისთვის ახალი შეფასების ფორმას ამოწმებს და აგზავნის.
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import type { Review } from "../../types/product";
 import { StarRating } from "./StarRating";
 
@@ -15,6 +15,7 @@ interface ReviewFormProps {
 const fieldClass = "min-h-12 w-full border border-market-border bg-primary px-3 text-sm text-primary outline-none transition-colors placeholder:text-market-muted focus:border-gold";
 
 export function ReviewForm({ isLoggedIn, reviewerName, onSubmit }: ReviewFormProps) {
+  const location = useLocation();
   const [title, setTitle] = useState("");
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
@@ -73,6 +74,7 @@ export function ReviewForm({ isLoggedIn, reviewerName, onSubmit }: ReviewFormPro
         </p>
         <Link
           to="/login"
+          state={{ from: `${location.pathname}${location.search}` }}
           className="mt-4 inline-flex min-h-11 items-center bg-market-ink px-5 text-xs uppercase tracking-[0.12em] text-market-paper transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
         >
           Sign in to write a review
