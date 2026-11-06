@@ -130,6 +130,6 @@ The route-level pages compose reusable UI components, while Context providers ho
 
 The live Vercel deployment is available here:
 
-**[treasures-of-middle-earth — Live demo](https://treasures-of-middle-earth-git-main-mariam-tchelidze-s-projects.vercel.app/?page=1)**
+**[treasures-of-middle-earth — Live demo](https://treasures-of-middle-earth.vercel.app/)**
 
 The application uses `BrowserRouter`; deployments should serve `index.html` as the fallback for client-side routes.
