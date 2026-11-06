@@ -23,7 +23,8 @@ export function CatalogPage() {
   const category = query ? "" : rawCategory;
   const rawSort = searchParams.get("sort") ?? "";
   const sort: CatalogSortOption = isCatalogSortOption(rawSort) ? rawSort : "";
-  const rawPage = Number(searchParams.get("page"));
+  const pageParam = searchParams.get("page");
+  const rawPage = pageParam === null ? 1 : Number(pageParam);
   const page = Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;
 
   const [searchInput, setSearchInput] = useState(query);
@@ -41,7 +42,7 @@ export function CatalogPage() {
 
   useEffect(() => {
     const hasInvalidSort = rawSort !== "" && !isCatalogSortOption(rawSort);
-    const needsPage = searchParams.get("page") !== String(page);
+    const needsPage = page === 1 ? pageParam !== null : pageParam !== String(page);
     const hasConflictingFilters = Boolean(query && rawCategory);
 
     if (!needsPage && !hasInvalidSort && !hasConflictingFilters) {
@@ -51,7 +52,11 @@ export function CatalogPage() {
     // URL-ში არასწორ ან ურთიერთგამომრიცხავ ფილტრებს ვასწორებთ history-ის ზედმეტი ჩანაწერის გარეშე.
     setSearchParams(
       (current) => {
-        current.set("page", String(page));
+        if (page === 1) {
+          current.delete("page");
+        } else {
+          current.set("page", String(page));
+        }
         if (hasInvalidSort) {
           current.delete("sort");
         }
@@ -80,7 +85,7 @@ export function CatalogPage() {
           } else {
             current.delete("q");
           }
-          current.set("page", "1");
+          current.delete("page");
           return current;
         },
         { replace: true },
@@ -104,7 +109,7 @@ export function CatalogPage() {
       } else {
         current.delete("category");
       }
-      current.set("page", "1");
+      current.delete("page");
       return current;
     });
   };
@@ -116,7 +121,7 @@ export function CatalogPage() {
       } else {
         current.delete("sort");
       }
-      current.set("page", "1");
+      current.delete("page");
       return current;
     });
   };
@@ -125,7 +130,11 @@ export function CatalogPage() {
     // გვერდის მნიშვნელობას ხელმისაწვდომ დიაპაზონში ვზღუდავთ.
     const boundedPage = Math.min(Math.max(1, nextPage), Math.max(1, totalPages));
     setSearchParams((current) => {
-      current.set("page", String(boundedPage));
+      if (boundedPage === 1) {
+        current.delete("page");
+      } else {
+        current.set("page", String(boundedPage));
+      }
       return current;
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -133,7 +142,7 @@ export function CatalogPage() {
 
   const clearFilters = (): void => {
     setSearchInput("");
-    setSearchParams({ page: "1" });
+    setSearchParams({});
   };
 
   return (

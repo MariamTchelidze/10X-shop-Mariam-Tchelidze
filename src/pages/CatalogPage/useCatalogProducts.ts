@@ -37,7 +37,11 @@ export function useCatalogProducts({
           const lastPage = Math.max(1, Math.ceil(response.total / CATALOG_PAGE_SIZE));
           if (page > lastPage) {
             setSearchParams((current) => {
-              current.set("page", String(lastPage));
+              if (lastPage === 1) {
+                current.delete("page");
+              } else {
+                current.set("page", String(lastPage));
+              }
               return current;
             }, { replace: true });
             return;

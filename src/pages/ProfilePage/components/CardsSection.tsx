@@ -40,7 +40,7 @@ export function CardsSection({ cards, values, onFieldChange, onSubmit, onRemove 
       )}
       <form onSubmit={handleSubmit} className="grid w-full min-w-0 max-w-full gap-5 sm:max-w-xl">
         <ProfileField id="card-holder" label="Cardholder name" autoComplete="cc-name" value={values.holder} onChange={(value) => onFieldChange("holder", value)} />
-        <ProfileField id="card-number" label="Card number" inputMode="numeric" autoComplete="cc-number" value={values.number} onChange={(value) => onFieldChange("number", value)} />
+        <ProfileField id="card-number" label="Card number" type="password" inputMode="numeric" autoComplete="cc-number" helperText="Your number is hidden while you type. Only the last four digits are saved." value={values.number} onChange={(value) => onFieldChange("number", value)} />
         <ProfileField id="card-expiry" label="Expiry (MM/YY)" autoComplete="cc-exp" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])/[0-9]{2}" value={values.expiry} onChange={(value) => onFieldChange("expiry", value)} />
         <button type="submit" className="min-h-12 bg-market-ink px-7 text-xs uppercase tracking-[0.14em] text-market-paper sm:w-fit">
           Save card reference
