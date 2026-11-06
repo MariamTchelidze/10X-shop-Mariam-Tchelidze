@@ -14,6 +14,7 @@ import { ScrollToTop } from "./components/ScrollToTop/ScrollToTop";
 import { FloatingWidgetDock } from "./components/FloatingWidgets/FloatingWidgetDock";
 import { WidgetProvider } from "./context/WidgetContext";
 import { CatalogPage } from "./pages/CatalogPage/CatalogPage";
+import { BottomNav } from "./components/Navigation/BottomNav";
 
 const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage").then((module) => ({ default: module.LoginPage })));
 const ProductPage = lazy(() => import("./pages/ProductPage/ProductPage").then((module) => ({ default: module.ProductPage })));
@@ -44,7 +45,7 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage").then
 function AppLayout() {
   return (
     <>
-      <div className="flex min-h-screen flex-col bg-market-paper">
+      <div className="flex min-h-screen flex-col bg-market-paper pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
         <Header />
         <div className="flex-1">
           <Suspense fallback={<main className="mx-auto w-full max-w-7xl px-4 py-16 text-center text-sm text-market-muted" role="status" aria-live="polite">Loading page…</main>}>
@@ -53,6 +54,7 @@ function AppLayout() {
         </div>
         <Footer />
       </div>
+      <BottomNav />
       <FloatingWidgetDock />
     </>
   );

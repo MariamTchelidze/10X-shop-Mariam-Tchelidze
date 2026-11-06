@@ -125,19 +125,6 @@ export function Header() {
             </picture>
             <span className="whitespace-nowrap font-display text-[10px] font-semibold tracking-[0.14em] text-market-ink sm:text-xs">10X SHOP</span>
           </Link>
-          {/* კალათის გვერდზე გადასვლის ღილაკი რაოდენობის მაჩვენებლით. */}
-          <Link
-            to="/cart"
-            aria-label={itemCount > 0 ? `Shopping bag, ${itemCount} items` : "Shopping bag"}
-            aria-current={location.pathname === "/cart" ? "page" : undefined}
-            className={`relative inline-flex h-11 w-11 shrink-0 items-center justify-center border-b-2 text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${location.pathname === "/cart" ? "border-market-ink" : "border-transparent"}`}
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 8h14l1 13H4L5 8Z" />
-              <path d="M9 9V6a3 3 0 0 1 6 0v3" />
-            </svg>
-            {itemCount > 0 && <span className="absolute right-0 top-0 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-market-ink px-1 text-[9px] leading-none text-market-paper">{itemCount}</span>}
-          </Link>
           {/* სურვილების სიის ღილაკი შესაბამისი რაოდენობის ბეჯით. */}
           <Link
             to="/wishlist"
@@ -152,8 +139,10 @@ export function Header() {
           </Link>
         </div>
 
-        {/* მობილური მენიუს გამომწვევი კომპონენტი. */}
-        <MobileMenu />
+        {/* დიდ ტაბლეტებზე ძველი დაკეცილი ნავიგაცია შენარჩუნებულია. */}
+        <div className="hidden md:flex min-[1280px]:hidden">
+          <MobileMenu />
+        </div>
       </div>
 
 {/* დიდი ეკრანების (დესკტოპის) ბადეზე დაფუძნებული განლაგება. */}

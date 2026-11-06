@@ -58,7 +58,7 @@
 }
 
 :root {
-  /* სინათლის Shire თემის ფერებსა და შრიფტებს აქ ვაყენებთ. */
+  /* Light mode -The Shire colors*/
   color-scheme: light;
   --bg-primary: #f7f3e9;
   --bg-secondary: #dbc9a4;
@@ -85,7 +85,7 @@
 
 :root.dark,
 .dark {
-  /* .dark კლასის ჩართვისას მუქი თემის ფერები საერთო ცვლადებს ანაცვლებს. */
+  /* Dark mode - the Mordor theme*/
   color-scheme: dark;
   --bg-primary: #0b0b0b;
   --bg-secondary: #1a1a1a;

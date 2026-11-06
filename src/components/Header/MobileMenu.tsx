@@ -1,6 +1,7 @@
 // მობილური ნავიგაციის სრულეკრანიან მენიუსა და ვიჯეტების პანელებს მართავს.
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useWidgets, type WidgetId } from "../../context/WidgetContext";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
@@ -13,7 +14,11 @@ const widgetActions: { id: WidgetId; label: string; icon: string }[] = [
   { id: "council", label: "Ask the Council", icon: "❧" },
 ];
 
-export function MobileMenu() {
+interface MobileMenuProps {
+  triggerVariant?: "menu" | "account";
+}
+
+export function MobileMenu({ triggerVariant = "menu" }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -59,23 +64,24 @@ export function MobileMenu() {
     <>
       <button
         type="button"
-        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-label={isOpen ? "Close account and settings" : triggerVariant === "account" ? "Open account and settings" : "Open navigation menu"}
         aria-expanded={isOpen}
         aria-controls="mobile-navigation-drawer"
         onClick={() => isOpen ? closeMenu() : setIsOpen(true)}
-        className="inline-flex h-11 w-11 items-center justify-center text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+        className={`inline-flex min-h-11 min-w-11 items-center justify-center text-market-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${triggerVariant === "account" ? "h-full w-full flex-col gap-1" : "h-11 w-11"}`}
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round">
-          {isOpen ? <path d="m6 6 12 12M18 6 6 18" /> : <path d="M3 6h18M3 12h18M3 18h18" />}
+        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          {triggerVariant === "account" ? <><circle cx="12" cy="8" r="3.25" /><path d="M5.5 20c.4-3.4 2.7-5.2 6.5-5.2s6.1 1.8 6.5 5.2" /><path d="M19.5 4.5c.4 1.2.4 2.2 0 3.2" /></> : isOpen ? <path d="m6 6 12 12M18 6 6 18" /> : <path d="M3 6h18M3 12h18M3 18h18" />}
         </svg>
+        {triggerVariant === "account" && <span className="text-[9px] uppercase tracking-[0.1em]">Account</span>}
       </button>
 
-      {isOpen && (
+      {isOpen && createPortal(
         <aside
           id="mobile-navigation-drawer"
           role="dialog"
           aria-modal="true"
-          aria-label="Mobile navigation"
+          aria-label={triggerVariant === "account" ? "Account and settings" : "Mobile navigation"}
           className="fixed inset-0 z-[60] h-[100dvh] w-screen max-w-none overflow-y-auto overscroll-contain bg-market-paper px-5 pb-7 pt-[max(1rem,env(safe-area-inset-top))] text-market-ink sm:px-6"
         >
           <div className="mx-auto flex min-h-12 max-w-2xl items-center justify-between border-b border-market-border pb-3">
@@ -160,7 +166,8 @@ export function MobileMenu() {
               </section>
             )}
           </div>
-        </aside>
+        </aside>,
+        document.body,
       )}
     </>
   );

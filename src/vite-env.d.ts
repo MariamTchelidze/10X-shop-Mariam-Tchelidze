@@ -1,3 +1,3 @@
 /// <reference types="vite/client" />
 
-// Vite-ის ტიპებს ამატებს, რათა პროექტმა იმუშაოს გარემოს ცვლადებისა და asset-ების ტიპებთან.
+//Adding Vite types, for making sure that the project works with variables and assets' types
