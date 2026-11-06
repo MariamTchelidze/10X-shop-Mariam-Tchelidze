@@ -68,6 +68,16 @@ The latest saved Lighthouse run used Chrome Lighthouse 13.5.0 in Mobile / Naviga
 - Light/dark theme toggle with saved preference.
 - Help center, individual footer information routes, and Middle-earth editorial branding.
 
+## 3 Challenging Technical Problems Solved
+
+1. **Keeping catalog state in the URL.** Search, category, sorting, and pagination are synchronized with `useSearchParams`, so a refreshed or shared URL restores the same catalog view. Search uses a debounce; selecting a category clears the search; invalid and conflicting parameters are normalized; and page one is represented without an unnecessary `page=1` query parameter. Product-page navigation also retains the catalog URL so returning from a product can restore the filters.
+2. **Managing asynchronous API requests safely.** Catalog, product-detail, and related-product requests use `AbortController` and check the abort signal before updating React state. This prevents an older request from overwriting newer results after route or filter changes. Loading, error, retry, and not-found states are handled separately so API failures do not appear as missing products.
+3. **Separating store prices from realm exchange estimates.** Realm selection and multiplier rates are shared through `RealmContext` for the Mithril Vault calculator, while catalog, cart, checkout, and order prices use the shared `formatPrice()` USD formatter. This keeps exchange estimates available without letting a selected realm silently change the amount charged or shown for a product.
+
+## AI Usage Summary
+
+AI assistance was used during development to discuss the application structure, divide larger pages and features into focused components, draft and refine typed React implementations, and review error handling and responsive behavior. It also helped investigate issues by tracing state and API flows and suggesting verification steps. AI-generated suggestions were checked against the project requirements and the repository; the application was verified with the documented typecheck, lint, test, and production-build commands. AI was used as a development aid, not as a substitute for reviewing or understanding the submitted code.
+
 ## Routes
 
 The app includes the catalog (`/`), login (`/login`), product details (`/products/:id`), cart (`/cart`), checkout (`/checkout`), profile (`/profile`), orders (`/orders`), order confirmation (`/order-success`), wishlist (`/wishlist`), help center (`/help-center`), footer help/about routes, and a not-found route. Checkout and account/order views are protected by the local authentication state.
