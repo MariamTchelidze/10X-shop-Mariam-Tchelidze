@@ -3,47 +3,59 @@ import type { Product, ProductsResponse } from "../types/product";
 import type { CatalogQuery, Category } from "../types/catalog";
 import { CATALOG_PAGE_SIZE } from "../types/catalog";
 
-function isReview(value: unknown): boolean {
-  if (typeof value !== "object" || value === null) return false;
-  return "rating" in value && typeof value.rating === "number" &&
+/*isReview() ამოწმებს, აქვს თუ არა მიღებულ მონაცემს პროდუქტის მიმოხილვისთვის (Review) საჭირო სტრუქტურა.  */
+function isReview(value: unknown): boolean {  // value: unknown — ნიშნავს, რომ შემოსული მონაცემის ტიპი წინასწარ არ ვიცით.
+  if (typeof value !== "object" || value === null) return false; //typeof — ამოწმებს მონაცემის ტიპს.
+  return "rating" in value && typeof value.rating === "number" &&  //"rating" in value — ამოწმებს, არსებობს თუ არა ობიექტში rating თვისება.
     "comment" in value && typeof value.comment === "string" &&
     "date" in value && typeof value.date === "string" &&
     "reviewerName" in value && typeof value.reviewerName === "string";
 }
 
-function isProduct(value: unknown): value is Product {
+
+/* ეს ფუნქცია ამოწმებს, შეესაბამება თუ არა მიღებული მონაცემი Product ტიპისთვის საჭირო სტრუქტურას.*/
+function isProduct(value: unknown): value is Product { //TypeScript-ის Type Guard — წარმატებული შემოწმების შემდეგ TypeScript-მა იცის, რომ მონაცემი Product ტიპისაა
   if (typeof value !== "object" || value === null) return false;
-  return "id" in value && typeof value.id === "number" && Number.isInteger(value.id) &&
+  return "id" in value && typeof value.id === "number" && Number.isInteger(value.id) &&  //ამოწმებს, არის თუ არა რიცხვი მთელი
     "title" in value && typeof value.title === "string" &&
     "description" in value && typeof value.description === "string" &&
     "category" in value && typeof value.category === "string" &&
-    "price" in value && typeof value.price === "number" && Number.isFinite(value.price) &&
+    "price" in value && typeof value.price === "number" && Number.isFinite(value.price) &&  //ამოწმებს, არის თუ არა რიცხვი სასრული
     "discountPercentage" in value && typeof value.discountPercentage === "number" &&
     "rating" in value && typeof value.rating === "number" &&
     "stock" in value && typeof value.stock === "number" && Number.isInteger(value.stock) &&
     "thumbnail" in value && typeof value.thumbnail === "string" &&
-    "images" in value && Array.isArray(value.images) && value.images.every((image) => typeof image === "string") &&
-    "reviews" in value && Array.isArray(value.reviews) && value.reviews.every(isReview);
-}
+    "images" in value && Array.isArray(value.images) && value.images.every((image) => typeof image === "string") && //ამოწმებს, არის თუ არა მნიშვნელობა მასივი
 
+    "reviews" in value && Array.isArray(value.reviews) && value.reviews.every(isReview); // every ამოწმებს, არის თუ არა მნიშვნელობა მასივი es konkretuli ki: თითოეულ მიმოხილვას ამოწმებს უკვე ნასწავლი isReview() ფუნქციით
+    /* აქ ფუნქცია ამოწმებს, რომ პროდუქტს ჰქონდეს reviews მასივი და მასში ყველა მიმოხილვა სწორი სტრუქტურის იყოს.
+    ანუ isProduct() იყენებს isReview()-ს — ფუნქციები ერთმანეთთან თანამშრომლობენ. */
+  }
+
+
+  /* isProductsResponse() ამოწმებს, სწორია თუ არა API-დან მიღებული პროდუქტების სიის მთლიანი პასუხის სტრუქტურა.*/
 function isProductsResponse(value: unknown): value is ProductsResponse {
   if (typeof value !== "object" || value === null) return false;
-  return "products" in value && Array.isArray(value.products) && value.products.every(isProduct) &&
-    "total" in value && typeof value.total === "number" && Number.isInteger(value.total) &&
-    "skip" in value && typeof value.skip === "number" && Number.isInteger(value.skip) &&
-    "limit" in value && typeof value.limit === "number" && Number.isInteger(value.limit);
+  return "products" in value && Array.isArray(value.products) && value.products.every(isProduct) && //products — უნდა იყოს მასივი და ყველა პროდუქტი უნდა აკმაყოფილებდეს isProduct()-ის პირობებს.
+    "total" in value && typeof value.total === "number" && Number.isInteger(value.total) && //total — პროდუქტების საერთო რაოდენობა, მთელი რიცხვი.
+    "skip" in value && typeof value.skip === "number" && Number.isInteger(value.skip) && //skip — რამდენ პროდუქტს ვტოვებთ გამოტოვებულს pagination-ის დროს, მთელი რიცხვი.
+    "limit" in value && typeof value.limit === "number" && Number.isInteger(value.limit); //- limit — რამდენ პროდუქტს ვითხოვთ ერთ ჯერზე, მთელი რიცხვი.
 }
 
+
+/* isCategory() ამოწმებს, შეესაბამება თუ არა მიღებული მონაცემი Category ტიპის სტრუქტურას.  ესეც TypeGuard-ია*/
 function isCategory(value: unknown): value is Category {
   if (typeof value !== "object" || value === null) return false;
-  return "slug" in value && typeof value.slug === "string" &&
-    "name" in value && typeof value.name === "string" &&
-    "url" in value && typeof value.url === "string";
+  return "slug" in value && typeof value.slug === "string" && //კატეგორიის ტექნიკური იდენტიფიკატორი, მაგალითად smartphones
+    "name" in value && typeof value.name === "string" && //კატეგორიის დასახელება, მაგალითად Smartphones
+    "url" in value && typeof value.url === "string"; //კატეგორიის API მისამართი
 }
 
-async function readJson(response: Response): Promise<unknown> {
+
+/*  readJson() არის ასინქრონული ფუნქცია, რომელიც სერვერის HTTP პასუხის სხეულს JSON-იდან JavaScript-ის მონაცემად გარდაქმნის და აბრუნებს. */
+async function readJson(response: Response): Promise<unknown> { //საბოლოოდ მივიღებთ წინასწარ უცნობი ტიპის მონაცემს
   const payload: unknown = await response.json();
-  return payload;
+  return payload; //აბრუნებს მიღებულ მონაცემს
 }
 
 // ძირითადი მისამართი, საიდანაც მონაცემები მოგვაქვს

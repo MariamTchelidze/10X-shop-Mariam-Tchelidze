@@ -6,7 +6,7 @@
 
 An editorial fantasy storefront for curious travelers, artifact collectors, and all who journey beyond the Shire.
 
-[**Explore the live Vercel demo →**](https://treasures-of-middle-earth-git-main-mariam-tchelidze-s-projects.vercel.app/?page=1)
+[**Explore the live Vercel demo →**](https://treasures-of-middle-earth-git-main-mariam-tchelidze-s-projects.vercel.app/)
 
 
 ---
@@ -21,7 +21,8 @@ Product catalog data comes from the [DummyJSON Products API](https://dummyjson.c
 
 ### Shopping experience
 
-- Mobile-first layout with a responsive header, full-height burger menu, and quick access to the bag and wishlist.
+- Mobile-first layout with a fixed bottom navigation bar and a full-height account/settings drawer for theme, realm, and account controls.
+- Desktop-only QR welcome modal for opening the shop on a phone.
 - Catalog search, category filters, sorting, and pagination synchronized with the URL.
 - Product details with stock status, variant selection, related items, and local reviews.
 - Product quick view and quick-add actions.
@@ -33,6 +34,7 @@ Product catalog data comes from the [DummyJSON Products API](https://dummyjson.c
 - **The Shire** light theme and **Mordor** dark theme, with a saved theme preference.
 - Cinzel display typography and Lora-inspired editorial styling.
 - Realm and currency selector with realm-specific conversion rates.
+- Eagle Post, Ask the Council, and Mithril Vault tools, available from desktop controls and the mobile account drawer.
 
 ### Accounts and saved items
 
@@ -77,9 +79,7 @@ Open the local URL printed by Vite in your terminal.
 
 ```bash
 npm run typecheck
-npm run typecheck:e2e
 npm test
-npm run test:e2e
 npm run build
 ```
 
@@ -96,12 +96,6 @@ npm run preview
 | `npm run dev` | Start the Vite development server. |
 | `npm run typecheck` | Run the strict TypeScript project check. |
 | `npm test` | Run the built-in Node tests for catalog requests, promo totals, stock labels, and order status. |
-| `npm run typecheck:e2e` | Strictly type-check the Playwright config and browser test files. |
-| `npm run test:e2e` | Build and serve the production app, then run Chrome and Firefox desktop/375px browser checks. |
-| `npm run test:e2e:chrome` | Run the desktop and 375px checks in installed Chrome only. |
-| `npm run test:e2e:firefox` | Run the desktop and 375px checks in Playwright Firefox only. |
-| `npm run test:e2e:ui` | Open Playwright's interactive test runner. |
-| `npm run test:e2e:report` | Open the latest HTML browser-test report. |
 | `npm run build` | Type-check and generate the production bundle. |
 | `npm run preview` | Preview the generated production bundle. |
 | `npm run lint` | Run ESLint. |
@@ -138,27 +132,10 @@ The route-level pages compose reusable UI components, while Context providers ho
 
 The live Vercel deployment is available here:
 
-**[treasures-of-middle-earth — Live demo](https://treasures-of-middle-earth.vercel.app/)**
+**[treasures-of-middle-earth — Live demo](https://treasures-of-middle-earth-git-main-mariam-tchelidze-s-projects.vercel.app/)**
 
 The application uses `BrowserRouter`; deployments should serve `index.html` as the fallback for client-side routes.
 
-## Browser testing with Playwright
+## Browser verification
 
-Install the project dependencies, then install Playwright's Firefox runtime once:
-
-```bash
-npm install
-npx playwright install firefox
-```
-
-Chrome must also be installed on the computer because the Chrome projects use the installed Chrome channel. Run `npm run typecheck:e2e` to check the test code and `npm run test:e2e` to build the production app, serve it locally, and check routes in Chrome and Firefox at desktop and **375 × 812** viewports. Separate `test:e2e:chrome` and `test:e2e:firefox` commands are available to isolate an engine. The suite saves viewport screenshots under `docs/compat/` and an HTML report under `playwright-report/`.
-
-To run the same browser checks against a deployed URL instead of the local build, set `PLAYWRIGHT_BASE_URL` before starting the tests. For example, in PowerShell:
-
-```powershell
-$env:PLAYWRIGHT_BASE_URL = "https://your-deployment.vercel.app"
-npm run test:e2e -- --project=chrome-desktop
-Remove-Item Env:PLAYWRIGHT_BASE_URL
-```
-
-See [`docs/testing/playwright.md`](docs/testing/playwright.md) for the browser setup notes and current environment limitations. A successful local run verifies the checked-in build and SPA fallback locally; it does not prove the Vercel deployment is current.
+Appendix A requires browser compatibility checks and screenshot evidence. These checks are performed manually in Chrome and Firefox using desktop viewports and browser device emulation at **375 × 812**; a physical phone is not required. Check the catalog, product details, cart, checkout, profile, and not-found routes, then record the browser/version, viewport, URL, result, and any issue in [`COMPATIBILITY.md`](COMPATIBILITY.md). Save screenshots in [`docs/compat/`](docs/compat/README.md). Local checks do not prove the deployed Vercel version; verify direct route loading and refresh on the live URL separately.

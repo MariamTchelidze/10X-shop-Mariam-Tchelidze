@@ -1,6 +1,6 @@
 # Browser compatibility evidence
 
-The Playwright CORE smoke suite saves viewport screenshots from real browser runs here. The captured image is evidence for the named browser, viewport, and local/deployed target recorded in `COMPATIBILITY.md`.
+This folder stores screenshots from manual browser checks. Each image is evidence for the named browser, viewport, route, and local/deployed target recorded in `COMPATIBILITY.md`; a screenshot does not by itself prove interaction behavior.
 
 ## File names
 
@@ -15,10 +15,6 @@ Examples:
 
 Use short route names: `catalog`, `login`, `product`, `cart`, `checkout`, `profile`, and `not-found`.
 
-## Automated capture
+## Manual capture checklist
 
-Install the browser dependencies once, then run `npm run test:e2e`. The suite uses the local production preview and writes desktop and 375 × 812 screenshots for the tested routes. Use `PLAYWRIGHT_BASE_URL` to check a deployed build. Details and the current Firefox runtime limitation are documented in [`docs/testing/playwright.md`](../testing/playwright.md).
-
-The latest successful automated evidence in this folder is from Chrome desktop and Chrome 375 × 812. Existing Firefox captures predate this Playwright run and are not current automated evidence. When `PLAYWRIGHT_BASE_URL` is set, captures go to `docs/compat/deployed/` so they do not overwrite local-build screenshots.
-
-The tests also check route content, mobile horizontal overflow, direct product navigation/refresh, the public cart, guest checkout redirection, and the desktop-only QR prompt. Record the browser version, target URL, viewport, result, and any remaining issues in `COMPATIBILITY.md`. A screenshot alone does not establish a behavior that the test did not check.
+Use Chrome and Firefox, recording desktop and **375 × 812** mobile-emulation checks separately. Capture the catalog, product, cart, checkout, profile, and not-found routes. Name each file with the pattern above, and record browser version, target URL, viewport, refresh/navigation result, and remaining issues in [`COMPATIBILITY.md`](../../COMPATIBILITY.md). Verify direct `/products/93` loading and refresh as a separate behavior from the screenshot.

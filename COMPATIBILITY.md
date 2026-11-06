@@ -1,8 +1,8 @@
 # Browser and Deployment Compatibility
 
-## Automated local CORE checks
+## Recorded local CORE checks
 
-The Playwright suite runs against a local production build (`vite build` + `vite preview`). On 2026-11-06, Chrome passed at desktop (1440 × 900) and mobile viewport emulation (375 × 812):
+On 2026-11-06, a Playwright smoke run against a local production build (`vite build` + `vite preview`) passed in Chrome at desktop (1440 × 900) and mobile viewport emulation (375 × 812):
 
 | Check | Chrome desktop | Chrome 375 × 812 |
 | --- | --- | --- |
@@ -14,17 +14,17 @@ The Playwright suite runs against a local production build (`vite build` + `vite
 | Invalid product ID renders not-found | Pass | Pass |
 | Desktop QR prompt opens; mobile viewport does not mount it | Pass | Pass |
 
-The Chrome run completed with 4 tests passed. Captures were saved to [`docs/compat/`](docs/compat/README.md), named by browser, viewport, and route. These are local build captures, not proof of the deployed version.
+The historical Chrome run completed with 4 tests passed. Its captures remain in [`docs/compat/`](docs/compat/README.md). Playwright has since been removed from the project; this records the earlier run only and is not a repeatable test command in the current repository. These are local build captures, not proof of the deployed version.
 
 ### Firefox status
 
-Playwright Firefox 159.0 was downloaded, but its executable could not start in the current Windows environment (`side-by-side configuration is incorrect`, surfaced by Playwright as `spawn UNKNOWN`). Chrome tests passed; the Firefox Playwright suite did not run. Existing manual Firefox screenshots in `docs/compat/` are historical evidence and must not be treated as a pass for the latest source. See [`docs/testing/playwright.md`](docs/testing/playwright.md) for the required Windows runtime check.
+The earlier Playwright Firefox 159.0 executable could not start in the Windows environment (`side-by-side configuration is incorrect`, surfaced as `spawn UNKNOWN`), so that automated Firefox run did not complete. The Firefox screenshots in `docs/compat/` are visual evidence only; they do not prove every route or interaction. Complete and record manual Firefox checks for the current source before claiming cross-browser coverage.
 
 ## Deployment checks
 
 Canonical deployment URL from README: <https://treasures-of-middle-earth-git-main-mariam-tchelidze-s-projects.vercel.app/>.
 
-The automated Playwright run used the local production preview. The previous manual Chrome deployment check (2026-11-05) confirmed `/`, `/products/93`, and refresh behavior for the deployed version available then. Re-run the deployment checks after the latest changes are deployed; Firefox deployment behavior remains unverified.
+The historical Chrome automation used a local production preview. The previous manual Chrome deployment check (2026-11-05) confirmed `/`, `/products/93`, and refresh behavior for the deployed version available then. Re-run the deployment checks after the latest changes are deployed; Firefox deployment behavior remains unverified.
 
 ## Lighthouse evidence
 

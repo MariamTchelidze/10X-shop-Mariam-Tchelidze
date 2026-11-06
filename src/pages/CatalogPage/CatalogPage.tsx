@@ -67,7 +67,7 @@ export function CatalogPage() {
       },
       { replace: true },
     );
-  }, [page, query, rawCategory, rawSort, searchParams, setSearchParams]);
+  }, [page, pageParam, query, rawCategory, rawSort, searchParams, setSearchParams]);
 
   useEffect(() => {
     const normalizedInput = searchInput.trim();
