@@ -15,6 +15,7 @@ import { FloatingWidgetDock } from "./components/FloatingWidgets/FloatingWidgetD
 import { WidgetProvider } from "./context/WidgetContext";
 import { CatalogPage } from "./pages/CatalogPage/CatalogPage";
 import { BottomNav } from "./components/Navigation/BottomNav";
+import { QrCodeModal } from "./components/Modals/QrCodeModal";
 
 const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage").then((module) => ({ default: module.LoginPage })));
 const ProductPage = lazy(() => import("./pages/ProductPage/ProductPage").then((module) => ({ default: module.ProductPage })));
@@ -56,6 +57,7 @@ function AppLayout() {
       </div>
       <BottomNav />
       <FloatingWidgetDock />
+      <QrCodeModal />
     </>
   );
 }

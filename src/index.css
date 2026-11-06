@@ -73,6 +73,8 @@
   --accent-lava: #ff6b1a;
   --accent-primary: var(--accent-forest);
   --accent-danger: #8b1e1e;
+  --qr-foreground: #3e5b3c;
+  --qr-background: #f7f3e9;
   --font-cinzel: "Cinzel", "Cormorant Garamond", Georgia, serif;
   --font-lora: "Lora", Georgia, serif;
 
@@ -100,6 +102,8 @@
   --accent-lava: #ff6b1a;
   --accent-primary: var(--accent-blood);
   --accent-danger: #ff6b1a;
+  --qr-foreground: #c9a96a;
+  --qr-background: #1a1a1a;
 }
 
 body {
