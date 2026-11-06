@@ -48,8 +48,8 @@ export function CartPage() {
       <h1 className="mb-8 border-b border-market-border pb-5 font-display text-3xl text-market-ink sm:mb-10 sm:text-4xl">
         Your cart
       </h1>
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14">
-        <section aria-label="Cart items">
+      <div className="grid min-w-0 gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14">
+        <section className="min-w-0" aria-label="Cart items">
           <ul className="divide-y divide-market-border">
             {items.map((item) => (
               <CartItemRow

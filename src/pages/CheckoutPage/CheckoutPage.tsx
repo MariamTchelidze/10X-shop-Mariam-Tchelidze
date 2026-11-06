@@ -93,11 +93,11 @@ export function CheckoutPage() {
   };
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+    <main className="mx-auto w-full min-w-0 max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <h1 className="mb-8 border-b border-market-border pb-5 font-display text-3xl text-market-ink sm:mb-10 sm:text-4xl">
         Checkout
       </h1>
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14">
+      <div className="grid min-w-0 gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14">
         <CheckoutForm
           values={values}
           errors={errors}

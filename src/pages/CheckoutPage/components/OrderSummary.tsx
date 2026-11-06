@@ -14,12 +14,12 @@ interface OrderSummaryProps {
 export function OrderSummary({ items, subtotal, discount, total, promoCode, formatPrice }: OrderSummaryProps) {
   // თითოეული ხაზის ფასდაკლებული ჯამი და მთელი კალათის ჯამი ცალ-ცალკე ჩანს.
   return (
-    <aside className="h-fit border border-market-border p-5 sm:p-6">
+    <aside className="h-fit min-w-0 border border-market-border p-5 sm:p-6">
       <h2 className="font-display text-2xl text-market-ink">Order summary</h2>
       <ul className="mt-5 space-y-3 border-b border-market-border pb-5">
         {items.map((item) => (
-          <li key={item.productId} className="flex justify-between gap-4 text-sm">
-            <span className="text-market-muted">{item.title} × {item.quantity}</span>
+          <li key={`${item.productId}-${item.size ?? ""}-${item.color ?? ""}`} className="flex min-w-0 justify-between gap-4 text-sm">
+            <span className="min-w-0 break-words text-market-muted">{item.title} × {item.quantity}</span>
             <span className="shrink-0 text-market-ink">
               {formatPrice(lineTotal(item.price, item.discountPercentage, item.quantity))}
             </span>
