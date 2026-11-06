@@ -6,7 +6,7 @@
 
 | Browser project | Result | Evidence |
 | --- | --- | --- |
-| Chromium (Playwright 1.65.0) | **8 passed** after the mobile layout adjustment | Current 375 × 812 captures: `chrome-mobile-375-{catalog,product,cart,checkout,profile,login,not-found,account-menu}.png` in this folder. |
+| Chromium (Playwright 1.65.0) | **9 passed** after the mobile layout and login validation fixes | The eight current 375 × 812 route/drawer captures use `chrome-mobile-375-{catalog,product,cart,checkout,profile,login,not-found,account-menu}.png`; an additional demo-login check verifies redirect and persisted session. |
 | Firefox (Playwright 1.65.0) | **Could not launch** | All 8 tests stop before page navigation with `browserType.launch: spawn UNKNOWN`; the Playwright Firefox executable fails with a Windows side-by-side configuration error. A forced reinstall of the pinned Firefox build did not resolve it. |
 
 Firefox images already in this folder are historical captures from 2026-11-05; they are not evidence for the current source. Current-source Firefox layout remains unverified until the browser can launch or a manual Firefox run is recorded.

@@ -4,7 +4,7 @@ This folder stores screenshots from browser checks. Each image is evidence for t
 
 ## Latest Chrome mobile capture
 
-On 2026-11-06, Playwright 1.65.0 checked the current source in Chromium at 375 × 812 against the local Vite server. DummyJSON responses and local account/cart data were seeded. Eight checks passed across Catalog, Product 93, Cart, Checkout, Profile, Login, Not Found, and the open Account/Settings drawer. The suite checked document/body overflow on each page, that catalog filters clear the fixed bottom navigation, and that the drawer measures 375 × 812 while locking background scrolling. The current viewport captures use the `chrome-mobile-375-*.png` names. They document local layout, not deployment behavior.
+On 2026-11-07, Playwright 1.65.0 checked the current source in Chromium at 375 × 812 against the local Vite server. DummyJSON responses and local account/cart data were seeded. Nine checks passed: Catalog, Product 93, Cart, Checkout, Profile, Login, Not Found, the open Account/Settings drawer, and demo login. The suite checked document/body overflow on each page, that catalog filters clear the fixed bottom navigation, that the drawer measures 375 × 812 while locking background scrolling, and that login redirects to the catalog and persists an authenticated session. The current viewport captures use the `chrome-mobile-375-*.png` names. They document local layout, not deployment behavior.
 
 The same suite is configured for Firefox, but the Playwright Firefox executable could not start in this Windows environment (`spawn UNKNOWN` / side-by-side configuration error), so the existing Firefox captures are historical and do not verify the current source.
 
