@@ -1,11 +1,47 @@
 // კალათის პროდუქტებს, რაოდენობებსა და ჯამურ ფასს მართავს.
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useReducer, type ReactNode } from "react";
 import type { Product } from "../types/product";
 import type { CartItem, CartState, CartVariants } from "../types/cart";
 import { useToast } from "./ToastContext";
 import { useInventory } from "./InventoryContext";
 import { readCartState, saveCartState } from "../utils/cartStorage";
 import { CartManager } from "../utils/CartManager";
+import { assertNever } from "../utils/assertNever";
+
+// კალათის reducer-ში დასაშვებ ყველა ცვლილებას discriminated union-ით აღვწერთ.
+export type CartAction =
+  | { type: "ADD_ITEM"; product: Product; quantity: number; stock: number; variants: CartVariants }
+  | { type: "REMOVE_ITEM"; productId: number; variants: CartVariants }
+  | { type: "UPDATE_QUANTITY"; productId: number; quantity: number; stock: number; variants: CartVariants }
+  | { type: "CLEAR_CART" }
+  | { type: "APPLY_PROMO"; code: string }
+  | { type: "REMOVE_PROMO" };
+
+// ახალი CartManager-ის გამოყენებით reducer-ის ძველ state-ს უცვლელად ვინარჩუნებთ.
+export function cartReducer(state: CartState, action: CartAction): CartState {
+  const manager = new CartManager(state);
+
+  switch (action.type) {
+    case "ADD_ITEM":
+      return manager.addItem(action.product, action.quantity, action.stock, action.variants).success
+        ? manager.state
+        : state;
+    case "REMOVE_ITEM":
+      return manager.removeItem(action.productId, action.variants) ? manager.state : state;
+    case "UPDATE_QUANTITY":
+      return manager.updateQuantity(action.productId, action.quantity, action.stock, action.variants).success
+        ? manager.state
+        : state;
+    case "CLEAR_CART":
+      return manager.clearCart() ? manager.state : state;
+    case "APPLY_PROMO":
+      return manager.applyPromoCode(action.code) ? manager.state : state;
+    case "REMOVE_PROMO":
+      return manager.removePromoCode() ? manager.state : state;
+    default:
+      return assertNever(action);
+  }
+}
 
 interface CartContextValue {
   items: CartItem[];
@@ -31,12 +67,8 @@ interface CartProviderProps {
 export function CartProvider({ children }: CartProviderProps) {
   const { addToast } = useToast();
   const { getStock } = useInventory();
-  const [cart, setCart] = useState<CartState>(() => readCartState(getStock));
-  const cartManagerRef = useRef<CartManager | null>(null);
-  if (cartManagerRef.current === null) {
-    cartManagerRef.current = new CartManager(cart);
-  }
-  const cartManager = cartManagerRef.current;
+  const [cart, dispatch] = useReducer(cartReducer, getStock, readCartState);
+  const cartManager = useMemo(() => new CartManager(cart), [cart]);
   const { items, promoCode } = cart;
 
   useEffect(() => {
@@ -47,14 +79,15 @@ export function CartProvider({ children }: CartProviderProps) {
   const addItem = (product: Product, quantity: number, variants: CartVariants = {}): boolean => {
     // დანართის flow-ში სტუმარსაც შეუძლია კალათის შევსება; Login საჭიროა Checkout-ზე.
     const stock = getStock(product.id, product.stock);
-    const result = cartManager.addItem(product, quantity, stock, variants);
+    const manager = new CartManager(cart);
+    const result = manager.addItem(product, quantity, stock, variants);
     if (!result.success) {
       if (result.reason === "stock-limit") {
         addToast("Cannot add more than available stock.", "error");
       }
       return false;
     }
-    setCart(cartManager.state);
+    dispatch({ type: "ADD_ITEM", product, quantity, stock, variants });
     if (result.limited) addToast("Cannot add more than available stock.", "error");
     addToast("Added to cart.", "success");
 
@@ -62,8 +95,9 @@ export function CartProvider({ children }: CartProviderProps) {
   };
 
   const removeItem = (productId: number, variants: CartVariants = {}): void => {
-    if (!cartManager.removeItem(productId, variants)) return;
-    setCart(cartManager.state);
+    const manager = new CartManager(cart);
+    if (!manager.removeItem(productId, variants)) return;
+    dispatch({ type: "REMOVE_ITEM", productId, variants });
     addToast("ITEM REMOVED", "info");
   };
 
@@ -73,31 +107,35 @@ export function CartProvider({ children }: CartProviderProps) {
     );
     if (!currentItem) return;
     const stock = getStock(productId, currentItem.stock);
-    const result = cartManager.updateQuantity(productId, quantity, stock, variants);
+    const manager = new CartManager(cart);
+    const result = manager.updateQuantity(productId, quantity, stock, variants);
     if (!result.success) {
       if (result.reason === "stock-limit") {
         addToast("Cannot add more than available stock.", "error");
       }
       return;
     }
-    setCart(cartManager.state);
+    dispatch({ type: "UPDATE_QUANTITY", productId, quantity, stock, variants });
     if (result.limited) addToast("Cannot add more than available stock.", "error");
   };
 
   const applyPromoCode = (code: string): boolean => {
-    if (!cartManager.applyPromoCode(code)) return false;
-    setCart(cartManager.state);
+    const manager = new CartManager(cart);
+    if (!manager.applyPromoCode(code)) return false;
+    dispatch({ type: "APPLY_PROMO", code });
     return true;
   };
 
   const removePromoCode = (): void => {
-    if (cartManager.removePromoCode()) setCart(cartManager.state);
+    const manager = new CartManager(cart);
+    if (manager.removePromoCode()) dispatch({ type: "REMOVE_PROMO" });
   };
 
   const clearCart = (): void => {
     const hadItems = items.length > 0;
-    if (!cartManager.clearCart()) return;
-    setCart(cartManager.state);
+    const manager = new CartManager(cart);
+    if (!manager.clearCart()) return;
+    dispatch({ type: "CLEAR_CART" });
     if (hadItems) addToast("CART CLEARED", "info");
   };
 
